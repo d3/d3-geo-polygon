@@ -1,0 +1,46 @@
+{
+  "name": "d3-geo-polygon",
+  "version": "0.0.0",
+  "description": "Clipping and geometric operations for spherical polygons.",
+  "keywords": [
+    "d3",
+    "d3-module",
+    "geo",
+    "polygon"
+  ],
+  "homepage": "https://github.com/d3/d3-geo-polygon",
+  "license": "ISC",
+  "author": {
+    "name": "Mike Bostock",
+    "url": "https://bost.ocks.org/mike"
+  },
+  "contributors": [
+    {
+      "name": "Jason Davies",
+      "url": "http://www.jasondavies.com"
+    },
+    {
+      "name": "Philippe Rivière",
+      "url": "https://visionscarto.net"
+    }
+  ],
+  "main": "build/d3-geo-polygon.js",
+  "module": "index",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d3/d3-geo-polygon.git"
+  },
+  "scripts": {
+    "pretest": "rm -rf build && mkdir build && rollup -c --banner \"$(preamble)\"",
+    "test": "tape 'test/**/*-test.js' && eslint index.js src",
+    "prepublishOnly": "npm run test && uglifyjs -b beautify=false,preamble=\"'$(preamble)'\" build/d3-geo-polygon.js -c -m -o build/d3-geo-polygon.min.js",
+    "postpublish": "git push && git push --tags && zip -j build/d3-geo-polygon.zip -- LICENSE README.md build/d3-geo-polygon.js build/d3-geo-polygon.min.js"
+  },
+  "devDependencies": {
+    "eslint": "4",
+    "package-preamble": "0.1",
+    "rollup": "0.49",
+    "tape": "4",
+    "uglify-js": "3"
+  }
+}
