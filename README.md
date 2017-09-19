@@ -1,6 +1,6 @@
 # d3-geo-polygon
 
-TODO …
+Clipping and geometric operations for spherical polygons. 
 
 ## Installing
 
@@ -11,13 +11,14 @@ If you use NPM, `npm install d3-geo-polygon`. Otherwise, download the [latest re
 <script src="https://unpkg.com/d3-geo-polygon@1"></script>
 <script>
 
-var mercator = d3.geoMercator();
+  var clipPolygon = d3.geoClipPolygon({ type: "Polygon", coordinates: [[[-10, -10], [-10, 10], [10, 10], [10, -10], [-10, -10]]] });
+  var projection = d3_geo.geoEquirectangular().preclip(clipPolygon);
 
 </script>
 ```
 
 ## API Reference
 
-<a name="geoClipPolygon" href="#geoClipPolygon">#</a> d3.<b>geoClipPolygon</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/clip/polygon.js "Source")
+<a name="geoClipPolygon" href="#geoClipPolygon">#</a> d3.<b>geoClipPolygon</b>(<i>polygon</i>) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/clip/polygon.js "Source")
 
-TODO …
+Given a GeoJSON *polygon*, returns a clip function suitable for [_projection_.preclip](https://github.com/d3/d3-geo#preclip).
