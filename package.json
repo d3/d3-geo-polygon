@@ -36,7 +36,11 @@
     "prepublishOnly": "npm run test && uglifyjs -b beautify=false,preamble=\"'$(preamble)'\" build/d3-geo-polygon.js -c -m -o build/d3-geo-polygon.min.js",
     "postpublish": "git push && git push --tags && zip -j build/d3-geo-polygon.zip -- LICENSE README.md build/d3-geo-polygon.js build/d3-geo-polygon.min.js"
   },
+  "dependencies": {
+    "d3-array": "1"
+  },
   "devDependencies": {
+    "d3-geo": "1",
     "eslint": "4",
     "package-preamble": "0.1",
     "rollup": "0.49",
