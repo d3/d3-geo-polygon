@@ -4,7 +4,9 @@ import {epsilon, halfPi} from "../math";
 import polygonContains from "../polygonContains";
 import {merge} from "d3-array";
 
-export default function(pointVisible, clipLine, interpolate, start) {
+export default function(pointVisible, clipLine, interpolate, start, sort) {
+  if (typeof sort === "undefined") sort = compareIntersection;
+
   return function(sink) {
     var line = clipLine(sink),
         ringBuffer = clipBuffer(),
@@ -33,7 +35,7 @@ export default function(pointVisible, clipLine, interpolate, start) {
         var startInside = polygonContains(polygon, start);
         if (segments.length) {
           if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
-          clipRejoin(segments, compareIntersection, startInside, interpolate, sink);
+          clipRejoin(segments, sort, startInside, interpolate, sink);
         } else if (startInside) {
           if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
           sink.lineStart();
@@ -70,9 +72,9 @@ export default function(pointVisible, clipLine, interpolate, start) {
       line.lineEnd();
     }
 
-    function pointRing(lambda, phi) {
+    function pointRing(lambda, phi, close) {
       ring.push([lambda, phi]);
-      ringSink.point(lambda, phi);
+      ringSink.point(lambda, phi, close);
     }
 
     function ringStart() {
@@ -81,7 +83,7 @@ export default function(pointVisible, clipLine, interpolate, start) {
     }
 
     function ringEnd() {
-      pointRing(ring[0][0], ring[0][1]);
+      pointRing(ring[0][0], ring[0][1], true);
       ringSink.lineEnd();
 
       var clean = ringSink.clean(),
