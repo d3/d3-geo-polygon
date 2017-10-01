@@ -8,6 +8,7 @@ export function intersectSegment(from, to) {
   this.toNormal = cartesianCross(this.normal, to);
 }
 
+var epsilon3 = 1e-18;
 
 // >> here a and b are segments processed by intersectSegment
 export function intersect(a, b) {
@@ -18,9 +19,11 @@ export function intersect(a, b) {
       b0 = cartesianDot(axb, b.fromNormal),
       b1 = cartesianDot(axb, b.toNormal);
 
-  if (a0 > -epsilon2 && a1 < epsilon2 && b0 > -epsilon2 && b1 < epsilon2) return axb;
+  if (a0 > -epsilon3 && a1 < epsilon3 && b0 > -epsilon3 && b1 < epsilon3) {
+    return axb;
+  }
 
-  if (a0 < epsilon2 && a1 > -epsilon2 && b0 < epsilon2 && b1 > -epsilon2) {
+  if (a0 < epsilon3 && a1 > -epsilon3 && b0 < epsilon3 && b1 > -epsilon3) {
     axb[0] = -axb[0], axb[1] = -axb[1], axb[2] = -axb[2];
     return axb;
   }
