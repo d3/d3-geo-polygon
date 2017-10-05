@@ -11,8 +11,11 @@ If you use NPM, `npm install d3-geo-polygon`. Otherwise, download the [latest re
 <script src="https://unpkg.com/d3-geo-polygon@1"></script>
 <script>
 
-  var clipPolygon = d3.geoClipPolygon({ type: "Polygon", coordinates: [[[-10, -10], [-10, 10], [10, 10], [10, -10], [-10, -10]]] });
-  var projection = d3_geo.geoEquirectangular().preclip(clipPolygon);
+var projection = d3.geoEquirectangular()
+    .preclip(d3.geoClipPolygon({
+      type: "Polygon",
+      coordinates: [[[-10, -10], [-10, 10], [10, 10], [10, -10], [-10, -10]]]
+    }));
 
 </script>
 ```
