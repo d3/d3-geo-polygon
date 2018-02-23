@@ -1,5 +1,5 @@
 import clip from "./index";
-import {atan2, cos, pi, radians, sign, sin, sqrt} from "../math";
+import {atan2, cos, degrees, pi, radians, sign, sin, sqrt} from "../math";
 import {cartesian, cartesianCross, cartesianDot, cartesianEqual, spherical} from "../cartesian";
 import {intersectCoincident, intersectPointOnLine, intersectSegment, intersect} from "../intersect";
 import {default as polygonContains} from "../polygonContains";
@@ -133,7 +133,16 @@ export default function (p) {
     }
   }
 
-  return clip(visible, clipLine, interpolate, polygon[0][0], clipPolygonSort);
+  var c = clip(visible, clipLine, interpolate, polygon[0][0], clipPolygonSort);
+  
+  c.polygon = function() {
+    return {
+      type: "Polygon",
+      coordinates: polygon.map(e => e.map(d => [ d[0] * degrees, d[1] * degrees]))
+    };
+  }
+  
+  return c;
 }
 
 function clipPolygonSort(a, b) {
