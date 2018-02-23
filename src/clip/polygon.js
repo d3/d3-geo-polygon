@@ -138,9 +138,13 @@ export default function (p) {
   c.polygon = function() {
     return {
       type: "Polygon",
-      coordinates: polygon.map(e => e.map(d => [ d[0] * degrees, d[1] * degrees]))
+      coordinates: polygon.map(function(e) {
+        return e.map(function(d) {
+          return [ d[0] * degrees, d[1] * degrees];
+        });
+      })
     };
-  }
+  };
   
   return c;
 }
