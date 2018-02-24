@@ -1,5 +1,5 @@
 import clip from "./index";
-import {atan2, cos, degrees, pi, radians, sign, sin, sqrt} from "../math";
+import {atan2, cos, degrees, max, min, pi, radians, sign, sin, sqrt} from "../math";
 import {cartesian, cartesianCross, cartesianDot, cartesianEqual, spherical} from "../cartesian";
 import {intersectCoincident, intersectPointOnLine, intersectSegment, intersect} from "../intersect";
 import {default as polygonContains} from "../polygonContains";
@@ -27,6 +27,10 @@ export default function (p) {
 
   function visible(lambda, phi) {
     return polygonContains(polygon, [lambda, phi]);
+  }
+
+  function randsign(i,j) {
+    return sign(sin(100 * i + j));
   }
 
   function clipLine(stream) {
@@ -59,8 +63,8 @@ export default function (p) {
                   cartesianEqual(intersection, point0) || cartesianEqual(intersection, point) ||
                   cartesianEqual(intersection, s.from) || cartesianEqual(intersection, s.to)) {
                 t = 1e-4;
-                lambda = (lambda + 3 * pi + (Math.random() < .5 ? t : -t)) % (2 * pi) - pi;
-                phi = Math.min(pi / 2 - 1e-4, Math.max(1e-4 - pi / 2, phi + (Math.random() < .5 ? t : -t)));
+                lambda = (lambda + 3 * pi + randsign(i,j) * t) % (2 * pi) - pi;
+                phi = min(pi / 2 - 1e-4, max(1e-4 - pi / 2, phi + randsign(i,j) * t));
                 segment = new intersectSegment(point0, point = cartesian([lambda, phi]));
                 i = -1, --j;
                 intersections.length = 0;
@@ -95,8 +99,8 @@ export default function (p) {
             s = segments[i];
             if (intersectPointOnLine(point, s)) {
               t = 1e-4;
-              lambda = (lambda + 3 * pi + (Math.random() < .5 ? t : -t)) % (2 * pi) - pi;
-              phi = Math.min(pi / 2 - 1e-4, Math.max(1e-4 - pi / 2, phi + (Math.random() < .5 ? t : -t)));
+              lambda = (lambda + 3 * pi + randsign(i,j) * t) % (2 * pi) - pi;
+              phi = min(pi / 2 - 1e-4, max(1e-4 - pi / 2, phi + randsign(i,j) * t));
               point = cartesian([lambda, phi]);
               i = -1, --j;
             }
