@@ -95,24 +95,21 @@ export default function(root, face, r) {
   var proj = projection(forward),
       stream_ = proj.stream;
 
-  // if d3-geo-polygon and proj.preclip are available:
   // run around the mesh of faces and stream all vertices to create the clipping polygon
-  if (clipPolygon && proj.preclip) {
-    var polygon = [];
-    outline({point: function(lambda, phi) { polygon.push([lambda, phi]); }}, root);
-    polygon.push(polygon[0]);
-    proj.preclip(clipPolygon({ type: "Polygon", coordinates: [ polygon ] }));
-  }
+  var polygon = [];
+  outline({point: function(lambda, phi) { polygon.push([lambda, phi]); }}, root);
+  polygon.push(polygon[0]);
+  proj.preclip(clipPolygon({ type: "Polygon", coordinates: [ polygon ] }));
 
   function noClip(s) { return s; }
 
   proj.stream = function(stream) {
     var rotate = proj.rotate(),
-        preclip = proj.preclip ? proj.preclip() : null,
+        preclip = proj.preclip(),
         rotateStream = stream_(stream),
-        sphereStream = ((preclip ? proj.preclip(noClip) : proj).rotate([0, 0]), stream_(stream));
+        sphereStream = (proj.preclip(noClip).rotate([0, 0]), stream_(stream));
     proj.rotate(rotate);
-    if (preclip) proj.preclip(preclip);
+    proj.preclip(preclip);
     rotateStream.sphere = function() {
       sphereStream.polygonStart();
       sphereStream.lineStart();
