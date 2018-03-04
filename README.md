@@ -11,6 +11,13 @@ If you use NPM, `npm install d3-geo-polygon`. Otherwise, download the [latest re
 <script src="https://unpkg.com/d3-geo-polygon@1"></script>
 <script>
 
+// new projection
+var projection = d3.geoDodecahedral();
+
+// polyhedral projections don’t need SVG or canvas clipping anymore
+var projection = d3.geoPolyhedralCollignon();
+
+// arbitrary polygon clipping on any projection
 var projection = d3.geoEquirectangular()
     .preclip(d3.geoClipPolygon({
       type: "Polygon",
@@ -34,6 +41,7 @@ Given a clipPolygon function, returns the GeoJSON polygon.
 
 
 ## Projections
+
 
 d3-geo-polygon adds polygon clipping to the polyhedral projections from [d3-geo-projection](https://github.com/d3/d3-geo-projection). Thus, it supercedes the following symbols:
 
@@ -59,3 +67,13 @@ The Collignon butterfly projection.
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/polyhedralWaterman.png" width="480" height="250">](https://www.jasondavies.com/maps/waterman-butterfly/)
 
 A butterfly projection inspired by Steve Waterman’s design.
+
+
+New projections are introduced:
+
+<a href="#geoDodecahedral" name="geoDodecahedral">#</a> d3.<b>geoDodecahedral</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/dodecahedral.js "Source")
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/dodecahedral.png" width="480" height="250">](https://bl.ocks.org/Fil/61bf310184055add159620a977112069)
+
+The dodecahedral projection.
+
