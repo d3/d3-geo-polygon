@@ -33,32 +33,6 @@ var projection = d3[projectionSymbol]().precision(0.1),
 
 context.fillStyle = "#fff";
 context.fillRect(0, 0, width, height);
-context.save();
-
-switch (projectionName) {
-  case "armadillo":
-  case "berghaus":
-  case "gingery":
-  case "hammerRetroazimuthal":
-  case "healpix":
-  case "interruptedBoggs":
-  case "interruptedHomolosine":
-  case "interruptedSinusoidal":
-  case "interruptedSinuMollweide":
-  case "interruptedMollweide":
-  case "interruptedMollweideHemispheres":
-  case "littrow":
-  case "modifiedStereographicGs50":
-  case "modifiedStereographicMiller":
-  case "polyhedralButterfly":
-  case "polyhedralWaterman":
-  case "polyhedralCollignon": {
-    context.beginPath();
-    path(outline);
-    context.clip();
-    break;
-  }
-}
 
 context.beginPath();
 path(land);
@@ -69,8 +43,6 @@ context.beginPath();
 path(graticule());
 context.strokeStyle = "rgba(119,119,119,0.5)";
 context.stroke();
-
-context.restore();
 
 context.beginPath();
 path(outline);
