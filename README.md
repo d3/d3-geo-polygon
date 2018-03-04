@@ -74,6 +74,11 @@ A butterfly projection inspired by Steve Waterman’s design.
 
 New projections are introduced:
 
+<a href="#geoVoronoiProjection" name="geoVoronoiProjection">#</a> d3.<b>geoVoronoiProjection</b>(<i>parents</i>, <i>rotation</i>, <i>polygons</i>, [<i>faceProjection</i>]) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/voronoi.js "Source")
+
+This returns a polyhedral projection based on the *polygons*, arranged in a tree according to the *parents* list, with initial *angle* of the root face. An optional [*faceProjection*](#geoPolyhedral) is passed to d3.geoPolyhedral() -- note that the gnomonic projection is the only faceProjection that works in the general case.
+
+
 <a href="#geoDodecahedral" name="geoDodecahedral">#</a> d3.<b>geoDodecahedral</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/dodecahedral.js "Source")
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/dodecahedral.png" width="480" height="250">](https://bl.ocks.org/Fil/61bf310184055add159620a977112069)
