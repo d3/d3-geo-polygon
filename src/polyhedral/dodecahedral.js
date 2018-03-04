@@ -1,4 +1,4 @@
-import {acos, asin, degrees, radians, sqrt} from "../math";
+import {acos, asin, degrees, sqrt} from "../math";
 import voronoi from "./voronoi";
 
 export default function(parents, rotation, polygons) {
@@ -22,7 +22,7 @@ if (!polygons) polygons = [
   [[-135,A0],[-90,A2],[-90,-A2],[-135,-A0],[-A3,0],[-135,A0]]
 ];
 
-if (rotation === undefined) rotation = (72 * 1.5) * radians;
+if (rotation === undefined) rotation = (72 * 1.5);
 
 // See http://blockbuilder.org/Fil/80822180c2dd077ca8fb015f06abef2b
 // for the arrangement of faces

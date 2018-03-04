@@ -48,7 +48,8 @@ d3-geo-polygon adds polygon clipping to the polyhedral projections from [d3-geo-
 
 <a href="#geoPolyhedral" name="geoPolyhedral">#</a> d3.<b>geoPolyhedral</b>(<i>root</i>, <i>face</i>[, <i>angle</i>]) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/index.js "Source")
 
-Defines a new polyhedral projection. The *root* is a spanning tree of polygon face nodes; each *node* is assigned a *node*.transform matrix. The *face* function returns the appropriate *node* for a given *lambda* and *phi* in radians. The specified rotation *angle* is applied to the polyhedron; if an *angle* is not specified, it defaults to -π / 6 (for butterflies).
+Defines a new polyhedral projection. The *root* is a spanning tree of polygon face nodes; each *node* is assigned a *node*.transform matrix. The *face* function returns the appropriate *node* for a given *lambda* and *phi* in radians. The specified rotation *angle* is applied to the polyhedron’s *root*.
+
 <a href="#geoPolyhedral_root" name="geoPolyhedral_root">#</a> <i>polyhedral</i>.<b>root</b>() returns the root of the polyhedron, from which one can infer the faces’ centers, polygons, shared edges etc.
 
 
