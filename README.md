@@ -31,3 +31,31 @@ Given a GeoJSON *polygon*, returns a clip function suitable for [_projection_.pr
 
 Given a clipPolygon function, returns the GeoJSON polygon.
 
+
+
+## Projections
+
+d3-geo-polygon adds polygon clipping to the polyhedral projections from [d3-geo-projection](https://github.com/d3/d3-geo-projection). Thus, it supercedes the following symbols:
+
+
+<a href="#geoPolyhedral" name="geoPolyhedral">#</a> d3.<b>geoPolyhedral</b>(<i>root</i>, <i>face</i>[, <i>angle</i>]) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/index.js "Source")
+
+Defines a new polyhedral projection. The *root* is a spanning tree of polygon face nodes; each *node* is assigned a *node*.transform matrix. The *face* function returns the appropriate *node* for a given *lambda* and *phi* in radians. The specified rotation *angle* is applied to the polyhedron; if an *angle* is not specified, it defaults to -π / 6 (for butterflies).
+
+<a href="#geoPolyhedralButterfly" name="geoPolyhedralButterfly">#</a> d3.<b>geoPolyhedralButterfly</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/butterfly.js "Source")
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/polyhedralButterfly.png" width="480" height="250">](http://bl.ocks.org/mbostock/4458680)
+
+The gnomonic butterfly projection.
+
+<a href="#geoPolyhedralCollignon" name="geoPolyhedralCollignon">#</a> d3.<b>geoPolyhedralCollignon</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/collignon.js "Source")
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/polyhedralCollignon.png" width="480" height="250">](https://www.jasondavies.com/maps/collignon-butterfly/)
+
+The Collignon butterfly projection.
+
+<a href="#geoPolyhedralWaterman" name="geoPolyhedralWaterman">#</a> d3.<b>geoPolyhedralWaterman</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/waterman.js "Source")
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/polyhedralWaterman.png" width="480" height="250">](https://www.jasondavies.com/maps/waterman-butterfly/)
+
+A butterfly projection inspired by Steve Waterman’s design.
