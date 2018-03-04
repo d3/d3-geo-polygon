@@ -120,6 +120,7 @@ export default function(root, face, r) {
     return rotateStream;
   };
 
+  proj.root = function() { return root; };
   return proj;
 }
 

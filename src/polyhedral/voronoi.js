@@ -52,7 +52,5 @@ export default function (parents, rotation, poly, faceProjection) {
     return faces[found];
   }
 
-  var proj = polyhedral(faces[0], voronoiface, rotation)
-  proj.faces = faces;
-  return proj;
+  return polyhedral(faces[0], voronoiface, rotation)
 }
