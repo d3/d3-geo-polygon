@@ -81,7 +81,7 @@ This returns a polyhedral projection based on the *polygons*, arranged in a tree
 
 <a href="#geoDodecahedral" name="geoDodecahedral">#</a> d3.<b>geoDodecahedral</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/dodecahedral.js "Source")
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/dodecahedral.png" width="480" height="250">](https://bl.ocks.org/Fil/61bf310184055add159620a977112069)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/dodecahedral.png" width="480" height="250">](https://beta.observablehq.com/@fil/dodecahedral-projection)
 
 The dodecahedral projection.
 
