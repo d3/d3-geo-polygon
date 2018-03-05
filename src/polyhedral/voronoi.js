@@ -2,7 +2,7 @@ import {geoCentroid as centroid, geoGnomonic as gnomonic, geoDistance as distanc
 import {degrees} from "../math";
 import polyhedral from "./index";
 
-export default function (parents, rotation, poly, faceProjection) {
+export default function (parents, rotation, polygons, faceProjection) {
 
   // it is possible to pass a specific projection on each face
   // by default is is a gnomonic projection centered on the face's centroid
@@ -17,12 +17,14 @@ export default function (parents, rotation, poly, faceProjection) {
   
   // the faces from the polyhedron each yield
   // - face: its vertices
-  // - site: its voronoi site (here: centroid of the pentagon)
+  // - site: its voronoi site (default: centroid)
   // - project: local projection on this face
-  var faces = poly.map(function(face) {
-    var polygon = face.slice();
-    face = face.slice(0,-1);
-    face.site = centroid({type: "Polygon", coordinates: [polygon]});
+  var faces = polygons.features.map(function(feature) {
+    var polygon = feature.geometry.coordinates[0];
+    var face = polygon.slice(0,-1);
+    face.site = (feature.properties && feature.properties.sitecoordinates)
+      ? feature.properties.sitecoordinates
+      : centroid(feature.geometry);
     return {
       face: face,
       site: face.site,

@@ -2,12 +2,12 @@ import {acos, asin, degrees, sqrt} from "../math";
 import voronoi from "./voronoi";
 
 export default function(parents, rotation, polygons) {
-var A0 = asin(1/sqrt(3)) * degrees,
+  var A0 = asin(1/sqrt(3)) * degrees,
         A1 = acos((sqrt(15) - sqrt(3))/6) * degrees,
         A2 = 90 - A1,
         A3 = acos(-(sqrt(3) + sqrt(15))/6) * degrees;
 
-if (!polygons) polygons = [
+  var dodecahedron = [
   [[45,A0],[0,A1],[180,A1],[135,A0],[90,A2],[45,A0]],
   [[45,A0],[A2,0],[-A2,0],[-45,A0],[0,A1],[45,A0]],
   [[45,A0],[90,A2],[90,-A2],[45,-A0],[A2,0],[45,A0]],
@@ -20,7 +20,22 @@ if (!polygons) polygons = [
   [[-45,-A0],[0,-A1],[180,-A1],[-135,-A0],[-90,-A2],[-45,-A0]],
   [[135,-A0],[A3,0],[-A3,0],[-135,-A0],[180,-A1],[135,-A0]],
   [[-135,A0],[-90,A2],[-90,-A2],[-135,-A0],[-A3,0],[-135,A0]]
-];
+  ];
+
+
+  if (!polygons) polygons = {
+    type: "FeatureCollection",
+    features: dodecahedron.map(function(face) {
+      return {
+        geometry: {
+          type: "Polygon",
+          coordinates: [ face ]
+        }
+      };
+    })
+  };
+
+
 
 if (rotation === undefined) rotation = (72 * 1.5);
 

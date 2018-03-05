@@ -74,9 +74,9 @@ A butterfly projection inspired by Steve Waterman’s design.
 
 New projections are introduced:
 
-<a href="#geoVoronoiProjection" name="geoVoronoiProjection">#</a> d3.<b>geoVoronoiProjection</b>(<i>parents</i>, <i>rotation</i>, <i>polygons</i>, [<i>faceProjection</i>]) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/voronoi.js "Source")
+<a href="#geoPolyhedralVoronoi" name="geoPolyhedralVoronoi">#</a> d3.<b>geoPolyhedralVoronoi</b>(<i>parents</i>, <i>rotation</i>, <i>polygons</i>, [<i>faceProjection</i>]) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/voronoi.js "Source")
 
-This returns a polyhedral projection based on the *polygons*, arranged in a tree according to the *parents* list, with initial *angle* of the root face. An optional [*faceProjection*](#geoPolyhedral) is passed to d3.geoPolyhedral() -- note that the gnomonic projection is the only faceProjection that works in the general case.
+Returns a polyhedral projection based on the *polygons*, arranged in a tree according to the *parents* list, with initial *angle* of the root face. *polygons* is represented by a GeoJSON FeatureCollection of geoVoronoi cells, and should indicate the corresponding sites (see [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi)). An optional [*faceProjection*](#geoPolyhedral) is passed to d3.geoPolyhedral() -- note that the gnomonic projection on the polygons’ sites is the only faceProjection that works in the general case.
 
 
 <a href="#geoDodecahedral" name="geoDodecahedral">#</a> d3.<b>geoDodecahedral</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/dodecahedral.js "Source")

@@ -3,7 +3,7 @@ export {default as geoPolyhedral} from "./src/polyhedral/index";
 export {default as geoPolyhedralButterfly} from "./src/polyhedral/butterfly";
 export {default as geoPolyhedralCollignon} from "./src/polyhedral/collignon";
 export {default as geoPolyhedralWaterman} from "./src/polyhedral/waterman";
-export {default as geoVoronoiProjection} from "./src/polyhedral/voronoi";
+export {default as geoPolyhedralVoronoi} from "./src/polyhedral/voronoi";
 export {default as geoDodecahedral} from "./src/polyhedral/dodecahedral";
 
 // if necessary, the following line could export a copy of the d3-geo-projection versions under the names xxxxUnclipped
