@@ -3,9 +3,9 @@ import voronoi from "./voronoi";
 
 export default function(parents, rotation, polygons) {
   var A0 = asin(1/sqrt(3)) * degrees,
-        A1 = acos((sqrt(15) - sqrt(3))/6) * degrees,
+        A1 = acos((sqrt(5) - 1) / sqrt(3) / 2) * degrees,
         A2 = 90 - A1,
-        A3 = acos(-(sqrt(3) + sqrt(15))/6) * degrees;
+        A3 = acos(-(1 + sqrt(5)) / sqrt(3) / 2) * degrees;
 
   var dodecahedron = [
   [[45,A0],[0,A1],[180,A1],[135,A0],[90,A2],[45,A0]],
