@@ -19,7 +19,7 @@ export default function (parents, rotation, polygons, faceProjection) {
   // - face: its vertices
   // - site: its voronoi site (default: centroid)
   // - project: local projection on this face
-  var faces = polygons.features.map(function(feature) {
+  var faces = polygons.features.map(function(feature, i) {
     var polygon = feature.geometry.coordinates[0];
     var face = polygon.slice(0,-1);
     face.site = (feature.properties && feature.properties.sitecoordinates)
@@ -28,6 +28,7 @@ export default function (parents, rotation, polygons, faceProjection) {
     return {
       face: face,
       site: face.site,
+      id: i,
       project: faceProjection(face)
     };
   });
