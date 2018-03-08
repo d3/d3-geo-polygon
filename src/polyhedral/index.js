@@ -4,17 +4,17 @@ import {abs, cos, degrees, epsilon, radians, sin} from "../../node_modules/d3-ge
 import {default as matrix, multiply, inverse} from "../../node_modules/d3-geo-projection/src/polyhedral/matrix";
 
 // Creates a polyhedral projection.
-//  * root: a spanning tree of polygon faces.  Nodes are automatically
+//  * tree: a spanning tree of polygon faces.  Nodes are automatically
 //    augmented with a transform matrix.
 //  * face: a function that returns the appropriate node for a given {lambda, phi}
 //    point (radians).
 //  * r: rotation angle for final polyhedral net.  Defaults to -30 degrees (for
 //    butterflies).
-export default function(root, face, r) {
+export default function(tree, face, r) {
 
   r = (r == null ? -30 : r) * radians; // TODO automate
 
-  recurse(root, {transform: [
+  recurse(tree, {transform: [
     cos(r), sin(r), 0,
     -sin(r), cos(r), 0
   ]});
@@ -64,8 +64,8 @@ export default function(root, face, r) {
 
   // Naive inverse!  A faster solution would use bounding boxes, or even a
   // polygonal quadtree.
-  if (hasInverse(root)) forward.invert = function(x, y) {
-    var coordinates = faceInvert(root, [x, -y]);
+  if (hasInverse(tree)) forward.invert = function(x, y) {
+    var coordinates = faceInvert(tree, [x, -y]);
     return coordinates && (coordinates[0] *= radians, coordinates[1] *= radians, coordinates);
   };
 
@@ -97,7 +97,7 @@ export default function(root, face, r) {
 
   // run around the mesh of faces and stream all vertices to create the clipping polygon
   var polygon = [];
-  outline({point: function(lambda, phi) { polygon.push([lambda, phi]); }}, root);
+  outline({point: function(lambda, phi) { polygon.push([lambda, phi]); }}, tree);
   polygon.push(polygon[0]);
   proj.preclip(clipPolygon({ type: "Polygon", coordinates: [ polygon ] }));
 
@@ -113,14 +113,14 @@ export default function(root, face, r) {
     rotateStream.sphere = function() {
       sphereStream.polygonStart();
       sphereStream.lineStart();
-      outline(sphereStream, root);
+      outline(sphereStream, tree);
       sphereStream.lineEnd();
       sphereStream.polygonEnd();
     };
     return rotateStream;
   };
 
-  proj.root = function() { return root; };
+  proj.tree = function() { return tree; };
   return proj;
 }
 
