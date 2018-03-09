@@ -35,13 +35,10 @@ export default function() {
     })
   };
 
-var projection = voronoi()
+  return voronoi()
    .parents([-1,0,4,8,1,2,2,3,1,8,6,3])
    .angle(72 * 1.5)
    .polygons(polygons)
    .rotate([-8,0,-32])
    .scale(99.8);
-
-return projection;
-
 }

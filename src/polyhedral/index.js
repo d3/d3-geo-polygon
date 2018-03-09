@@ -8,16 +8,16 @@ import {default as matrix, multiply, inverse} from "../../node_modules/d3-geo-pr
 //    augmented with a transform matrix.
 //  * face: a function that returns the appropriate node for a given {lambda, phi}
 //    point (radians).
-//  * r: rotation angle for final polyhedral net.  Defaults to -30 degrees (for
+//  * angle: rotation angle for final polyhedral net.  Defaults to -30 degrees (for
 //    butterflies).
-export default function(tree, face, r) {
+export default function(tree, face, angle) {
 
-  r = (r == null ? -30 : r) * radians; // TODO automate
-
-  recurse(tree, {transform: [
-    cos(r), sin(r), 0,
-    -sin(r), cos(r), 0
-  ]});
+  function initial_angle(angle) {
+    recurse(tree, {transform: [
+      cos(angle), sin(angle), 0,
+      -sin(angle), cos(angle), 0
+    ]});
+  }
 
   function recurse(node, parent) {
     node.edges = faceEdges(node.face);
@@ -95,6 +95,14 @@ export default function(tree, face, r) {
   var proj = projection(forward),
       stream_ = proj.stream;
 
+  proj.angle = function(_) {
+    if (!arguments.length) return angle;
+    initial_angle(angle = +_);
+  }
+
+  angle = (angle == null ? -30 : angle) * radians; // TODO automate
+  initial_angle(angle);
+
   // run around the mesh of faces and stream all vertices to create the clipping polygon
   var polygon = [];
   outline({point: function(lambda, phi) { polygon.push([lambda, phi]); }}, tree);
@@ -121,6 +129,7 @@ export default function(tree, face, r) {
   };
 
   proj.tree = function() { return tree; };
+  
   return proj;
 }
 
