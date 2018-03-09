@@ -86,6 +86,17 @@ The .<b>parents</b>([<i>parents</i>]), .<b>angle</b>([<i>angle</i>]), .<b>polygo
 
 The dodecahedral projection.
 
+<a href="#geoTetrahedralLee" name="geoTetrahedralLee">#</a> d3.<b>geoTetrahedralLee</b>(<i>orientation</i>) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/tetrahedralLee.js "Source")
+<br><a href="#geoLeeRaw" name="geoLeeRaw">#</a> d3.<b>geoLeeRaw</b>
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-projection/master/img/tetrahedralLee.png" width="480" height="250">](https://bl.ocks.org/Fil/c36ed66a4d50d77150712c80642a78d5)
+
+Lee’s tetrahedral conformal projection.
+
+<a href="tetrahedralLee_angle" name="polyhedralLee_angle">#</a> Default <i>angle</i> is +30°, apex up (-30° for base up, apex down).
+
+Default aspect uses *projection*.rotate([30, 180]) and has the North Pole at the triangle’s center -- use *projection*.rotate([-30, 0]) for the [South aspect](https://bl.ocks.org/Fil/79d2073c50e02b1b4f74e3f330183581).
+
 <a href="#geoCox" name="geoCox">#</a> d3.<b>geoCox</b>() [<>](https://github.com/d3/d3-geo-projection/blob/master/src/cox.js "Source")
 <br><a href="#geoCoxRaw" name="geoCoxRaw">#</a> d3.<b>geoCoxRaw</b>
 

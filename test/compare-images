@@ -6,6 +6,7 @@ for i in \
     polyhedralButterfly \
     polyhedralCollignon \
     polyhedralWaterman \
+    tetrahedralLee \
     ; do
   test/render-world $i > test/output/$i.png \
       && [ "$(gm compare -metric rmse img/$i.png test/output/$i.png 2>&1)" = "Image Difference (RootMeanSquaredError):
