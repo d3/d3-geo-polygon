@@ -86,6 +86,12 @@ The .<b>parents</b>([<i>parents</i>]), .<b>angle</b>([<i>angle</i>]), .<b>polygo
 
 The dodecahedral projection.
 
+<a href="#geoIcosahedral" name="geoIcosahedral">#</a> d3.<b>geoIcosahedral</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/icosahedral.js "Source")
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/icosahedral.png" width="480" height="250">](https://beta.observablehq.com/@fil/icosahedral-projection)
+
+The icosahedral projection.
+
 <a href="#geoAirocean" name="geoAirocean">#</a> d3.<b>geoAirocean</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/airocean.js "Source")
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/airocean.png" width="480" height="250">](https://beta.observablehq.com/@fil/airocean-projection)

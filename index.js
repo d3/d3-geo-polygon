@@ -9,6 +9,7 @@ export {default as geoCox, coxRaw as geoCoxRaw} from "./src/cox.js";
 export {default as geoTetrahedralLee, leeRaw as geoLeeRaw} from "./src/tetrahedralLee.js";
 export {default as geoGrayFullerRaw} from "./src/grayfuller";
 export {default as geoAirocean} from "./src/airocean";
+export {default as geoIcosahedral} from "./src/icosahedral";
 
 // if necessary, the following line could export a copy of the d3-geo-projection versions under the names xxxxUnclipped
 // export {geoPolyhedral as geoPolyhedralUnclipped, geoPolyhedralButterfly as geoPolyhedralButterflyUnclipped, geoPolyhedralCollignon as geoPolyhedralCollignonUnclipped, geoPolyhedralWaterman as geoPolyhedralWatermanUnclipped} from "./node_modules/d3-geo-projection/index";
