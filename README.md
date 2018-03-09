@@ -80,6 +80,12 @@ Returns a polyhedral projection based on the *polygons*, arranged in a tree acco
 
 The .<b>parents</b>([<i>parents</i>]), .<b>angle</b>([<i>angle</i>]), .<b>polygons</b>([<i>polygons</i>]), .<b>faceProjection</b>([<i>faceProjection</i>]) set and read the corresponding options.
 
+<a href="#geoCubic" name="geoCubic">#</a> d3.<b>geoCubic</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/cubic.js "Source")
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/cubic.png" width="480" height="250">](https://beta.observablehq.com/@fil/cubic-projection)
+
+The cubic projection.
+
 <a href="#geoDodecahedral" name="geoDodecahedral">#</a> d3.<b>geoDodecahedral</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/dodecahedral.js "Source")
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/dodecahedral.png" width="480" height="250">](https://beta.observablehq.com/@fil/dodecahedral-projection)
