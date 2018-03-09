@@ -2,7 +2,6 @@ import {geoCentroid as centroid, geoGnomonic as gnomonic} from "d3-geo";
 import {pi} from "../../node_modules/d3-geo-projection/src/math";
 import polyhedral from "./index";
 import octahedron from "../../node_modules/d3-geo-projection/src/polyhedral/octahedron";
-"./octahedron";
 
 export default function(faceProjection) {
 
