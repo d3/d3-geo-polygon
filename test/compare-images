@@ -1,6 +1,7 @@
 #!/bin/bash
 
 for i in \
+    cox \
     dodecahedral \
     polyhedralButterfly \
     polyhedralCollignon \

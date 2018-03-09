@@ -86,3 +86,10 @@ The .<b>parents</b>([<i>parents</i>]), .<b>angle</b>([<i>angle</i>]), .<b>polygo
 
 The dodecahedral projection.
 
+<a href="#geoCox" name="geoCox">#</a> d3.<b>geoCox</b>() [<>](https://github.com/d3/d3-geo-projection/blob/master/src/cox.js "Source")
+<br><a href="#geoCoxRaw" name="geoCoxRaw">#</a> d3.<b>geoCoxRaw</b>
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-projection/master/img/cox.png" width="480" height="250">](https://visionscarto.net/cox-conformal-projection)
+
+The Cox conformal projection.
+
