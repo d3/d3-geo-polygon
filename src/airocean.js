@@ -191,8 +191,7 @@ function airoceanRaw(faceProjection) {
     // Polyhedral projection
     var proj = polyhedral(
       faces[0], // the root face
-      face, // a function that returns a face given coords
-      -60 // rotation of the root face in the projected (pixel) space
+      face // a function that returns a face given coords
     );
 
     proj.faces = faces;
@@ -216,6 +215,7 @@ export default function () {
 
   return p
     .rotate([-83.65929, 25.44458, -87.45184])
+    .angle(60)
     .scale(45.4631)
     .center([126, 0]);
 }
