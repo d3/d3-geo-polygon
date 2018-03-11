@@ -6,7 +6,10 @@ import {
 import { degrees } from "../math";
 import polyhedral from "./index";
 
-export function voronoiRaw(parents, angle, polygons, faceProjection) {
+export default function(parents, polygons, faceProjection) {
+  parents = parents || [];
+  polygons = polygons || { features: [] };
+
   // it is possible to pass a specific projection on each face
   // by default is is a gnomonic projection centered on the face's centroid
   // scale 1 by convention
@@ -66,26 +69,16 @@ export function voronoiRaw(parents, angle, polygons, faceProjection) {
   }
 
   var p = gnomonic();
-  p.angle = function(_) {
-    if (!arguments.length) return angle;
-    angle = +_;
-    return reset();
-  };
 
   function reset() {
     var rotate = p.rotate(),
       translate = p.translate(),
       center = p.center(),
-      scale = p.scale();
+      scale = p.scale(),
+      angle = p.angle();
 
     if (faces.length) {
-      p = polyhedral(faces[0], voronoiface, angle);
-      p._angle = p.angle;
-      p.angle = function(_) {
-        if (!arguments.length) return angle;
-        p._angle((angle = +_));
-        return reset();
-      };
+      p = polyhedral(faces[0], voronoiface);
     }
 
     p.parents = function(_) {
@@ -113,18 +106,10 @@ export function voronoiRaw(parents, angle, polygons, faceProjection) {
       .rotate(rotate)
       .translate(translate)
       .center(center)
-      .scale(scale);
+      .scale(scale)
+      .angle(angle);
   }
 
   build_tree();
   return reset();
-}
-
-export default function() {
-  var parents = [],
-    angle = 0,
-    polygons = { features: [] },
-    faceProjection = null;
-
-  return voronoiRaw(parents, angle, polygons, faceProjection);
 }

@@ -1,6 +1,6 @@
 import {geoBounds as bounds, geoCentroid as centroid, geoInterpolate as interpolate, geoProjection as projection} from "d3-geo";
 import {default as clipPolygon} from "../clip/polygon";
-import {abs, cos, degrees, epsilon, radians, sin} from "../../node_modules/d3-geo-projection/src/math";
+import {abs, degrees, epsilon, radians} from "../../node_modules/d3-geo-projection/src/math";
 import {default as matrix, multiply, inverse} from "../../node_modules/d3-geo-projection/src/polyhedral/matrix";
 
 // Creates a polyhedral projection.
@@ -8,16 +8,12 @@ import {default as matrix, multiply, inverse} from "../../node_modules/d3-geo-pr
 //    augmented with a transform matrix.
 //  * face: a function that returns the appropriate node for a given {lambda, phi}
 //    point (radians).
-//  * angle: rotation angle for final polyhedral net.  Defaults to -30 degrees (for
-//    butterflies).
-export default function(tree, face, angle) {
+export default function(tree, face) {
 
-  function initial_angle(angle) {
-    recurse(tree, {transform: [
-      cos(angle), sin(angle), 0,
-      -sin(angle), cos(angle), 0
-    ]});
-  }
+  recurse(tree, {transform: [
+    1, 0, 0,
+    0, 1, 0
+  ]});
 
   function recurse(node, parent) {
     node.edges = faceEdges(node.face);
@@ -94,14 +90,6 @@ export default function(tree, face, angle) {
 
   var proj = projection(forward),
       stream_ = proj.stream;
-
-  proj.angle = function(_) {
-    if (!arguments.length) return angle;
-    initial_angle(angle = +_);
-  }
-
-  angle = (angle == null ? -30 : angle) * radians; // TODO automate
-  initial_angle(angle);
 
   // run around the mesh of faces and stream all vertices to create the clipping polygon
   var polygon = [];
