@@ -159,15 +159,13 @@ export default function() {
           return faces[i];
         }
       }
-    },
-    30
+    }
   );
 
-  return (
-    p
-      .rotate([30, 180]) // North Pole aspect, needs clipPolygon
-      // .rotate([-30, 0]) // South Pole aspect
-      .scale(118.899)
-      .center([0, -35.315])
-  );
+  return p
+    .rotate([30, 180]) // North Pole aspect, needs clipPolygon
+    // .rotate([-30, 0]) // South Pole aspect
+    .angle(-30)
+    .scale(118.662)
+    .translate([480, 195.47]);
 }
