@@ -215,7 +215,7 @@ export default function () {
 
   return p
     .rotate([-83.65929, 25.44458, -87.45184])
-    .angle(60)
+    .angle(-60)
     .scale(45.4631)
     .center([126, 0]);
 }

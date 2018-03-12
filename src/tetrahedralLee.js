@@ -165,7 +165,7 @@ export default function() {
   return p
     .rotate([30, 180]) // North Pole aspect, needs clipPolygon
     // .rotate([-30, 0]) // South Pole aspect
-    .angle(-30)
+    .angle(30)
     .scale(118.662)
     .translate([480, 195.47]);
 }
