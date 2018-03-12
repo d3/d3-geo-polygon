@@ -82,7 +82,7 @@ function sm_1(z) {
   return k;
 }
 
-var lagrange1_2 = lagrangeRaw(0.5);
+var lagrange1_2 = lagrangeRaw ? lagrangeRaw(0.5) : null;
 export function coxRaw(lambda, phi) {
   var s = lagrange1_2(lambda, phi);
   var t = sm_1([s[1] / 2, s[0] / 2]);
