@@ -11,6 +11,7 @@ export default function() {
   var polygons = {
     type: "FeatureCollection",
     features: cube.map(function(face) {
+      face = face.slice();
       face.push(face[0]);
       return {
         geometry: {
