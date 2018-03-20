@@ -1,7 +1,7 @@
 /*
  * Cahill-Keyes projection
  *
- * Implemented in C by Mary Jo Graça (2011)
+ * Implemented in Perl by Mary Jo Graça (2011)
  *
  * Ported to D3.js by Enrico Spinielli (2013)
  *
