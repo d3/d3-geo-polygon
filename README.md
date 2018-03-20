@@ -104,6 +104,13 @@ The icosahedral projection.
 
 Buckminster Fuller’s Airocean projection (also known as “Dymaxion”), based on a very specific arrangement of the icosahedron which allows continuous continent shapes. Fuller’s triangle transformation, as formulated by Robert W. Gray (and implemented by Philippe Rivière), makes the projection almost equal-area.
 
+<a href="#geoCahillKeyes" name="geoCahillKeyes">#</a> d3.<b>geoCahillKeyes</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/cahillKeyes.js "Source")
+<br><a href="#geoCahillKeyesRaw" name="geoCahillKeyesRaw">#</a> d3.<b>geoCahillKeyes</b>
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/cahillKeyes.png" width="480" height="250">](http://www.genekeyes.com/)
+
+The Cahill-Keyes projection, designed by Gene Keyes (1975), is built on Bernard J. S. Cahill’s 1909 octant design. Implementation by Mary Jo Graça (2011), ported to D3 by Enrico Spinielli (2013).
+
 <a href="#geoTetrahedralLee" name="geoTetrahedralLee">#</a> d3.<b>geoTetrahedralLee</b>(<i>orientation</i>) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/tetrahedralLee.js "Source")
 <br><a href="#geoLeeRaw" name="geoLeeRaw">#</a> d3.<b>geoLeeRaw</b>
 
