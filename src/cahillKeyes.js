@@ -6,7 +6,8 @@
  * Ported to D3.js by Enrico Spinielli (2013)
  *
  */
-import { abs, asin, atan2, cos, degrees, max, min, pi, radians, sin, sqrt, tan } from "./math";
+import { abs, cos, degrees, pi, radians, sin, sign, sqrt, tan } from "./math";
+import { cartesianCross, cartesianDegrees, cartesianDot, sphericalDegrees } from "./cartesian";
 import polyhedral from "./polyhedral/index";
 import { geoProjectionMutator as projectionMutator } from "d3-geo";
 
@@ -35,7 +36,7 @@ export default function(faceProjection) {
   });
 
   var ck = octahedron.map(function(face) {
-    var xyz = face.map(cartesian),
+    var xyz = face.map(cartesianDegrees),
       n = xyz.length,
       a = xyz[n - 1],
       b,
@@ -46,12 +47,12 @@ export default function(faceProjection) {
     for (var i = 0; i < n; ++i) {
       b = xyz[i];
       hexagon.push(
-        spherical([
+        sphericalDegrees([
           a[0] * cosTheta + b[0] * sinTheta,
           a[1] * cosTheta + b[1] * sinTheta,
           a[2] * cosTheta + b[2] * sinTheta
         ]),
-        spherical([
+        sphericalDegrees([
           b[0] * cosTheta + a[0] * sinTheta,
           b[1] * cosTheta + a[1] * sinTheta,
           b[2] * cosTheta + a[2] * sinTheta
@@ -78,9 +79,9 @@ export default function(faceProjection) {
       ]);
       parents.push(j);
       normals.push(
-        cross(
-          cartesian(hexagon[(i * 2 + 2) % (2 * n)]),
-          cartesian(hexagon[(i * 2 + 1) % (2 * n)])
+        cartesianCross(
+          cartesianDegrees(hexagon[(i * 2 + 2) % (2 * n)]),
+          cartesianDegrees(hexagon[(i * 2 + 1) % (2 * n)])
         )
       );
     }
@@ -116,42 +117,13 @@ export default function(faceProjection) {
     var n = cornerNormals[hexagon];
 
     return faces[
-      dot(n[0], p) < 0
+      cartesianDot(n[0], p) < 0
         ? 8 + 3 * hexagon
-        : dot(n[1], p) < 0
+        : cartesianDot(n[1], p) < 0
           ? 8 + 3 * hexagon + 1
-          : dot(n[2], p) < 0 ? 8 + 3 * hexagon + 2 : hexagon
+          : cartesianDot(n[2], p) < 0 ? 8 + 3 * hexagon + 2 : hexagon
     ];
   }
-}
-
-function dot(a, b) {
-  for (var i = 0, n = a.length, s = 0; i < n; ++i) s += a[i] * b[i];
-  return s;
-}
-
-function cross(a, b) {
-  return [
-    a[1] * b[2] - a[2] * b[1],
-    a[2] * b[0] - a[0] * b[2],
-    a[0] * b[1] - a[1] * b[0]
-  ];
-}
-
-// Converts 3D Cartesian to spherical coordinates (degrees).
-function spherical(cartesian) {
-  return [
-    atan2(cartesian[1], cartesian[0]) * degrees,
-    asin(max(-1, min(1, cartesian[2]))) * degrees
-  ];
-}
-
-// Converts spherical coordinates (degrees) to 3D Cartesian.
-function cartesian(coordinates) {
-  var lambda = coordinates[0] * radians,
-    phi = coordinates[1] * radians,
-    cosPhi = cos(phi);
-  return [cosPhi * cos(lambda), cosPhi * sin(lambda), sin(phi)];
 }
 
 // all names of reference points, A, B, D, ... , G, P75
@@ -177,41 +149,40 @@ export function cahillKeyesRaw(mg) {
       pointV,
       k = sqrt(3);
 
-    CK.lengthMA = 940 / 10000 * CK.lengthMG; //->GLOBAL
-    CK.lengthParallel0to73At0 = CK.lengthMG / 100; //->GLOBAL
+    CK.lengthMA = 940 / 10000 * CK.lengthMG;
+    CK.lengthParallel0to73At0 = CK.lengthMG / 100;
     CK.lengthParallel73to90At0 =
-      (CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 73) / (90 - 73); //->GLOBAL
-    CK.sin60 = 0.866025403784439; // √3/2  //->GLOBAL
-    CK.cos60 = 0.5; //->GLOBAL
-    CK.yTranslate = CK.lengthMG * CK.sin60; //->GLOBAL
-    CK.pointM = [0, 0]; //->GLOBAL
-    CK.pointG = [CK.lengthMG, 0]; //->GLOBAL
+      (CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 73) / (90 - 73);
+    CK.sin60 = k / 2; // √3/2 
+    CK.cos60 = 0.5;
+    CK.pointM = [0, 0];
+    CK.pointG = [CK.lengthMG, 0];
     pointN = [CK.lengthMG, CK.lengthMG * tan(30 * radians)];
-    CK.pointA = [CK.lengthMA, 0]; //->GLOBAL
-    CK.pointB = lineIntersection(CK.pointM, 30, CK.pointA, 45); //->GLOBAL
-    CK.lengthAG = distance(CK.pointA, CK.pointG); //->GLOBAL
-    CK.lengthAB = distance(CK.pointA, CK.pointB); //->GLOBAL
+    CK.pointA = [CK.lengthMA, 0];
+    CK.pointB = lineIntersection(CK.pointM, 30, CK.pointA, 45);
+    CK.lengthAG = distance(CK.pointA, CK.pointG);
+    CK.lengthAB = distance(CK.pointA, CK.pointB);
     lengthMB = distance(CK.pointM, CK.pointB);
     lengthMN = distance(CK.pointM, pointN);
     lengthNG = distance(pointN, CK.pointG);
-    CK.pointD = interpolate(lengthMB, lengthMN, pointN, CK.pointM); //->GLOBAL
-    CK.pointF = [CK.lengthMG, lengthNG - lengthMB]; //->GLOBAL
+    CK.pointD = interpolate(lengthMB, lengthMN, pointN, CK.pointM);
+    CK.pointF = [CK.lengthMG, lengthNG - lengthMB];
     CK.pointE = [
       pointN[0] - CK.lengthMA * sin(30 * radians),
       pointN[1] - CK.lengthMA * cos(30 * radians)
-    ]; //->GLOBAL
-    CK.lengthGF = distance(CK.pointG, CK.pointF); //->GLOBAL
-    CK.lengthBD = distance(CK.pointB, CK.pointD); //->GLOBAL
-    CK.lengthBDE = CK.lengthBD + CK.lengthAB; // lengthAB = lengthDE  //->GLOBAL
-    CK.lengthGFE = CK.lengthGF + CK.lengthAB; // lengthAB = lengthFE  //->GLOBAL
-    CK.deltaMEq = CK.lengthGFE / 45; //->GLOBAL
-    CK.lengthAP75 = (90 - 75) * CK.lengthParallel73to90At0; //->GLOBAL
-    CK.lengthAP73 = CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 73; //->GLOBAL
+    ];
+    CK.lengthGF = distance(CK.pointG, CK.pointF);
+    CK.lengthBD = distance(CK.pointB, CK.pointD);
+    CK.lengthBDE = CK.lengthBD + CK.lengthAB; // lengthAB = lengthDE 
+    CK.lengthGFE = CK.lengthGF + CK.lengthAB; // lengthAB = lengthFE 
+    CK.deltaMEq = CK.lengthGFE / 45;
+    CK.lengthAP75 = (90 - 75) * CK.lengthParallel73to90At0;
+    CK.lengthAP73 = CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 73;
     pointU = [
       CK.pointA[0] + CK.lengthAP73 * cos(30 * radians),
       CK.pointA[1] + CK.lengthAP73 * sin(30 * radians)
     ];
-    CK.pointT = lineIntersection(pointU, -60, CK.pointB, 30); //->GLOBAL
+    CK.pointT = lineIntersection(pointU, -60, CK.pointB, 30);
 
     p73a = parallel73(m);
     lF = p73a.lengthParallel73;
@@ -219,8 +190,8 @@ export function cahillKeyesRaw(mg) {
     lM = lengthMiddleSegment(m);
     l = p * (lT + lM + lF) / 73;
     pointV = [0, 0];
-    CK.pointC = [0, 0]; //->GLOBAL
-    CK.radius = 0; //->GLOBAL
+    CK.pointC = [0, 0];
+    CK.radius = 0;
 
     l = l - lT;
     pointV = interpolate(l, lM, jointT(m), jointF(m));
@@ -339,10 +310,6 @@ export function cahillKeyesRaw(mg) {
     return xynew;
   }
 
-  function sgn(x) {
-    return x >= 0 ? 1 : -1;
-  }
-
   // truncate towards zero like int() in Perl
   function truncate(n) {
     return Math[n > 0 ? "floor" : "ceil"](n);
@@ -422,8 +389,8 @@ export function cahillKeyesRaw(mg) {
     var south = [0, 6, 7, 8, 5],
       o = truncate((lon + 180) / 90 + 1),
       p, // parallel
-      m = lon + 180 - 90 * (o - 1) - 45, // meridian
-      s = sgn(m); // sign
+      m = (lon + 720) % 90 - 45, // meridian
+      s = sign(m);
 
     m = abs(m);
     if (o === 5) o = 1;
@@ -681,7 +648,6 @@ export function cahillKeyesRaw(mg) {
       //console.log("mj2g: something weird happened!");
       return xynew;
     }
-    xynew[1] += CK.yTranslate;
 
     return xynew;
   }
@@ -693,10 +659,10 @@ export function cahillKeyesRaw(mg) {
     var lon = lambda * degrees,
       lat = phi * degrees,
       res = ll2mp(lon, lat),
-      m = res[0],
-      p = res[1],
-      s = res[2],
-      o = res[3],
+      m = res[0],  // 0 ≤ m ≤ 45
+      p = res[1],  // 0 ≤ p ≤ 90
+      s = res[2],  // -1 / 1 = side of m
+      o = res[3],  // octant
       xy = mp2xy(m, p),
       mm = mj2g([xy[0], s * xy[1]], o);
 
