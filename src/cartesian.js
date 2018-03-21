@@ -1,12 +1,21 @@
-import {asin, atan2, cos, epsilon2, sin, sqrt} from "./math";
+import {asin, atan2, cos, degrees, epsilon2, radians, sin, sqrt} from "./math";
 
 export function spherical(cartesian) {
   return [atan2(cartesian[1], cartesian[0]), asin(cartesian[2])];
 }
 
+export function sphericalDegrees(cartesian) {
+  var c = spherical(cartesian);
+  return [c[0] * degrees, c[1] * degrees];
+}
+
 export function cartesian(spherical) {
   var lambda = spherical[0], phi = spherical[1], cosPhi = cos(phi);
   return [cosPhi * cos(lambda), cosPhi * sin(lambda), sin(phi)];
+}
+
+export function cartesianDegrees(spherical) {
+  return cartesian([spherical[0] * radians, spherical[1] * radians]);
 }
 
 export function cartesianDot(a, b) {
