@@ -10,10 +10,7 @@ import {default as matrix, multiply, inverse} from "../../node_modules/d3-geo-pr
 //    point (radians).
 export default function(tree, face) {
 
-  recurse(tree, {transform: [
-    1, 0, 0,
-    0, 1, 0
-  ]});
+  recurse(tree, {transform: null});
 
   function recurse(node, parent) {
     node.edges = faceEdges(node.face);
