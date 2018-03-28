@@ -111,7 +111,7 @@ Buckminster Fuller’s Airocean projection (also known as “Dymaxion”), based
 
 The Cahill-Keyes projection, designed by Gene Keyes (1975), is built on Bernard J. S. Cahill’s 1909 octant design. Implementation by Mary Jo Graça (2011), ported to D3 by Enrico Spinielli (2013).
 
-<a href="#geoTetrahedralLee" name="geoTetrahedralLee">#</a> d3.<b>geoTetrahedralLee</b>(<i>orientation</i>) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/tetrahedralLee.js "Source")
+<a href="#geoTetrahedralLee" name="geoTetrahedralLee">#</a> d3.<b>geoTetrahedralLee</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/tetrahedralLee.js "Source")
 <br><a href="#geoLeeRaw" name="geoLeeRaw">#</a> d3.<b>geoLeeRaw</b>
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/tetrahedralLee.png" width="480" height="250">](https://bl.ocks.org/Fil/c36ed66a4d50d77150712c80642a78d5)
