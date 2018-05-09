@@ -82,7 +82,7 @@ The .<b>parents</b>([<i>parents</i>]), .<b>polygons</b>([<i>polygons</i>]), .<b>
 
 <a href="#geoCubic" name="geoCubic">#</a> d3.<b>geoCubic</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/cubic.js "Source")
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/cubic.png" width="480" height="250">](https://beta.observablehq.com/@fil/cubic-projection)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/cubic.png" width="480" height="250">](https://beta.observablehq.com/@fil/cubic-projections)
 
 The cubic projection.
 
@@ -94,7 +94,7 @@ The dodecahedral projection.
 
 <a href="#geoIcosahedral" name="geoIcosahedral">#</a> d3.<b>geoIcosahedral</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/icosahedral.js "Source")
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/icosahedral.png" width="480" height="250">](https://beta.observablehq.com/@fil/icosahedral-projection)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/icosahedral.png" width="480" height="250">](https://beta.observablehq.com/@fil/icosahedral-projections)
 
 The icosahedral projection.
 
