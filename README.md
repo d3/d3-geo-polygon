@@ -1,6 +1,6 @@
 # d3-geo-polygon
 
-Clipping and geometric operations for spherical polygons. 
+Clipping and geometric operations for spherical polygons.
 
 ## Installing
 
@@ -92,7 +92,7 @@ The cubic projection.
 
 The dodecahedral projection.
 
-<a href="#geoIcosahedral" name="geoIcosahedral">#</a> d3.<b>geoIcosahedral</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/icosahedral.js "Source")
+<a href="#geoIcosahedral" name="geoIcosahedral">#</a> d3.<b>geoIcosahedral</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/icosahedral.js "Source")
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/icosahedral.png" width="480" height="250">](https://beta.observablehq.com/@fil/icosahedral-projections)
 
