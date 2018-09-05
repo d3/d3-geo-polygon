@@ -1,11 +1,12 @@
 {
   "name": "d3-geo-polygon",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Clipping and geometric operations for spherical polygons.",
   "keywords": [
     "d3",
     "d3-module",
-    "geo",
+    "cartography",
+    "projection",
     "polygon"
   ],
   "homepage": "https://github.com/d3/d3-geo-polygon",
@@ -24,30 +25,30 @@
       "url": "https://visionscarto.net"
     }
   ],
-  "main": "build/d3-geo-polygon.js",
-  "unpkg": "build/d3-geo-polygon.min.js",
-  "jsdelivr": "build/d3-geo-polygon.min.js",
-  "module": "index",
+  "main": "dist/d3-geo-polygon.js",
+  "unpkg": "dist/d3-geo-polygon.min.js",
+  "jsdelivr": "dist/d3-geo-polygon.min.js",
+  "module": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3-geo-polygon.git"
   },
   "scripts": {
-    "pretest": "rm -rf build && mkdir build && rollup -c --banner \"$(preamble)\"",
-    "test": "tape 'test/**/*-test.js' && eslint index.js src",
-    "prepublishOnly": "npm run test && mkdir -p test/output && test/compare-images && uglifyjs -b beautify=false,preamble=\"'$(preamble)'\" build/d3-geo-polygon.js -c -m -o build/d3-geo-polygon.min.js",
-    "postpublish": "git push && git push --tags && zip -j build/d3-geo-polygon.zip -- LICENSE README.md build/d3-geo-polygon.js build/d3-geo-polygon.min.js"
+    "pretest": "rollup -c",
+    "test": "tape 'test/**/*-test.js' && eslint src",
+    "prepublishOnly": "rm -rf dist && yarn test && mkdir -p test/output && test/compare-images",
+    "postpublish": "git push && git push --tags && zip -j dist/d3-geo-polygon.zip -- LICENSE README.md dist/d3-geo-polygon.js dist/d3-geo-polygon.min.js"
   },
   "dependencies": {
     "d3-array": "1",
+    "d3-geo": "^1.11.1",
     "d3-geo-projection": "2"
   },
   "devDependencies": {
-    "d3-geo": "^1.10",
-    "eslint": "4",
-    "package-preamble": "0.1",
-    "rollup": "0.50",
-    "tape": "4",
-    "uglify-js": "3"
+    "canvas": "1",
+    "eslint": "5",
+    "rollup": "0.64",
+    "rollup-plugin-terser": "1",
+    "tape": "4"
   }
 }
