@@ -74,11 +74,11 @@ A butterfly projection inspired by Steve Waterman’s design.
 
 New projections are introduced:
 
-<a href="#geoPolyhedralVoronoi" name="geoPolyhedralVoronoi">#</a> d3.<b>geoPolyhedralVoronoi</b>([<i>parents</i>], [<i>polygons</i>], [<i>faceProjection</i>]) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/voronoi.js "Source")
+<a href="#geoPolyhedralVoronoi" name="geoPolyhedralVoronoi">#</a> d3.<b>geoPolyhedralVoronoi</b>([<i>parents</i>], [<i>polygons</i>], [<i>faceProjection</i>], [<i>faceFind</i>]) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/voronoi.js "Source")
 
 Returns a polyhedral projection based on the *polygons*, arranged in a tree according to the *parents* list. *polygons* are a GeoJSON FeatureCollection of geoVoronoi cells, which should indicate the corresponding sites (see [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi)). An optional [*faceProjection*](#geoPolyhedral) is passed to d3.geoPolyhedral() -- note that the gnomonic projection on the polygons’ sites is the only faceProjection that works in the general case.
 
-The .<b>parents</b>([<i>parents</i>]), .<b>polygons</b>([<i>polygons</i>]), .<b>faceProjection</b>([<i>faceProjection</i>]) set and read the corresponding options.
+The .<b>parents</b>([<i>parents</i>]), .<b>polygons</b>([<i>polygons</i>]), .<b>faceProjection</b>([<i>faceProjection</i>]) set and read the corresponding options. Use <i>.faceFind(voronoi.find)</i> for faster results.
 
 <a href="#geoCubic" name="geoCubic">#</a> d3.<b>geoCubic</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/cubic.js "Source")
 

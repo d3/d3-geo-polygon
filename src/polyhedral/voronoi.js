@@ -6,9 +6,10 @@ import {
 import { degrees } from "../math";
 import polyhedral from "./index";
 
-export default function(parents, polygons, faceProjection) {
+export default function(parents, polygons, faceProjection, find) {
   parents = parents || [];
   polygons = polygons || { features: [] };
+  find = find || find0;
 
   // it is possible to pass a specific projection on each face
   // by default is is a gnomonic projection centered on the face's centroid
@@ -51,11 +52,8 @@ export default function(parents, polygons, faceProjection) {
     });
   }
 
-  // use the voronoi construction to find the relevant face
-  // i.e. the one whose centre is closest to the point
-  function voronoiface(lambda, phi) {
-    lambda *= degrees;
-    phi *= degrees;
+  // a basic function to find the polygon that contains the point
+  function find0(lambda, phi) {
     var d0 = Infinity;
     var found = -1;
     for (var i = 0; i < faces.length; i++) {
@@ -65,7 +63,11 @@ export default function(parents, polygons, faceProjection) {
         found = i;
       }
     }
-    return faces[found];
+    return found;
+  }
+  
+  function faceFind(lambda, phi) {
+    return faces[find(lambda * degrees, phi * degrees)];
   }
 
   var p = gnomonic();
@@ -78,7 +80,7 @@ export default function(parents, polygons, faceProjection) {
       angle = p.angle();
 
     if (faces.length) {
-      p = polyhedral(faces[0], voronoiface);
+      p = polyhedral(faces[0], faceFind);
     }
 
     p.parents = function(_) {
@@ -96,9 +98,15 @@ export default function(parents, polygons, faceProjection) {
     };
 
     p.faceProjection = function(_) {
-      if (!arguments.length) return parents;
+      if (!arguments.length) return faceProjection;
       faceProjection = _;
       build_tree();
+      return reset();
+    };
+
+    p.faceFind = function(_) {
+      if (!arguments.length) return find;
+      find = _;
       return reset();
     };
 
