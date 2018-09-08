@@ -1,5 +1,5 @@
-import {abs, acos, cos, epsilon2} from "./math";
-import {cartesianCross, cartesianDot, cartesianNormalizeInPlace} from "./cartesian";
+import {abs, acos, cos, epsilon, epsilon2} from "./math";
+import {cartesianCross, cartesianDot, cartesianEqual, cartesianNormalizeInPlace} from "./cartesian";
 
 export function intersectSegment(from, to) {
   this.from = from, this.to = to;
@@ -11,27 +11,49 @@ export function intersectSegment(from, to) {
 
 // >> here a and b are segments processed by intersectSegment
 export function intersect(a, b) {
-  var lc = cos(a.l + b.l);
+  var lc = cos(a.l + b.l) - epsilon;
   if (cartesianDot(a.from, b.from) < lc
   || cartesianDot(a.from, b.to) < lc
   || cartesianDot(a.to, b.from) < lc
   || cartesianDot(a.to, b.to) < lc)
     return;
+
   var axb = cartesianCross(a.normal, b.normal);
   cartesianNormalizeInPlace(axb);
+
   var a0 = cartesianDot(axb, a.fromNormal),
       a1 = cartesianDot(axb, a.toNormal),
       b0 = cartesianDot(axb, b.fromNormal),
       b1 = cartesianDot(axb, b.toNormal);
 
-  if (a0 > 0 && a1 < 0 && b0 > 0 && b1 < 0) {
+  // check if the candidate lies on both segments
+  // or is almost equal to one of the four points
+  if (
+    (a0 > 0 && a1 < 0 && b0 > 0 && b1 < 0) ||
+    cartesianEqual(axb, a.from) ||
+    cartesianEqual(axb, a.to) ||
+    cartesianEqual(axb, b.from) ||
+    cartesianEqual(axb, b.to)
+  )
     return axb;
-  }
 
-  if (a0 < 0 && a1 > 0 && b0 < 0 && b1 > 0) {
-    axb[0] = -axb[0], axb[1] = -axb[1], axb[2] = -axb[2];
+  // same test for the antipode
+  axb[0] = -axb[0];
+  axb[1] = -axb[1];
+  axb[2] = -axb[2];
+  a0 = -a0;
+  a1 = -a1;
+  b0 = -b0;
+  b1 = -b1;
+
+  if (
+    (a0 > 0 && a1 < 0 && b0 > 0 && b1 < 0) ||
+    cartesianEqual(axb, a.from) ||
+    cartesianEqual(axb, a.to) ||
+    cartesianEqual(axb, b.from) ||
+    cartesianEqual(axb, b.to)
+  )
     return axb;
-  }
 }
 
 export function intersectPointOnLine(p, a) {
