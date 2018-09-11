@@ -1,5 +1,5 @@
 import clip from "./index";
-import {atan2, cos, degrees, max, min, pi, radians, sign, sin, sqrt} from "../math";
+import {atan2, cos, max, min, pi, radians, sign, sin, sqrt} from "../math";
 import {cartesian, cartesianCross, cartesianDot, cartesianEqual, spherical} from "../cartesian";
 import {intersectCoincident, intersectPointOnLine, intersectSegment, intersect} from "../intersect";
 import {default as polygonContains} from "../polygonContains";
@@ -7,33 +7,96 @@ import {default as polygonContains} from "../polygonContains";
 var clipNone = function(stream) { return stream; };
 
 // clipPolygon
-export default function (p) {
-  var segments = [];
+export default function (geometry) {
 
-  if (p.type != "Polygon") return clipNone; // todo: MultiPolygon?
+  function clipGeometry(geometry) {
+    var polygons;
+    if (geometry.type === "MultiPolygon") {
+      polygons = geometry.coordinates;
+    } else if (geometry.type === "Polygon") {
+      polygons = [geometry.coordinates];
+    } else { return clipNone; }
 
-  var polygon = p.coordinates.map(function(ring) {
-    var c, c0;
-    ring = ring.map(function(point, i) {
-      c = cartesian(point = [point[0] * radians, point[1] * radians]);
-      if (i) segments.push(new intersectSegment(c0, c));
-      c0 = c;
-      return point;
-    });
-    ring.pop();
-    return ring;
+    var clipPolygon = function(sink) {
+      polygons.forEach(function(poly) {
+        var polygon = ringRadians(poly[0]); // todo holes?
+        var segments = ringSegments(polygon);
+        polygon.pop();
+        sink = clip(visible([polygon]), clipLine(segments), interpolate(segments, [polygon]), polygon[0], clipPolygonSort)(sink);
+      });
+      return sink;
+    };
+//    console.warn(typeof A);
+//    return A;
+    
+    clipPolygon.polygon = function(_) {
+      return _ ? (geometry = _, clipGeometry(geometry)) : geometry;
+    };
+  
+    return clipPolygon;
+  }
+
+  return clipGeometry(geometry);
+}
+
+function ringRadians(ring) {
+  return ring.map(function(point) {
+    return [point[0] * radians, point[1] * radians];
   });
+}
 
+function ringSegments(ring) {
+  var c, c0, segments = [];
+  ring.forEach(function(point, i) {
+    c = cartesian(point);
+    if (i) segments.push(new intersectSegment(c0, c));
+    c0 = c;
+    return point;
+  });
+  return segments;
+}
+  
+function clipPolygonSort(a, b) {
+  a = a.x, b = b.x;
+  return a.index - b.index || a.t - b.t;
+}
 
-  function visible(lambda, phi) {
+function interpolate(segments, polygon) {
+  return function (from, to, direction, stream) {
+    if (from == null) {
+      var n = polygon.length;
+      polygon.forEach(function(ring, i) {
+        ring.forEach(function(point) { stream.point(point[0], point[1]); });
+        if (i < n - 1) stream.lineEnd(), stream.lineStart();
+      });
+    } else if (from.index !== to.index && from.index != null && to.index != null) {
+      for (var i = from.index; i !== to.index; i = (i + direction + segments.length) % segments.length) {
+        var segment = segments[i],
+            point = spherical(direction > 0 ? segment.to : segment.from);
+        stream.point(point[0], point[1]);
+      }
+    }
+  };
+}
+
+// Geodesic coordinates for two 3D points.
+function clipPolygonDistance(a, b) {
+  var axb = cartesianCross(a, b);
+  return atan2(sqrt(cartesianDot(axb, axb)), cartesianDot(a, b));
+}
+
+function visible(polygon) {
+  return function (lambda, phi) {
     return polygonContains(polygon, [lambda, phi]);
   }
+}
 
-  function randsign(i,j) {
-    return sign(sin(100 * i + j));
-  }
+function randsign(i,j) {
+  return sign(sin(100 * i + j));
+}
 
-  function clipLine(stream) {
+function clipLine(segments) {
+  return function(stream) {
     var point0,
         lambda00,
         phi00,
@@ -120,46 +183,4 @@ export default function (p) {
       }
     };
   }
-
-  function interpolate(from, to, direction, stream) {
-    if (from == null) {
-      var n = polygon.length;
-      polygon.forEach(function(ring, i) {
-        ring.forEach(function(point) { stream.point(point[0], point[1]); });
-        if (i < n - 1) stream.lineEnd(), stream.lineStart();
-      });
-    } else if (from.index !== to.index && from.index != null && to.index != null) {
-      for (var i = from.index; i !== to.index; i = (i + direction + segments.length) % segments.length) {
-        var segment = segments[i],
-            point = spherical(direction > 0 ? segment.to : segment.from);
-        stream.point(point[0], point[1]);
-      }
-    }
-  }
-
-  var c = clip(visible, clipLine, interpolate, polygon[0][0], clipPolygonSort);
-  
-  c.polygon = function() {
-    return {
-      type: "Polygon",
-      coordinates: polygon.map(function(e) {
-        return e.map(function(d) {
-          return [ d[0] * degrees, d[1] * degrees];
-        });
-      })
-    };
-  };
-  
-  return c;
-}
-
-function clipPolygonSort(a, b) {
-  a = a.x, b = b.x;
-  return a.index - b.index || a.t - b.t;
-}
-
-// Geodesic coordinates for two 3D points.
-function clipPolygonDistance(a, b) {
-  var axb = cartesianCross(a, b);
-  return atan2(sqrt(cartesianDot(axb, axb)), cartesianDot(a, b));
 }
