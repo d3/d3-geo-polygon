@@ -3,6 +3,7 @@ import {atan2, cos, max, min, pi, radians, sign, sin, sqrt} from "../math";
 import {cartesian, cartesianCross, cartesianDot, cartesianEqual, spherical} from "../cartesian";
 import {intersectCoincident, intersectPointOnLine, intersectSegment, intersect} from "../intersect";
 import {default as polygonContains} from "../polygonContains";
+import {merge} from "d3-array";
 
 var clipNone = function(stream) { return stream; };
 
@@ -11,6 +12,7 @@ export default function (geometry) {
 
   function clipGeometry(geometry) {
     var polygons;
+
     if (geometry.type === "MultiPolygon") {
       polygons = geometry.coordinates;
     } else if (geometry.type === "Polygon") {
@@ -19,27 +21,21 @@ export default function (geometry) {
 
     polygons = polygons.map(poly => poly.map(ringRadians));
 
-    var clipPolygon = function(sink) {
-      var isVisible = visible(polygons);
-      polygons.forEach(function(polygon) {
-        var segments = ringSegments(polygon[0]); // todo holes?
-        sink = clip(
-          isVisible,
-          clipLine(segments, polygon),
-          interpolate(segments, polygon),
-          polygon[0][0],
-          clipPolygonSort
-        )(sink);
-      });
-      return sink;
-    };
-//    console.warn(typeof A);
-//    return A;
+    var isVisible = visible(polygons),
+      segments = merge(polygons.map(function(polygon) {
+        return ringSegments(polygon[0]); // todo holes?
+      })),
+      clipPolygon = clip(
+        isVisible,
+        clipLine(segments, isVisible),
+        interpolate(segments, polygons),
+        polygons[0][0][0],
+        clipPolygonSort
+      );
     
     clipPolygon.polygon = function(_) {
       return _ ? (geometry = _, clipGeometry(geometry)) : geometry;
     };
-  
     return clipPolygon;
   }
 
@@ -68,20 +64,27 @@ function clipPolygonSort(a, b) {
   return a.index - b.index || a.t - b.t;
 }
 
-function interpolate(segments, polygon) {
+function interpolate(segments, polygons) {
   return function (from, to, direction, stream) {
     if (from == null) {
+   polygons.forEach(function(polygon, r) {
+      stream.polygonStart();
       var n = polygon.length;
       polygon.forEach(function(ring, i) {
+        stream.lineStart();
         ring.forEach(function(point) { stream.point(point[0], point[1]); });
-        if (i < n - 1) stream.lineEnd(), stream.lineStart();
+        stream.lineEnd();
+      });
+      stream.polygonEnd();
       });
     } else if (from.index !== to.index && from.index != null && to.index != null) {
+   polygons.forEach(function(polygon, r) {
       for (var i = from.index; i !== to.index; i = (i + direction + segments.length) % segments.length) {
         var segment = segments[i],
             point = spherical(direction > 0 ? segment.to : segment.from);
         stream.point(point[0], point[1]);
       }
+   });
     }
   };
 }
@@ -102,8 +105,7 @@ function randsign(i,j) {
   return sign(sin(100 * i + j));
 }
 
-function clipLine(segments, polygon) {
-  var isVisible = visible([polygon]);
+function clipLine(segments, isVisible) {
   return function(stream) {
     var point0,
         lambda00,

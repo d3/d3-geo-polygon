@@ -38,19 +38,13 @@ export default function(pointVisible, clipLine, interpolate, start, sort) {
           clipRejoin(segments, sort, startInside, interpolate, sink);
         } else if (startInside) {
           if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
-          sink.lineStart();
           interpolate(null, null, 1, sink);
-          sink.lineEnd();
         }
         if (polygonStarted) sink.polygonEnd(), polygonStarted = false;
         segments = polygon = null;
       },
       sphere: function() {
-        sink.polygonStart();
-        sink.lineStart();
         interpolate(null, null, 1, sink);
-        sink.lineEnd();
-        sink.polygonEnd();
       }
     };
 
