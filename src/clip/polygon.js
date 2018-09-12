@@ -8,8 +8,7 @@ import {merge} from "d3-array";
 var clipNone = function(stream) { return stream; };
 
 // clipPolygon
-export default function (geometry) {
-
+export default function(geometry) {
   function clipGeometry(geometry) {
     var polygons;
 
@@ -17,14 +16,18 @@ export default function (geometry) {
       polygons = geometry.coordinates;
     } else if (geometry.type === "Polygon") {
       polygons = [geometry.coordinates];
-    } else { return clipNone; }
+    } else {
+      return clipNone;
+    }
 
     polygons = polygons.map(poly => poly.map(ringRadians));
 
     var isVisible = visible(polygons),
-      segments = merge(polygons.map(function(polygon) {
-        return ringSegments(polygon[0]); // todo holes?
-      })),
+      segments = merge(
+        polygons.map(function(polygon) {
+          return ringSegments(polygon[0]); // todo holes?
+        })
+      ),
       clipPolygon = clip(
         isVisible,
         clipLine(segments, isVisible),
@@ -32,9 +35,9 @@ export default function (geometry) {
         polygons[0][0][0],
         clipPolygonSort
       );
-    
+
     clipPolygon.polygon = function(_) {
-      return _ ? (geometry = _, clipGeometry(geometry)) : geometry;
+      return _ ? ((geometry = _), clipGeometry(geometry)) : geometry;
     };
     return clipPolygon;
   }
@@ -49,7 +52,9 @@ function ringRadians(ring) {
 }
 
 function ringSegments(ring) {
-  var c, c0, segments = [];
+  var c,
+    c0,
+    segments = [];
   ring.forEach(function(point, i) {
     c = cartesian(point);
     if (i) segments.push(new intersectSegment(c0, c));
@@ -58,33 +63,43 @@ function ringSegments(ring) {
   });
   return segments;
 }
-  
+
 function clipPolygonSort(a, b) {
-  a = a.x, b = b.x;
+  (a = a.x), (b = b.x);
   return a.index - b.index || a.t - b.t;
 }
 
 function interpolate(segments, polygons) {
-  return function (from, to, direction, stream) {
+  return function(from, to, direction, stream) {
     if (from == null) {
-   polygons.forEach(function(polygon, r) {
-      stream.polygonStart();
-      var n = polygon.length;
-      polygon.forEach(function(ring, i) {
-        stream.lineStart();
-        ring.forEach(function(point) { stream.point(point[0], point[1]); });
-        stream.lineEnd();
+      polygons.forEach(function(polygon, r) {
+        stream.polygonStart();
+        var n = polygon.length;
+        polygon.forEach(function(ring, i) {
+          stream.lineStart();
+          ring.forEach(function(point) {
+            stream.point(point[0], point[1]);
+          });
+          stream.lineEnd();
+        });
+        stream.polygonEnd();
       });
-      stream.polygonEnd();
-      });
-    } else if (from.index !== to.index && from.index != null && to.index != null) {
-   polygons.forEach(function(polygon, r) {
-      for (var i = from.index; i !== to.index; i = (i + direction + segments.length) % segments.length) {
-        var segment = segments[i],
+    } else if (
+      from.index !== to.index &&
+      from.index != null &&
+      to.index != null
+    ) {
+      polygons.forEach(function(polygon, r) {
+        for (
+          var i = from.index;
+          i !== to.index;
+          i = (i + direction + segments.length) % segments.length
+        ) {
+          var segment = segments[i],
             point = spherical(direction > 0 ? segment.to : segment.from);
-        stream.point(point[0], point[1]);
-      }
-   });
+          stream.point(point[0], point[1]);
+        }
+      });
     }
   };
 }
@@ -96,23 +111,18 @@ function clipPolygonDistance(a, b) {
 }
 
 function visible(polygons) {
-  return function (lambda, phi) {
+  return function(lambda, phi) {
     return polygons.some(polygon => polygonContains(polygon, [lambda, phi]));
-  }
+  };
 }
 
-function randsign(i,j) {
+function randsign(i, j) {
   return sign(sin(100 * i + j));
 }
 
 function clipLine(segments, isVisible) {
   return function(stream) {
-    var point0,
-        lambda00,
-        phi00,
-        v00,
-        v0,
-        clean;
+    var point0, lambda00, phi00, v00, v0, clean;
     return {
       lineStart: function() {
         point0 = null;
@@ -120,26 +130,40 @@ function clipLine(segments, isVisible) {
       },
       point: function(lambda, phi, close) {
         if (cos(lambda) == -1) lambda -= sign(sin(lambda)) * 1e-5; // move away from -180/180 https://github.com/d3/d3-geo/pull/108#issuecomment-323798937
-        if (close) lambda = lambda00, phi = phi00;
+        if (close) (lambda = lambda00), (phi = phi00);
         var point = cartesian([lambda, phi]),
-            v = v0,
-            intersection,
-            i, j, s, t;
+          v = v0,
+          intersection,
+          i,
+          j,
+          s,
+          t;
         if (point0) {
           var segment = new intersectSegment(point0, point),
-              intersections = [];
+            intersections = [];
           for (i = 0, j = 100; i < segments.length && j > 0; ++i) {
             s = segments[i];
             intersection = intersect(segment, s);
             if (intersection) {
-              if (intersection === intersectCoincident ||
-                  cartesianEqual(intersection, point0) || cartesianEqual(intersection, point) ||
-                  cartesianEqual(intersection, s.from) || cartesianEqual(intersection, s.to)) {
+              if (
+                intersection === intersectCoincident ||
+                cartesianEqual(intersection, point0) ||
+                cartesianEqual(intersection, point) ||
+                cartesianEqual(intersection, s.from) ||
+                cartesianEqual(intersection, s.to)
+              ) {
                 t = 1e-4;
-                lambda = (lambda + 3 * pi + randsign(i,j) * t) % (2 * pi) - pi;
-                phi = min(pi / 2 - 1e-4, max(1e-4 - pi / 2, phi + randsign(i,j) * t));
-                segment = new intersectSegment(point0, point = cartesian([lambda, phi]));
-                i = -1, --j;
+                lambda =
+                  ((lambda + 3 * pi + randsign(i, j) * t) % (2 * pi)) - pi;
+                phi = min(
+                  pi / 2 - 1e-4,
+                  max(1e-4 - pi / 2, phi + randsign(i, j) * t)
+                );
+                segment = new intersectSegment(
+                  point0,
+                  (point = cartesian([lambda, phi]))
+                );
+                (i = -1), --j;
                 intersections.length = 0;
                 continue;
               }
@@ -147,21 +171,35 @@ function clipLine(segments, isVisible) {
               intersection.distance = clipPolygonDistance(point0, intersection);
               intersection.index = i;
               intersection.t = clipPolygonDistance(s.from, intersection);
-              intersection[0] = sph[0], intersection[1] = sph[1], intersection.pop();
+              (intersection[0] = sph[0]),
+                (intersection[1] = sph[1]),
+                intersection.pop();
               intersections.push(intersection);
             }
           }
           if (intersections.length) {
             clean = 0;
-            intersections.sort(function(a, b) { return a.distance - b.distance; });
+            intersections.sort(function(a, b) {
+              return a.distance - b.distance;
+            });
             for (i = 0; i < intersections.length; ++i) {
               intersection = intersections[i];
               v = !v;
               if (v) {
                 stream.lineStart();
-                stream.point(intersection[0], intersection[1], intersection.index, intersection.t);
+                stream.point(
+                  intersection[0],
+                  intersection[1],
+                  intersection.index,
+                  intersection.t
+                );
               } else {
-                stream.point(intersection[0], intersection[1], intersection.index, intersection.t);
+                stream.point(
+                  intersection[0],
+                  intersection[1],
+                  intersection.index,
+                  intersection.t
+                );
                 stream.lineEnd();
               }
             }
@@ -172,16 +210,19 @@ function clipLine(segments, isVisible) {
             s = segments[i];
             if (intersectPointOnLine(point, s)) {
               t = 1e-4;
-              lambda = (lambda + 3 * pi + randsign(i,j) * t) % (2 * pi) - pi;
-              phi = min(pi / 2 - 1e-4, max(1e-4 - pi / 2, phi + randsign(i,j) * t));
+              lambda = ((lambda + 3 * pi + randsign(i, j) * t) % (2 * pi)) - pi;
+              phi = min(
+                pi / 2 - 1e-4,
+                max(1e-4 - pi / 2, phi + randsign(i, j) * t)
+              );
               point = cartesian([lambda, phi]);
-              i = -1, --j;
+              (i = -1), --j;
             }
           }
-          v00 = v = isVisible(lambda00 = lambda, phi00 = phi);
+          v00 = v = isVisible((lambda00 = lambda), (phi00 = phi));
           if (v) stream.lineStart(), stream.point(lambda, phi);
         }
-        point0 = point, v0 = v;
+        (point0 = point), (v0 = v);
       },
       lineEnd: function() {
         if (v0) stream.lineEnd();
@@ -192,5 +233,5 @@ function clipLine(segments, isVisible) {
         return clean | ((v00 && v0) << 1);
       }
     };
-  }
+  };
 }
