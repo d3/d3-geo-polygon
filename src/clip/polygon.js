@@ -20,21 +20,42 @@ export default function(geometry) {
       return clipNone;
     }
 
-    polygons = polygons.map(poly => poly.map(ringRadians));
-
-    var pointVisible = visible(polygons),
-      segments = merge(
-        polygons.map(function(polygon) {
-          return ringSegments(polygon[0]); // todo holes?
-        })
-      ),
-      clipPolygon = clip(
+    var clips = polygons.map(function(polygon) {
+      polygon = polygon.map(ringRadians);
+      var pointVisible = visible(polygon),
+        segments = ringSegments(polygon[0]); // todo holes?
+      return clip(
         pointVisible,
         clipLine(segments, pointVisible),
-        interpolate(segments, polygons),
-        polygons[0][0][0],
+        interpolate(segments, polygon),
+        polygon[0][0],
         clipPolygonSort
       );
+    });
+
+    var clipPolygon = function(stream) {
+      var clipstream = clips.map(clip => clip(stream));
+      return {
+        point: function(lambda, phi) {
+          clipstream.forEach(clip => clip.point(lambda, phi));
+        },
+        lineStart: function() {
+          clipstream.forEach(clip => clip.lineStart());
+        },
+        lineEnd: function() {
+          clipstream.forEach(clip => clip.lineEnd());
+        },
+        polygonStart: function() {
+          clipstream.forEach(clip => clip.polygonStart());
+        },
+        polygonEnd: function() {
+          clipstream.forEach(clip => clip.polygonEnd());
+        },
+        sphere: function() {
+          clipstream.forEach(clip => clip.sphere());
+        }
+      };
+    };
 
     clipPolygon.polygon = function(_) {
       return _ ? ((geometry = _), clipGeometry(geometry)) : geometry;
@@ -69,37 +90,33 @@ function clipPolygonSort(a, b) {
   return a.index - b.index || a.t - b.t;
 }
 
-function interpolate(segments, polygons) {
+function interpolate(segments, polygon) {
   return function(from, to, direction, stream) {
     if (from == null) {
-      polygons.forEach(function(polygon, r) {
-        stream.polygonStart();
-        var n = polygon.length;
-        polygon.forEach(function(ring, i) {
-          stream.lineStart();
-          ring.forEach(function(point) {
-            stream.point(point[0], point[1]);
-          });
-          stream.lineEnd();
+      stream.polygonStart();
+      var n = polygon.length;
+      polygon.forEach(function(ring, i) {
+        stream.lineStart();
+        ring.forEach(function(point) {
+          stream.point(point[0], point[1]);
         });
-        stream.polygonEnd();
+        stream.lineEnd();
       });
+      stream.polygonEnd();
     } else if (
       from.index !== to.index &&
       from.index != null &&
       to.index != null
     ) {
-      polygons.forEach(function(polygon, r) {
-        for (
-          var i = from.index;
-          i !== to.index;
-          i = (i + direction + segments.length) % segments.length
-        ) {
-          var segment = segments[i],
-            point = spherical(direction > 0 ? segment.to : segment.from);
-          stream.point(point[0], point[1]);
-        }
-      });
+      for (
+        var i = from.index;
+        i !== to.index;
+        i = (i + direction + segments.length) % segments.length
+      ) {
+        var segment = segments[i],
+          point = spherical(direction > 0 ? segment.to : segment.from);
+        stream.point(point[0], point[1]);
+      }
     }
   };
 }
@@ -110,9 +127,9 @@ function clipPolygonDistance(a, b) {
   return atan2(sqrt(cartesianDot(axb, axb)), cartesianDot(a, b));
 }
 
-function visible(polygons) {
+function visible(polygon) {
   return function(lambda, phi) {
-    return polygons.some(polygon => polygonContains(polygon, [lambda, phi]));
+    return polygonContains(polygon, [lambda, phi]);
   };
 }
 
