@@ -22,15 +22,15 @@ export default function(geometry) {
 
     polygons = polygons.map(poly => poly.map(ringRadians));
 
-    var isVisible = visible(polygons),
+    var pointVisible = visible(polygons),
       segments = merge(
         polygons.map(function(polygon) {
           return ringSegments(polygon[0]); // todo holes?
         })
       ),
       clipPolygon = clip(
-        isVisible,
-        clipLine(segments, isVisible),
+        pointVisible,
+        clipLine(segments, pointVisible),
         interpolate(segments, polygons),
         polygons[0][0][0],
         clipPolygonSort
@@ -120,7 +120,7 @@ function randsign(i, j) {
   return sign(sin(100 * i + j));
 }
 
-function clipLine(segments, isVisible) {
+function clipLine(segments, pointVisible) {
   return function(stream) {
     var point0, lambda00, phi00, v00, v0, clean;
     return {
@@ -219,7 +219,7 @@ function clipLine(segments, isVisible) {
               (i = -1), --j;
             }
           }
-          v00 = v = isVisible((lambda00 = lambda), (phi00 = phi));
+          v00 = v = pointVisible((lambda00 = lambda), (phi00 = phi));
           if (v) stream.lineStart(), stream.point(lambda, phi);
         }
         (point0 = point), (v0 = v);
