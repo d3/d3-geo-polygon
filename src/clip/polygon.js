@@ -17,12 +17,19 @@ export default function (geometry) {
       polygons = [geometry.coordinates];
     } else { return clipNone; }
 
+    polygons = polygons.map(poly => poly.map(ringRadians));
+
     var clipPolygon = function(sink) {
-      polygons.forEach(function(poly) {
-        var polygon = ringRadians(poly[0]); // todo holes?
-        var segments = ringSegments(polygon);
-        polygon.pop();
-        sink = clip(visible([polygon]), clipLine(segments), interpolate(segments, [polygon]), polygon[0], clipPolygonSort)(sink);
+      var isVisible = visible(polygons);
+      polygons.forEach(function(polygon) {
+        var segments = ringSegments(polygon[0]); // todo holes?
+        sink = clip(
+          isVisible,
+          clipLine(segments, polygon),
+          interpolate(segments, polygon),
+          polygon[0][0],
+          clipPolygonSort
+        )(sink);
       });
       return sink;
     };
@@ -85,9 +92,9 @@ function clipPolygonDistance(a, b) {
   return atan2(sqrt(cartesianDot(axb, axb)), cartesianDot(a, b));
 }
 
-function visible(polygon) {
+function visible(polygons) {
   return function (lambda, phi) {
-    return polygonContains(polygon, [lambda, phi]);
+    return polygons.some(polygon => polygonContains(polygon, [lambda, phi]));
   }
 }
 
@@ -95,7 +102,8 @@ function randsign(i,j) {
   return sign(sin(100 * i + j));
 }
 
-function clipLine(segments) {
+function clipLine(segments, polygon) {
+  var isVisible = visible([polygon]);
   return function(stream) {
     var point0,
         lambda00,
@@ -168,7 +176,7 @@ function clipLine(segments) {
               i = -1, --j;
             }
           }
-          v00 = v = visible(lambda00 = lambda, phi00 = phi);
+          v00 = v = isVisible(lambda00 = lambda, phi00 = phi);
           if (v) stream.lineStart(), stream.point(lambda, phi);
         }
         point0 = point, v0 = v;
