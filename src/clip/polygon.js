@@ -3,7 +3,6 @@ import {atan2, cos, max, min, pi, radians, sign, sin, sqrt} from "../math";
 import {cartesian, cartesianCross, cartesianDot, cartesianEqual, spherical} from "../cartesian";
 import {intersectCoincident, intersectPointOnLine, intersectSegment, intersect} from "../intersect";
 import {default as polygonContains} from "../polygonContains";
-import {merge} from "d3-array";
 
 var clipNone = function(stream) { return stream; };
 
@@ -19,6 +18,7 @@ export default function(geometry) {
     } else {
       return clipNone;
     }
+    polygons.forEach(polygon => (polygon.mark = geometry.mark));
 
     var clips = polygons.map(function(polygon) {
       polygon = polygon.map(ringRadians);
@@ -94,8 +94,7 @@ function interpolate(segments, polygon) {
   return function(from, to, direction, stream) {
     if (from == null) {
       stream.polygonStart();
-      var n = polygon.length;
-      polygon.forEach(function(ring, i) {
+      polygon.forEach(function(ring) {
         stream.lineStart();
         ring.forEach(function(point) {
           stream.point(point[0], point[1]);

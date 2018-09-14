@@ -85,34 +85,13 @@ export default function(tree, face) {
     return face(coordinates[0] * radians, coordinates[1] * radians);
   }
 
-  var proj = projection(forward),
-      stream_ = proj.stream;
+  var proj = projection(forward);
 
   // run around the mesh of faces and stream all vertices to create the clipping polygon
   var polygon = [];
   outline({point: function(lambda, phi) { polygon.push([lambda, phi]); }}, tree);
   polygon.push(polygon[0]);
   proj.preclip(clipPolygon({ type: "Polygon", coordinates: [ polygon ] }));
-
-  function noClip(s) { return s; }
-
-  proj.stream = function(stream) {
-    var rotate = proj.rotate(),
-        preclip = proj.preclip(),
-        rotateStream = stream_(stream),
-        sphereStream = (proj.preclip(noClip).rotate([0, 0]), stream_(stream));
-    proj.rotate(rotate);
-    proj.preclip(preclip);
-    rotateStream.sphere = function() {
-      sphereStream.polygonStart();
-      sphereStream.lineStart();
-      outline(sphereStream, tree);
-      sphereStream.lineEnd();
-      sphereStream.polygonEnd();
-    };
-    return rotateStream;
-  };
-
   proj.tree = function() { return tree; };
   
   return proj;
