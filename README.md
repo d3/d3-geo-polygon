@@ -31,7 +31,7 @@ var projection = d3.geoEquirectangular()
 
 <a name="geoClipPolygon" href="#geoClipPolygon">#</a> d3.<b>geoClipPolygon</b>(<i>polygon</i>) [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/clip/polygon.js "Source")
 
-Given a GeoJSON *polygon*, returns a clip function suitable for [_projection_.preclip](https://github.com/d3/d3-geo#preclip).
+Given a GeoJSON *polygon* or *multipolygon*, returns a clip function suitable for [_projection_.preclip](https://github.com/d3/d3-geo#preclip).
 
 
 <a name="polygon" href="#polygon">#</a> clip.<b>polygon</b>()
