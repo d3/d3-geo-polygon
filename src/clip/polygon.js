@@ -138,11 +138,23 @@ function randsign(i, j) {
 
 function clipLine(segments, pointVisible) {
   return function(stream) {
-    var point0, lambda00, phi00, v00, v0, clean;
+    var point0, lambda00, phi00, v00, v0, clean, line, lines = [];
     return {
       lineStart: function() {
         point0 = null;
         clean = 1;
+        line = [];
+      },
+      lineEnd: function() {
+        if (v0) lines.push(line);
+        lines.forEach(function(line) {
+          stream.lineStart();
+          line.forEach(function(point) {
+            stream.point(...point); // can have 4 dimensions
+          });
+          stream.lineEnd();
+        });
+        lines = [];
       },
       point: function(lambda, phi, close) {
         if (cos(lambda) == -1) lambda -= sign(sin(lambda)) * 1e-5; // move away from -180/180 https://github.com/d3/d3-geo/pull/108#issuecomment-323798937
@@ -202,25 +214,25 @@ function clipLine(segments, pointVisible) {
               intersection = intersections[i];
               v = !v;
               if (v) {
-                stream.lineStart();
-                stream.point(
+                line = [];
+                line.push([
                   intersection[0],
                   intersection[1],
                   intersection.index,
                   intersection.t
-                );
+                ]);
               } else {
-                stream.point(
+                line.push([
                   intersection[0],
                   intersection[1],
                   intersection.index,
                   intersection.t
-                );
-                stream.lineEnd();
+                ]);
+                lines.push(line);
               }
             }
           }
-          if (v) stream.point(lambda, phi);
+          if (v) line.push([lambda, phi]);
         } else {
           for (i = 0, j = 100; i < segments.length && j > 0; ++i) {
             s = segments[i];
@@ -236,12 +248,9 @@ function clipLine(segments, pointVisible) {
             }
           }
           v00 = v = pointVisible((lambda00 = lambda), (phi00 = phi));
-          if (v) stream.lineStart(), stream.point(lambda, phi);
+          if (v) line = [], line.push([lambda, phi]);
         }
         (point0 = point), (v0 = v);
-      },
-      lineEnd: function() {
-        if (v0) stream.lineEnd();
       },
       // Rejoin first and last segments if there were intersections and the first
       // and last points were visible.
