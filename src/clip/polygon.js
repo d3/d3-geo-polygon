@@ -116,6 +116,21 @@ function interpolate(segments, polygon) {
           point = spherical(direction > 0 ? segment.to : segment.from);
         stream.point(point[0], point[1]);
       }
+    } else if (
+      from.index === to.index &&
+      from.t > to.t &&
+      from.index != null &&
+      to.index != null
+    ) {
+      for (
+        i = 0;
+        i < segments.length;
+        i++
+      ) {
+        segment = segments[(from.index + i * direction + segments.length)%segments.length],
+          point = spherical(direction > 0 ? segment.to : segment.from);
+        stream.point(point[0], point[1]);
+      }
     }
   };
 }

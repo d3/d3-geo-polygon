@@ -11,3 +11,18 @@ tape("clipPolygon clips line", function(test) {
   test.end();
 });
 
+
+tape("clipPolygon interpolates when the intersections are on the same segment", function(test) {
+  var clipPolygon = d3.geoClipPolygon({
+    type: "Polygon",
+    coordinates: [[[-10, -11], [10, 10], [11, -10], [-10, -11]]]
+  }),
+    projection = d3_geo.geoEquirectangular().preclip(clipPolygon).precision(0.1),
+    path = d3_geo.geoPath().projection(projection);
+  test.equal(path({
+    type: "Polygon",
+    coordinates: [[[0, -11], [1, -11], [1, -10], [0, -10], [0, -11]]]
+  }).replace(/[.]\d+/g, ""),
+  "M482,278L482,276L480,276L480,278L466,279L453,279L506,223L509,276L495,277Z");
+  test.end();
+});
