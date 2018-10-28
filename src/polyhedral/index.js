@@ -1,7 +1,7 @@
 import {geoBounds as bounds, geoCentroid as centroid, geoInterpolate as interpolate, geoProjection as projection} from "d3-geo";
 import {default as clipPolygon} from "../clip/polygon";
-import {abs, degrees, epsilon, radians} from "../../node_modules/d3-geo-projection/src/math";
-import {default as matrix, multiply, inverse} from "../../node_modules/d3-geo-projection/src/polyhedral/matrix";
+import {abs, degrees, epsilon, radians} from "../math";
+import {default as matrix, multiply, inverse} from "./matrix";
 
 // Creates a polyhedral projection.
 //  * tree: a spanning tree of polygon faces.  Nodes are automatically

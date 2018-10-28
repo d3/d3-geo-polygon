@@ -5,7 +5,7 @@
  *
  */
 import voronoi from "./polyhedral/voronoi";
-import { default as cube } from "../node_modules/d3-geo-projection/src/polyhedral/cube";
+import { default as cube } from "./polyhedral/cube";
 
 export default function() {
   var polygons = {

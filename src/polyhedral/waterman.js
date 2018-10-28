@@ -1,7 +1,7 @@
 import {geoCentroid as centroid, geoGnomonic as gnomonic} from "d3-geo";
-import {asin, atan2, cos, degrees, max, min, pi, radians, sin} from "../../node_modules/d3-geo-projection/src/math";
+import {asin, atan2, cos, degrees, max, min, pi, radians, sin} from "../math";
 import polyhedral from "./index";
-import octahedron from "../../node_modules/d3-geo-projection/src/polyhedral/octahedron";
+import octahedron from "./octahedron";
 
 export default function(faceProjection) {
 

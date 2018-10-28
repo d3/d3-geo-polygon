@@ -1,8 +1,8 @@
 import {geoCentroid as centroid, geoProjection as projection} from "d3-geo";
 import {geoCollignonRaw as collignonRaw} from "d3-geo-projection";
-import {pi, sqrt} from "../../node_modules/d3-geo-projection/src/math";
+import {pi, sqrt} from "../math";
 import polyhedral from "./index";
-import octahedron from "../../node_modules/d3-geo-projection/src/polyhedral/octahedron";
+import octahedron from "./octahedron";
 
 var kx = 2 / sqrt(3);
 

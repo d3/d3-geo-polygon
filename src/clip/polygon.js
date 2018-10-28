@@ -18,7 +18,6 @@ export default function(geometry) {
     } else {
       return clipNone;
     }
-    polygons.forEach(polygon => (polygon.mark = geometry.mark));
 
     var clips = polygons.map(function(polygon) {
       polygon = polygon.map(ringRadians);
