@@ -119,7 +119,7 @@ The Imago projection, engineered by Justin Kunimune (2017), is inspired by Hajim
 
 <a href="#imago_k" name="imago_k">#</a> <i>imago</i>.<b>k</b>([<i>k</i>])
 
-Exponent. Defaults to 0.68.
+Exponent. Defaults to 0.59.
 
 <a href="#imago_shift" name="imago_cut">#</a> <i>imago</i>.<b>shift</b>([<i>shift</i>])
 
