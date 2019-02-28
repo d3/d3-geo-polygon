@@ -226,22 +226,20 @@ export function imagoBlock() {
   };
 
   var a = -atan(1 / sqrt(2)) * degrees,
-    poly = {
-      type: "Polygon",
-      coordinates: [
-        [
-          [-180 + epsilon, a + epsilon],
-          [0, 90],
-          [180 - epsilon, a + epsilon],
-          [180 - epsilon, a - epsilon],
-          [-180 + epsilon, a - epsilon],
-          [-180 + epsilon, a + epsilon]
-        ]
-      ]
-    };
+    border = [
+      [-180 + epsilon, a + epsilon],
+      [0, 90],
+      [180 - epsilon, a + epsilon],
+      [180 - epsilon, a - epsilon],
+      [-180 + epsilon, a - epsilon],
+      [-180 + epsilon, a + epsilon]
+    ];
 
   return p
-    .preclip(clipPolygon(poly))
+    .preclip(clipPolygon({
+      type: "Polygon",
+      coordinates: [border]
+      }))
     .scale(144.04)
     .rotate([18, -12.5, 3.5])
     .center([0, 35.2644]);
@@ -286,7 +284,7 @@ function imagoWideRaw(k, shift) {
 }
 
 export default function() {
-  var k = 0.68,
+  var k = 0.59,
     shift = 1.16,
     m = projectionMutator(imagoWideRaw),
     p = m(k, shift);
@@ -299,9 +297,9 @@ export default function() {
   };
 
   function clipped(p) {
-    const N = 50 + 2 * epsilon,
+    const N = 100 + 2 * epsilon,
       border = [],
-      e = 4e-3;
+      e = 3e-3;
 
     const scale = p.scale(),
       center = p.center(),
