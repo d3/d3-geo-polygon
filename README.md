@@ -111,6 +111,20 @@ Buckminster Fuller’s Airocean projection (also known as “Dymaxion”), based
 
 The Cahill-Keyes projection, designed by Gene Keyes (1975), is built on Bernard J. S. Cahill’s 1909 octant design. Implementation by Mary Jo Graça (2011), ported to D3 by Enrico Spinielli (2013).
 
+<a href="#geoImago" name="geoImago">#</a> d3.<b>geoImago</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/imago.js "Source")
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/imago.png" width="480" height="250">](https://kunimune.home.blog/2017/11/23/the-secrets-of-the-authagraph-revealed/)
+
+The Imago projection, engineered by Justin Kunimune (2017), is inspired by Hajime Narukawa’s AuthaGraph design (1999).
+
+<a href="#imago_k" name="imago_k">#</a> <i>imago</i>.<b>k</b>([<i>k</i>])
+
+Exponent. Useful values include 0.59 (default, minimizes angular distortion of the continents), 0.68 (gives the best approximation of the Authagraph) and 0.72 (prevents kinks in the graticule).
+
+<a href="#imago_shift" name="imago_cut">#</a> <i>imago</i>.<b>shift</b>([<i>shift</i>])
+
+Horizontal shift. Defaults to 1.16.
+
 <a href="#geoTetrahedralLee" name="geoTetrahedralLee">#</a> d3.<b>geoTetrahedralLee</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/tetrahedralLee.js "Source")
 <br><a href="#geoLeeRaw" name="geoLeeRaw">#</a> d3.<b>geoLeeRaw</b>
 
