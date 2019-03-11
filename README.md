@@ -119,13 +119,11 @@ The Imago projection, engineered by Justin Kunimune (2017), is inspired by Hajim
 
 <a href="#imago_k" name="imago_k">#</a> <i>imago</i>.<b>k</b>([<i>k</i>])
 
-Exponent. Defaults to 0.59.
+Exponent. Useful values include 0.59 (default, minimizes angular distortion of the continents), 0.68 (gives the best approximation of the Authagraph) and 0.72 (prevents kinks in the graticule).
 
 <a href="#imago_shift" name="imago_cut">#</a> <i>imago</i>.<b>shift</b>([<i>shift</i>])
 
 Horizontal shift. Defaults to 1.16.
-
-
 
 <a href="#geoTetrahedralLee" name="geoTetrahedralLee">#</a> d3.<b>geoTetrahedralLee</b>() [<>](https://github.com/d3/d3-geo-polygon/blob/master/src/tetrahedralLee.js "Source")
 <br><a href="#geoLeeRaw" name="geoLeeRaw">#</a> d3.<b>geoLeeRaw</b>
