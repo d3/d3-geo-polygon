@@ -1,4 +1,5 @@
 export {default as geoClipPolygon} from "./clip/polygon";
+export {default as geoIntersectArc} from "./intersect";
 export {default as geoPolyhedral} from "./polyhedral/index";
 export {default as geoPolyhedralButterfly} from "./polyhedral/butterfly";
 export {default as geoPolyhedralCollignon} from "./polyhedral/collignon";

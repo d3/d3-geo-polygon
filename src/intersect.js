@@ -1,16 +1,21 @@
-import {abs, acos, cos, epsilon, epsilon2} from "./math";
-import {cartesianCross, cartesianDot, cartesianEqual, cartesianNormalizeInPlace} from "./cartesian";
+import {abs, acos, cos, degrees, epsilon, epsilon2, max, radians} from "./math";
+import {cartesian, cartesianCross, cartesianDot, cartesianEqual, cartesianNormalizeInPlace, spherical} from "./cartesian";
 
 export function intersectSegment(from, to) {
   this.from = from, this.to = to;
   this.normal = cartesianCross(from, to);
   this.fromNormal = cartesianCross(this.normal, from);
   this.toNormal = cartesianCross(this.normal, to);
-  this.l = acos(cartesianDot(from, to));
+  this.l = acos(max(0,cartesianDot(from, to)));
 }
 
 // >> here a and b are segments processed by intersectSegment
 export function intersect(a, b) {
+  if (cartesianEqual(a.from, b.from) || cartesianEqual(a.from, b.to))
+    return a.from;
+  if (cartesianEqual(a.to, b.from) || cartesianEqual(a.to, b.to))
+    return a.to;
+
   var lc = cos(a.l + b.l) - epsilon;
   if (cartesianDot(a.from, b.from) < lc
   || cartesianDot(a.from, b.to) < lc
@@ -30,10 +35,14 @@ export function intersect(a, b) {
   // or is almost equal to one of the four points
   if (
     (a0 > 0 && a1 < 0 && b0 > 0 && b1 < 0) ||
-    cartesianEqual(axb, a.from) ||
-    cartesianEqual(axb, a.to) ||
-    cartesianEqual(axb, b.from) ||
-    cartesianEqual(axb, b.to)
+    (a0 >= 0 &&
+      a1 <= 0 &&
+      b0 >= 0 &&
+      b1 <= 0 &&
+      (cartesianEqual(axb, a.from) ||
+        cartesianEqual(axb, a.to) ||
+        cartesianEqual(axb, b.from) ||
+        cartesianEqual(axb, b.to)))
   )
     return axb;
 
@@ -48,10 +57,14 @@ export function intersect(a, b) {
 
   if (
     (a0 > 0 && a1 < 0 && b0 > 0 && b1 < 0) ||
-    cartesianEqual(axb, a.from) ||
-    cartesianEqual(axb, a.to) ||
-    cartesianEqual(axb, b.from) ||
-    cartesianEqual(axb, b.to)
+    (a0 >= 0 &&
+      a1 <= 0 &&
+      b0 >= 0 &&
+      b1 <= 0 &&
+      (cartesianEqual(axb, a.from) ||
+        cartesianEqual(axb, a.to) ||
+        cartesianEqual(axb, b.from) ||
+        cartesianEqual(axb, b.to)))
   )
     return axb;
 }
@@ -66,6 +79,12 @@ export function intersectPointOnLine(p, a) {
 
 export var intersectCoincident = {};
 
-
-// todo: publicly expose d3.geoIntersect(segment0, segment1) ??
-// cf. https://github.com/d3/d3/commit/3dbdf87974dc2588c29db0533a8500ccddb25daa#diff-65daf69cea7d039d72c1eca7c13326b0
+export default function(a, b) {
+  var ca = a.map(p => cartesian(p.map(d => d * radians))),
+      cb = b.map(p => cartesian(p.map(d => d * radians)));
+  var i = intersect(
+    new intersectSegment(ca[0], ca[1]),
+    new intersectSegment(cb[0], cb[1])
+  );
+  return !i ? i : spherical(i).map(d => d * degrees);
+}
