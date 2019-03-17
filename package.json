@@ -41,8 +41,7 @@
   },
   "dependencies": {
     "d3-array": "1",
-    "d3-geo": "^1.11.1",
-    "d3-geo-projection": "2"
+    "d3-geo": "^1.11.1"
   },
   "devDependencies": {
     "canvas": "1",

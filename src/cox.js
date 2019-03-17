@@ -1,7 +1,7 @@
 import { geoProjection as projection, geoStream } from "d3-geo";
 import { scan } from "d3-array";
 import { asin, degrees, epsilon, sqrt } from "./math";
-import { geoLagrangeRaw as lagrangeRaw } from "d3-geo-projection";
+import { lagrangeRaw } from "./lagrange";
 import { complexAdd, complexMul, complexNorm2, complexPow } from "./complex";
 
 // w1 = gamma(1/n) * gamma(1 - 2/n) / n / gamma(1 - 1/n)

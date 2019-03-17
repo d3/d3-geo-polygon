@@ -1,5 +1,5 @@
 import {geoCentroid as centroid, geoProjection as projection} from "d3-geo";
-import {geoCollignonRaw as collignonRaw} from "d3-geo-projection";
+import {collignonRaw} from "../collignon";
 import {pi, sqrt} from "../math";
 import polyhedral from "./index";
 import octahedron from "./octahedron";
