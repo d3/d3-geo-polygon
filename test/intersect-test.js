@@ -41,6 +41,9 @@ tape("spherical intersections", function(test) {
   test.deepEqual(e, [0, 0]);
 
   test.false(d3.geoIntersectArc([[0,0], [0,90]], [[10,0], [90,0]]));
+  test.false(d3.geoIntersectArc([[0,90], [0,0]], [[10,0], [90,0]]));
+  test.false(d3.geoIntersectArc([[0,0], [0,90]], [[90,0], [10,0]]));
+  test.false(d3.geoIntersectArc([[0,90], [0,0]], [[90,0], [10,0]]));
 
   test.end();
 });
