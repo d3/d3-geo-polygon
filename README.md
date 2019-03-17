@@ -43,14 +43,8 @@ Given a clipPolygon function, returns the GeoJSON polygon.
 
 Given two spherical arcs [point0, point1] and [point2, point3], returns their intersection, or undefined if there is none. See “[Spherical Intersection](https://observablehq.com/@fil/spherical-intersection)”.
 
-<a name="polygon" href="#polygon">#</a> clip.<b>polygon</b>()
-
-Given a clipPolygon function, returns the GeoJSON polygon.
-
-
 
 ## Projections
-
 
 d3-geo-polygon adds polygon clipping to the polyhedral projections from [d3-geo-projection](https://github.com/d3/d3-geo-projection). Thus, it supercedes the following symbols:
 
