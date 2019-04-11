@@ -1,4 +1,4 @@
-import {abs, acos, cos, degrees, epsilon, epsilon2, max, radians} from "./math";
+import {abs, acos, cos, degrees, epsilon, epsilon2, pi, radians} from "./math";
 import {cartesian, cartesianCross, cartesianDot, cartesianEqual, cartesianNormalizeInPlace, spherical} from "./cartesian";
 
 export function intersectSegment(from, to) {
@@ -6,7 +6,7 @@ export function intersectSegment(from, to) {
   this.normal = cartesianCross(from, to);
   this.fromNormal = cartesianCross(this.normal, from);
   this.toNormal = cartesianCross(this.normal, to);
-  this.l = acos(max(0,cartesianDot(from, to)));
+  this.l = acos(cartesianDot(from, to));
 }
 
 // >> here a and b are segments processed by intersectSegment
@@ -16,7 +16,7 @@ export function intersect(a, b) {
   if (cartesianEqual(a.to, b.from) || cartesianEqual(a.to, b.to))
     return a.to;
 
-  var lc = cos(a.l + b.l) - epsilon;
+  var lc = (a.l + b.l < pi) ? cos(a.l + b.l) - epsilon : -1;
   if (cartesianDot(a.from, b.from) < lc
   || cartesianDot(a.from, b.to) < lc
   || cartesianDot(a.to, b.from) < lc

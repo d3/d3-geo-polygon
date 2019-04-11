@@ -65,6 +65,10 @@ switch (projectionName) {
     land = d3.geoGraticule().extent([[-40, -40], [80, 80]]).outline();
     break;
   }
+  // For LeeSouth
+  // case "tetrahedralLee": {
+  //  projection.angle(-30);
+  // }
 }
 
 var path = d3.geoPath()
