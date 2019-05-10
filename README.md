@@ -29,7 +29,7 @@ var projection = d3.geoEquirectangular()
 
 ## API Reference
 
-<a name="geoClipPolygon" href="#geoClipPolygon">#</a> d3.<b>geoClipPolygon</b>(<i>polygon</i>) [![src](https://raw.githubusercontent.com/d3/d3-geo-polygon/links/img/octicon-code.svg?sanitize=true)](https://github.com/d3/d3-geo-polygon/blob/master/src/clip/polygon.js "Source")
+<a name="geoClipPolygon" href="#geoClipPolygon">#</a> d3.<b>geoClipPolygon</b>(<i>polygon</i>) [![src](https://raw.githubusercontent.com/d3/d3-geo-polygon/links/img/octicon-code.svg?sanitize=true)](https://github.com/d3/d3-geo-polygon/blob/master/src/clip/polygon.js "Source") [![observable](https://raw.githubusercontent.com/d3/d3-geo-polygon/links/img/observable-logo.svg?sanitize=true)](https://observablehq.com/@mbostock/spherical-clipping "Explore on Observable")
 
 Given a GeoJSON *polygon* or *multipolygon*, returns a clip function suitable for [_projection_.preclip](https://github.com/d3/d3-geo#preclip).
 
