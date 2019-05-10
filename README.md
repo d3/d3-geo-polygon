@@ -58,19 +58,19 @@ Defines a new polyhedral projection. The *tree* is a spanning tree of polygon fa
 <a href="#geoPolyhedral_tree" name="geoPolyhedral_tree">#</a> <i>polyhedral</i>.<b>tree</b>() returns the spanning tree of the polyhedron, from which one can infer the faces’ centers, polygons, shared edges etc.
 
 
-<a href="#geoPolyhedralButterfly" name="geoPolyhedralButterfly">#</a> d3.<b>geoPolyhedralButterfly</b>() [[source]](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/butterfly.js)]
+<a href="#geoPolyhedralButterfly" name="geoPolyhedralButterfly">#</a> d3.<b>geoPolyhedralButterfly</b>() [[source]](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/butterfly.js)
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/polyhedralButterfly.png" width="480" height="250">](https://observablehq.com/@d3/polyhedral-gnomonic)
 
 The gnomonic butterfly projection.
 
-<a href="#geoPolyhedralCollignon" name="geoPolyhedralCollignon">#</a> d3.<b>geoPolyhedralCollignon</b>() [[source]](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/collignon.js)]
+<a href="#geoPolyhedralCollignon" name="geoPolyhedralCollignon">#</a> d3.<b>geoPolyhedralCollignon</b>() [[source]](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/collignon.js)
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/polyhedralCollignon.png" width="480" height="250">](https://www.jasondavies.com/maps/collignon-butterfly/)
 
 The Collignon butterfly projection.
 
-<a href="#geoPolyhedralWaterman" name="geoPolyhedralWaterman">#</a> d3.<b>geoPolyhedralWaterman</b>() [[source]](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/waterman.js)]
+<a href="#geoPolyhedralWaterman" name="geoPolyhedralWaterman">#</a> d3.<b>geoPolyhedralWaterman</b>() [[source]](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/waterman.js)
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/polyhedralWaterman.png" width="480" height="250">](https://www.jasondavies.com/maps/waterman-butterfly/)
 
@@ -79,7 +79,7 @@ A butterfly projection inspired by Steve Waterman’s design.
 
 New projections are introduced:
 
-<a href="#geoPolyhedralVoronoi" name="geoPolyhedralVoronoi">#</a> d3.<b>geoPolyhedralVoronoi</b>([<i>parents</i>], [<i>polygons</i>], [<i>faceProjection</i>], [<i>faceFind</i>]) [[source]](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/voronoi.js)]
+<a href="#geoPolyhedralVoronoi" name="geoPolyhedralVoronoi">#</a> d3.<b>geoPolyhedralVoronoi</b>([<i>parents</i>], [<i>polygons</i>], [<i>faceProjection</i>], [<i>faceFind</i>]) [[source]](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/voronoi.js)
 
 Returns a polyhedral projection based on the *polygons*, arranged in a tree according to the *parents* list. *polygons* are a GeoJSON FeatureCollection of geoVoronoi cells, which should indicate the corresponding sites (see [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi)). An optional [*faceProjection*](#geoPolyhedral) is passed to d3.geoPolyhedral() -- note that the gnomonic projection on the polygons’ sites is the only faceProjection that works in the general case.
 
