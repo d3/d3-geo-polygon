@@ -1,5 +1,4 @@
-import {abs, epsilon} from "./math";
-
-export default function(a, b) {
-  return abs(a[0] - b[0]) < epsilon && abs(a[1] - b[1]) < epsilon;
+export default function pointEqual(a, b) {
+  return a && b && a[0] === b[0] && a[1] === b[1];
 }
+
