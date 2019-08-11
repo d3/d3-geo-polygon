@@ -1,6 +1,6 @@
-import adder from "./adder";
-import {cartesian, cartesianCross, cartesianNormalizeInPlace} from "./cartesian";
-import {asin, atan2, cos, epsilon, pi, quarterPi, sin, tau} from "./math";
+import adder from "./adder.js";
+import {cartesian, cartesianCross, cartesianNormalizeInPlace} from "./cartesian.js";
+import {asin, atan2, cos, epsilon, pi, quarterPi, sin, tau} from "./math.js";
 
 var sum = adder();
 

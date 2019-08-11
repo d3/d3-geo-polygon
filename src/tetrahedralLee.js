@@ -4,9 +4,9 @@ import {
   geoCentroid,
   geoContains
 } from "d3-geo";
-import polyhedral from "./polyhedral/index";
+import polyhedral from "./polyhedral/index.js";
 import { scan } from "d3-array";
-import { abs, asin, degrees, sqrt } from "./math";
+import { abs, asin, degrees, sqrt } from "./math.js";
 import {
   complexAdd,
   complexMul,

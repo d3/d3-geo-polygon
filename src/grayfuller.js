@@ -9,7 +9,7 @@
  * To the extent possible under law, Philippe Rivière has waived all copyright
  * and related or neighboring rights to this implementation. (Public Domain.)
  */
-import { abs, atan2, cos, epsilon, sin, sqrt } from "./math";
+import { abs, atan2, cos, epsilon, sin, sqrt } from "./math.js";
 import { geoGnomonicRaw as gnomonicRaw } from "d3-geo";
 
 export default function GrayFullerRaw() {

@@ -1,7 +1,7 @@
-import clipBuffer from "./buffer";
-import clipRejoin from "./rejoin";
-import {epsilon, halfPi} from "../math";
-import polygonContains from "../polygonContains";
+import clipBuffer from "./buffer.js";
+import clipRejoin from "./rejoin.js";
+import {epsilon, halfPi} from "../math.js";
+import polygonContains from "../polygonContains.js";
 import {merge} from "d3-array";
 
 export default function(pointVisible, clipLine, interpolate, start, sort) {

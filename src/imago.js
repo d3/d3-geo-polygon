@@ -23,7 +23,7 @@ import {
   tan
 } from "./math";
 import { geoProjectionMutator as projectionMutator } from "d3-geo";
-import { default as clipPolygon } from "./clip/polygon";
+import { default as clipPolygon } from "./clip/polygon.js";
 import { solve } from "./newton.js";
 
 var hypot = Math.hypot;

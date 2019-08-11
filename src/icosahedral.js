@@ -5,8 +5,8 @@
  * Enrico Spinielli (2017) and Philippe Rivière (2017, 2018)
  *
  */
-import { atan, degrees } from "./math";
-import voronoi from "./polyhedral/voronoi";
+import { atan, degrees } from "./math.js";
+import voronoi from "./polyhedral/voronoi.js";
 
 
 export default function() {

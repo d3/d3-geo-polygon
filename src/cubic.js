@@ -4,8 +4,8 @@
  * Implemented for D3.js by Enrico Spinielli (2017) and Philippe Rivière (2017, 2018)
  *
  */
-import voronoi from "./polyhedral/voronoi";
-import { default as cube } from "./polyhedral/cube";
+import voronoi from "./polyhedral/voronoi.js";
+import { default as cube } from "./polyhedral/cube.js";
 
 export default function() {
   var polygons = {

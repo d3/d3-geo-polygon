@@ -1,5 +1,5 @@
-import {acos, asin, degrees, sqrt} from "../math";
-import voronoi from "./voronoi";
+import {acos, asin, degrees, sqrt} from "../math.js";
+import voronoi from "./voronoi.js";
 
 export default function() {
   var A0 = asin(1/sqrt(3)) * degrees,

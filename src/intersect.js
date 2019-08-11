@@ -1,5 +1,5 @@
-import {abs, acos, cos, degrees, epsilon, epsilon2, pi, radians} from "./math";
-import {cartesian, cartesianCross, cartesianDot, cartesianEqual, cartesianNormalizeInPlace, spherical} from "./cartesian";
+import {abs, acos, cos, degrees, epsilon, epsilon2, pi, radians} from "./math.js";
+import {cartesian, cartesianCross, cartesianDot, cartesianEqual, cartesianNormalizeInPlace, spherical} from "./cartesian.js";
 
 export function intersectSegment(from, to) {
   this.from = from, this.to = to;

@@ -1,4 +1,4 @@
-import { abs, atan2, cos, exp, halfPi, log, pow, sin, sqrt } from "./math";
+import { abs, atan2, cos, exp, halfPi, log, pow, sin, sqrt } from "./math.js";
 
 export function complexAtan(x, y) {
   var x2 = x * x,

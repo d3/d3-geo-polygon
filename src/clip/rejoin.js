@@ -1,4 +1,4 @@
-import pointEqual from "../pointEqual";
+import pointEqual from "../pointEqual.js";
 
 function Intersection(point, points, other, entry) {
   this.x = point;

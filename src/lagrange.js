@@ -1,5 +1,5 @@
 // code duplicated from d3-geo-projection
-import {abs, asin, atan2, cos, epsilon, halfPi, pow, sign, sin} from "./math";
+import {abs, asin, atan2, cos, epsilon, halfPi, pow, sign, sin} from "./math.js";
 
 export function lagrangeRaw(n) {
 

@@ -6,9 +6,9 @@
  * Ported to D3.js by Enrico Spinielli (2013)
  *
  */
-import { abs, cos, degrees, pi, radians, sin, sign, sqrt, tan } from "./math";
-import { cartesianCross, cartesianDegrees, cartesianDot, sphericalDegrees } from "./cartesian";
-import polyhedral from "./polyhedral/index";
+import { abs, cos, degrees, pi, radians, sin, sign, sqrt, tan } from "./math.js";
+import { cartesianCross, cartesianDegrees, cartesianDot, sphericalDegrees } from "./cartesian.js";
+import polyhedral from "./polyhedral/index.js";
 import { geoProjectionMutator as projectionMutator } from "d3-geo";
 
 export default function(faceProjection) {

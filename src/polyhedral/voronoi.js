@@ -3,8 +3,8 @@ import {
   geoGnomonic as gnomonic,
   geoDistance as distance
 } from "d3-geo";
-import { degrees } from "../math";
-import polyhedral from "./index";
+import { degrees } from "../math.js";
+import polyhedral from "./index.js";
 
 export default function(parents, polygons, faceProjection, find) {
   parents = parents || [];

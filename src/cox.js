@@ -1,8 +1,8 @@
 import { geoProjection as projection, geoStream } from "d3-geo";
 import { scan } from "d3-array";
-import { asin, degrees, epsilon, sqrt } from "./math";
-import { lagrangeRaw } from "./lagrange";
-import { complexAdd, complexMul, complexNorm2, complexPow } from "./complex";
+import { asin, degrees, epsilon, sqrt } from "./math.js";
+import { lagrangeRaw } from "./lagrange.js";
+import { complexAdd, complexMul, complexNorm2, complexPow } from "./complex.js";
 
 // w1 = gamma(1/n) * gamma(1 - 2/n) / n / gamma(1 - 1/n)
 // https://bl.ocks.org/Fil/852557838117687bbd985e4b38ff77d4

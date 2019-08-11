@@ -1,8 +1,8 @@
-import clip from "./index";
-import {atan2, cos, max, min, pi, radians, sign, sin, sqrt} from "../math";
-import {cartesian, cartesianCross, cartesianDot, cartesianEqual, spherical} from "../cartesian";
-import {intersectCoincident, intersectPointOnLine, intersectSegment, intersect} from "../intersect";
-import {default as polygonContains} from "../polygonContains";
+import clip from "./index.js";
+import {atan2, cos, max, min, pi, radians, sign, sin, sqrt} from "../math.js";
+import {cartesian, cartesianCross, cartesianDot, cartesianEqual, spherical} from "../cartesian.js";
+import {intersectCoincident, intersectPointOnLine, intersectSegment, intersect} from "../intersect.js";
+import {default as polygonContains} from "../polygonContains.js";
 
 var clipNone = function(stream) { return stream; };
 

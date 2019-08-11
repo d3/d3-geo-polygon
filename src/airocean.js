@@ -5,9 +5,9 @@
  * Enrico Spinielli (2017) and Philippe Rivière (2017, 2018)
  *
  */
-import { atan, degrees } from "./math";
-import polyhedral from "./polyhedral/index";
-import { default as grayFullerRaw } from "./grayfuller";
+import { atan, degrees } from "./math.js";
+import polyhedral from "./polyhedral/index.js";
+import { default as grayFullerRaw } from "./grayfuller.js";
 import {
   geoCentroid as centroid,
   geoContains as contains,
