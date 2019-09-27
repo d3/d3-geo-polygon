@@ -43,6 +43,7 @@
     "d3-array": "1",
     "d3-geo": "^1.11.1"
   },
+  "sideEffects": false,
   "devDependencies": {
     "canvas": "1",
     "eslint": "5",
