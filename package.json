@@ -40,7 +40,7 @@
     "postpublish": "git push && git push --tags && zip -j dist/d3-geo-polygon.zip -- LICENSE README.md dist/d3-geo-polygon.js dist/d3-geo-polygon.min.js"
   },
   "dependencies": {
-    "d3-array": "1",
+    "d3-array": "1 - 2",
     "d3-geo": "^1.11.1"
   },
   "devDependencies": {
