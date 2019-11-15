@@ -140,3 +140,25 @@ Default aspect uses *projection*.rotate([30, 180]) and has the North Pole at the
 
 The Cox conformal projection.
 
+<a href="#geoComplexLog" name="geoComplexLog">#</a> d3.<b>geoComplexLog</b>([<i>planarProjectionRaw</i>[<i>, cutoffLatitude</i>]]) · [Source](src/complexLog.js), [Example](https://cgmi.github.io/complex-log-projection/)
+<br><a href="#geoComplexLogRaw" name="geoComplexLogRaw">#</a> d3.<b>geoComplexLogRaw</b>([<i>planarProjectionRaw</i>])
+
+[<img src="img/complexLog.png" width="480" height="250">](https://cgmi.github.io/complex-log-projection/)
+
+Complex logarithmic view. This projection is based on the papers by Joachim Böttger et al.:
+
+* [Detail‐In‐Context Visualization for Satellite Imagery (2008)](https://doi.org/10.1111/j.1467-8659.2008.01156.x)
+* [Complex Logarithmic Views for Small Details in Large Contexts (2006)](https://doi.org/10.1109/TVCG.2006.126)
+
+The specified raw projection <i>planarProjectionRaw</i> is used to project onto the complex plane on which the complex logarithm is applied.
+Recommended are [azimuthal equal-area](https://github.com/d3/d3-geo#geoAzimuthalEqualAreaRaw) (default) or [azimuthal equidistant](https://github.com/d3/d3-geo#geoAzimuthalEquidistantRaw).
+
+<i>cutoffLatitude</i> is the latitude relative to the projection center at which to cutoff/clip the projection, lower values result in more detail around the projection center. Value must be < 0 because complex log projects the origin to infinity.
+
+<a href="#complexLog_planarProjectionRaw" name="complexLog_planarProjectionRaw">#</a> <i>complexLog</i>.<b>planarProjectionRaw</b>([<i>projectionRaw</i>])
+
+If <i>projectionRaw</i> is specified, sets the planar raw projection. See above. If <i>projectionRaw</i> is not specified, returns the current planar raw projection.
+
+<a href="#complexLog_cutoffLatitude" name="complexLog_cutoffLatitude">#</a> <i>complexLog</i>.<b>cutoffLatitude</b>([<i>latitude</i>])
+
+If <i>latitude</i> is specified, sets the cutoff latitude. See above. If <i>latitude</i> is not specified, returns the current cutoff latitude.

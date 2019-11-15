@@ -26,6 +26,8 @@ switch (projectionName) {
   case "modifiedStereographicGs50": outline = graticule.extent([[-180, 15], [-50, 75]]).outline(); break;
   case "modifiedStereographicMiller": outline = graticule.extent([[-40, -40], [80, 80]]).outline(); break;
   case "tetrahedralLeeSouth": projectionSymbol = "geoTetrahedralLee"; rotate = [-30,0]; angle = -30; translate = [599.204, 98.0632]; break;
+  // Outline cannot be rendered properly using complex log
+  case "complexLog": outline = {type: "Point", coordinates: []}; break;
 }
 
 var projection = d3[projectionSymbol]().precision(0.1),
