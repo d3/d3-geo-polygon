@@ -49,6 +49,12 @@
     "eslint": "5",
     "rollup": "0.64",
     "rollup-plugin-terser": "1",
-    "tape": "4"
-  }
+    "tape": "4",
+    "topojson-client": "3",
+    "world-atlas": "1"
+  },
+  "engines": {
+    "node": ">=6.0.0 <=10.17.0"
+  },
+  "engine-strict": true
 }
