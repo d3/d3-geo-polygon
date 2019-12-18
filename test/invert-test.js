@@ -17,9 +17,9 @@ tape("inverse polyhedrals", function(test) {
   test.end();
 });
 
-tape("inverse Imago", function(test) {
+tape("inverse Imago, tetrahedralLee", function(test) {
 
-  [ d3.geoImago(), d3.geoImagoBlock() ]
+  [ d3.geoImago(), d3.geoImagoBlock(), d3.geoTetrahedralLee() ]
   .forEach(function(projection) {
     [ [-23, 12], [10,10], [100,-45] ]
     .forEach(function(location) {

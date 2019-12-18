@@ -14,6 +14,7 @@ import {
   complexPow,
   complexSub
 } from "./complex";
+import {solve2d} from "./newton.js";
 
 export function leeRaw(lambda, phi) {
   // return d3.geoGnomonicRaw(...arguments);
@@ -95,6 +96,16 @@ export function leeRaw(lambda, phi) {
   // in between 0.3 and 0.5, interpolate
   var t = (n - 0.3) / (0.5 - 0.3);
   return complexAdd(complexMul(k, [t, 0]), complexMul(h, [1 - t, 0]));
+}
+
+var leeSolver = solve2d(leeRaw);
+leeRaw.invert = function (x,y) {
+  if (x > 1.5) return false; // immediately avoid using the wrong face
+  var p = leeSolver(x, y),
+      q = leeRaw(p[0], p[1]);
+  q[0] -= x; q[1] -= y;
+  if (q[0]*q[0] + q[1]*q[1] < 1e-8) return p;
+  return [-10, 0]; // far out of the face
 }
 
 var asin1_3 = asin(1 / 3);
