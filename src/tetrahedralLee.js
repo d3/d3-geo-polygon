@@ -101,7 +101,7 @@ export function leeRaw(lambda, phi) {
 var leeSolver = solve2d(leeRaw);
 leeRaw.invert = function (x,y) {
   if (x > 1.5) return false; // immediately avoid using the wrong face
-  var p = leeSolver(x, y),
+  var p = leeSolver(x, y, x, y * 0.5),
       q = leeRaw(p[0], p[1]);
   q[0] -= x; q[1] -= y;
   if (q[0]*q[0] + q[1]*q[1] < 1e-8) return p;
