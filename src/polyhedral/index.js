@@ -2,6 +2,7 @@ import {geoBounds as bounds, geoCentroid as centroid, geoInterpolate as interpol
 import {default as clipPolygon} from "../clip/polygon.js";
 import {abs, degrees, epsilon, radians} from "../math.js";
 import {default as matrix, multiply, inverse} from "./matrix.js";
+import pointEqual from "../pointEqual.js";
 
 // Creates a polyhedral projection.
 //  * tree: a spanning tree of polygon faces.  Nodes are automatically
@@ -130,11 +131,6 @@ function outline(stream, node, parent) {
       if (edge !== parent) outline(stream, edge, node);
     }
   }
-}
-
-// Tests equality of two spherical points.
-function pointEqual(a, b) {
-  return a && b && a[0] === b[0] && a[1] === b[1];
 }
 
 // Finds a shared edge given two clockwise polygons.
