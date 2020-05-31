@@ -10,6 +10,7 @@ import { abs, cos, degrees, pi, radians, sin, sign, sqrt, tan } from "./math.js"
 import { cartesianCross, cartesianDegrees, cartesianDot, sphericalDegrees } from "./cartesian.js";
 import polyhedral from "./polyhedral/index.js";
 import { geoProjectionMutator as projectionMutator } from "d3-geo";
+import {solve2d} from "./newton.js";
 
 export default function(faceProjection) {
   faceProjection =
@@ -668,6 +669,8 @@ export function cahillKeyesRaw(mg) {
 
     return mm;
   }
+
+  forward.invert = solve2d(forward);
 
   return forward;
 }
