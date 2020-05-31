@@ -1,6 +1,6 @@
 {
   "name": "d3-geo-polygon",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Clipping and geometric operations for spherical polygons.",
   "keywords": [
     "d3",
