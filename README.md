@@ -18,6 +18,7 @@ var projection = d3.geoDodecahedral();
 var projection = d3.geoPolyhedralCollignon();
 
 // arbitrary polygon clipping on any projection
+// expects left-hand geojson used by d3 rather than RFC 7946 geojson following right-hand rule 
 var projection = d3.geoEquirectangular()
     .preclip(d3.geoClipPolygon({
       type: "Polygon",
