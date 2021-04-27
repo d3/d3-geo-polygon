@@ -21,7 +21,7 @@ import {
   sin,
   sqrt,
   tan
-} from "./math";
+} from "./math.js";
 import { geoProjectionMutator as projectionMutator } from "d3-geo";
 import { default as clipPolygon } from "./clip/polygon.js";
 import { solve } from "./newton.js";
