@@ -45,8 +45,8 @@ export default function(tree, face) {
   function forward(lambda, phi) {
     var node = face(lambda, phi),
         point = node.project([lambda * degrees, phi * degrees]),
-        t;
-    if (t = node.transform) {
+        t = node.transform;
+    if (t) {
       return [
         t[0] * point[0] + t[1] * point[1] + t[2],
         -(t[3] * point[0] + t[4] * point[1] + t[5])
@@ -78,7 +78,8 @@ export default function(tree, face) {
     var p,
         children = node.children;
     for (var i = 0, n = children && children.length; i < n; ++i) {
-      if (p = faceInvert(children[i], coordinates)) return p;
+      p = faceInvert(children[i], coordinates);
+      if (p) return p;
     }
   }
 

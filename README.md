@@ -4,21 +4,31 @@ Clipping and geometric operations for spherical polygons.
 
 ## Installing
 
-If you use NPM, `npm install d3-geo-polygon`. Otherwise, download the [latest release](https://github.com/d3/d3-geo-polygon/releases/latest). You can also load directly from [unpkg](https://unpkg.com/d3-geo-polygon/). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
+If you use npm, `npm install d3-geo-polygon`. You can also download the [latest release on GitHub](https://github.com/d3/d3-geo-polygon/releases/latest). For vanilla HTML in modern browsers, import d3-geo-polygon from Skypack:
 
 ```html
-<script src="https://unpkg.com/d3-geo@1"></script>
-<script src="https://unpkg.com/d3-geo-polygon@1"></script>
+<script type="module">
+import {geoDodecahedral} from "https://cdn.skypack.dev/d3-geo-polygon@2";
+
+const projection = geoDodecahedral();
+</script>
+```
+
+For legacy environments, you can load d3-geo-polygon’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/d3-geo@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-geo-polygon@2"></script>
 <script>
 
 // new projection
-var projection = d3.geoDodecahedral();
+const projection = d3.geoDodecahedral();
 
 // polyhedral projections don’t need SVG or canvas clipping anymore
-var projection = d3.geoPolyhedralCollignon();
+const projection = d3.geoPolyhedralCollignon();
 
 // arbitrary polygon clipping on any projection
-var projection = d3.geoEquirectangular()
+const projection = d3.geoEquirectangular()
     .preclip(d3.geoClipPolygon({
       type: "Polygon",
       coordinates: [[[-10, -10], [-10, 10], [10, 10], [10, -10], [-10, -10]]]

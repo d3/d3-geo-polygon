@@ -13,7 +13,7 @@ import {
   complexNorm,
   complexPow,
   complexSub
-} from "./complex";
+} from "./complex.js";
 import {solve2d} from "./newton.js";
 
 export function leeRaw(lambda, phi) {
