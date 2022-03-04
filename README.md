@@ -43,7 +43,7 @@ Given two spherical arcs [point0, point1] and [point2, point3], returns their in
 
 ## Projections
 
-d3-geo-polygon adds polygon clipping to the polyhedral projections from [d3-geo-projection](https://github.com/d3/d3-geo-projection). Thus, it supercedes the following symbols:
+d3-geo-polygon adds polygon clipping to the polyhedral projections from [d3-geo-projection](https://github.com/d3/d3-geo-projection). Thus, it supersedes the following symbols:
 
 <a href="#geoPolyhedral" name="geoPolyhedral">#</a> d3.<b>geoPolyhedral</b>(<i>tree</i>, <i>face</i>) · [Source](https://github.com/d3/d3-geo-polygon/blob/master/src/polyhedral/index.js), [Examples](https://observablehq.com/@fil/polyhedral-projections-with-d3-geo-polygon)
 
