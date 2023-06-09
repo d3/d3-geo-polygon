@@ -116,9 +116,9 @@ The Imago projection, engineered by Justin Kunimune (2017), is inspired by Hajim
 
 <a href="#imago_k" name="imago_k">#</a> <i>imago</i>.<b>k</b>([<i>k</i>])
 
-Exponent. Useful values include 0.59 (default, minimizes angular distortion of the continents), 0.68 (gives the closest approximation of the Authagraph) and 0.72 (prevents kinks in the graticule).
+Exponent. Useful values include 0.59 (default, minimizes angular distortion of the continents), 0.68 (gives the closest approximation of the AuthaGraph) and 0.72 (prevents kinks in the graticule).
 
-<a href="#imago_shift" name="imago_cut">#</a> <i>imago</i>.<b>shift</b>([<i>shift</i>])
+<a href="#imago_shift" name="imago_shift">#</a> <i>imago</i>.<b>shift</b>([<i>shift</i>])
 
 Horizontal shift. Defaults to 1.16.
 
@@ -129,7 +129,7 @@ Horizontal shift. Defaults to 1.16.
 
 Lee’s tetrahedral conformal projection.
 
-<a href="tetrahedralLee_angle" name="polyhedralLee_angle">#</a> Default <i>angle</i> is +30°, apex up (-30° for base up, apex down).
+<a href="#tetrahedralLee_angle" name="tetrahedralLee_angle">#</a> Default <i>angle</i> is +30°, apex up (-30° for base up, apex down).
 
 Default aspect uses *projection*.rotate([30, 180]) and has the North Pole at the triangle’s center -- use *projection*.rotate([-30, 0]) for the [South aspect](https://observablehq.com/@fil/lee-projection).
 
@@ -140,7 +140,7 @@ Default aspect uses *projection*.rotate([30, 180]) and has the North Pole at the
 
 The Cox conformal projection.
 
-<a href="#geoComplexLog" name="geoComplexLog">#</a> d3.<b>geoComplexLog</b>([<i>planarProjectionRaw</i>[<i>, cutoffLatitude</i>]]) · [Source](src/complexLog.js), [Example](https://cgmi.github.io/complex-log-projection/)
+<a href="#geoComplexLog" name="geoComplexLog">#</a> d3.<b>geoComplexLog</b>([<i>planarProjectionRaw</i>[<i>, cutoffLatitude</i>]]) · [Source](https://github.com/d3/d3-geo-polygon/blob/master/src/complexLog.js), [Example](https://cgmi.github.io/complex-log-projection/)
 <br><a href="#geoComplexLogRaw" name="geoComplexLogRaw">#</a> d3.<b>geoComplexLogRaw</b>([<i>planarProjectionRaw</i>])
 
 [<img src="img/complexLog.png" width="480" height="250">](https://cgmi.github.io/complex-log-projection/)
