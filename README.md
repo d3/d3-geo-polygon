@@ -143,7 +143,7 @@ The Cox conformal projection.
 <a href="#geoComplexLog" name="geoComplexLog">#</a> d3.<b>geoComplexLog</b>([<i>planarProjectionRaw</i>[<i>, cutoffLatitude</i>]]) · [Source](https://github.com/d3/d3-geo-polygon/blob/master/src/complexLog.js), [Example](https://cgmi.github.io/complex-log-projection/)
 <br><a href="#geoComplexLogRaw" name="geoComplexLogRaw">#</a> d3.<b>geoComplexLogRaw</b>([<i>planarProjectionRaw</i>])
 
-[<img src="img/complexLog.png" width="480" height="250">](https://cgmi.github.io/complex-log-projection/)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/master/img/complexLog.png" width="480" height="250">](https://cgmi.github.io/complex-log-projection/)
 
 Complex logarithmic view. This projection is based on the papers by Joachim Böttger et al.:
 
