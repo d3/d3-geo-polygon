@@ -13,5 +13,7 @@ export {default as geoAirocean} from "./airocean";
 export {default as geoIcosahedral} from "./icosahedral";
 export {default as geoImago, imagoBlock as geoImagoBlock, imagoRaw as geoImagoRaw} from "./imago";
 export {default as geoCubic} from "./cubic";
+export {default as geoRhombicDodecahedral} from "./rhombic";
+export {default as geoDeltoidalHexecontahedral} from "./deltoidal";
 export {default as geoCahillKeyes, cahillKeyesRaw as geoCahillKeyesRaw} from "./cahillKeyes";
 export {default as geoComplexLog, complexLogRaw as geoComplexLogRaw} from "./complexLog";
