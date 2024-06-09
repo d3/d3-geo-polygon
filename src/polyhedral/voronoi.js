@@ -6,38 +6,36 @@ import {
 import { degrees } from "../math.js";
 import polyhedral from "./index.js";
 
-export default function(parents, polygons, faceProjection, find) {
-  parents = parents || [];
-  polygons = polygons || { features: [] };
-  find = find || find0;
+// it is possible to pass a specific projection on each face
+// by default is is a gnomonic projection centered on the face's centroid
+// scale 1 by convention
+const faceProjection0 = (face) => gnomonic()
+  .scale(1)
+  .translate([0, 0])
+  .rotate([-face.site[0], -face.site[1]]);
 
-  // it is possible to pass a specific projection on each face
-  // by default is is a gnomonic projection centered on the face's centroid
-  // scale 1 by convention
-  faceProjection =
-    faceProjection ||
-    function(face) {
-      return gnomonic()
-        .scale(1)
-        .translate([0, 0])
-        .rotate([-face.site[0], -face.site[1]]);
-    };
-
-  var faces = [];
+export default function(
+  parents = [],
+  polygons = { features: [] },
+  faceProjection = faceProjection0,
+  find
+) {
+  if (find === undefined) find = find0;
+  let faces = [];
   function build_tree() {
     // the faces from the polyhedron each yield
     // - face: its vertices
     // - site: its voronoi site (default: centroid)
     // - project: local projection on this face
-    faces = polygons.features.map(function(feature, i) {
-      var polygon = feature.geometry.coordinates[0];
-      var face = polygon.slice(0, -1);
+    faces = polygons.features.map((feature, i) => {
+      const polygon = feature.geometry.coordinates[0];
+      const face = polygon.slice(0, -1);
       face.site =
         feature.properties && feature.properties.sitecoordinates
           ? feature.properties.sitecoordinates
           : centroid(feature.geometry);
       return {
-        face: face,
+        face,
         site: face.site,
         id: i,
         project: faceProjection(face)
@@ -46,18 +44,18 @@ export default function(parents, polygons, faceProjection, find) {
 
     // Build a tree of the faces, starting with face 0 (North Pole)
     // which has no parent (-1)
-    parents.forEach(function(d, i) {
-      var node = faces[d];
+    parents.forEach((d, i) => {
+      const node = faces[d];
       node && (node.children || (node.children = [])).push(faces[i]);
     });
   }
 
   // a basic function to find the polygon that contains the point
   function find0(lambda, phi) {
-    var d0 = Infinity;
-    var found = -1;
-    for (var i = 0; i < faces.length; i++) {
-      var d = distance(faces[i].site, [lambda, phi]);
+    let d0 = Infinity;
+    let found = -1;
+    for (let i = 0; i < faces.length; i++) {
+      const d = distance(faces[i].site, [lambda, phi]);
       if (d < d0) {
         d0 = d;
         found = i;
@@ -70,10 +68,10 @@ export default function(parents, polygons, faceProjection, find) {
     return faces[find(lambda * degrees, phi * degrees)];
   }
 
-  var p = gnomonic();
+  let p = gnomonic();
 
   function reset() {
-    var rotate = p.rotate(),
+    let rotate = p.rotate(),
       translate = p.translate(),
       center = p.center(),
       scale = p.scale(),

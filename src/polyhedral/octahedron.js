@@ -1,5 +1,5 @@
 // TODO generate on-the-fly to avoid external modification.
-var octahedron = [
+const octahedron = [
   [0, 90],
   [-90, 0], [0, 0], [90, 0], [180, 0],
   [0, -90]
@@ -14,8 +14,4 @@ export default [
   [0, 4, 3],
   [5, 4, 1],
   [5, 3, 4]
-].map(function(face) {
-  return face.map(function(i) {
-    return octahedron[i];
-  });
-});
+].map((face) => face.map((i) => octahedron[i]));

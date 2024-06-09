@@ -2,38 +2,36 @@ import {acos, asin, degrees, sqrt} from "../math.js";
 import voronoi from "./voronoi.js";
 
 export default function() {
-  var A0 = asin(1/sqrt(3)) * degrees,
-        A1 = acos((sqrt(5) - 1) / sqrt(3) / 2) * degrees,
-        A2 = 90 - A1,
-        A3 = acos(-(1 + sqrt(5)) / sqrt(3) / 2) * degrees;
+  const A0 = asin(1/sqrt(3)) * degrees;
+  const A1 = acos((sqrt(5) - 1) / sqrt(3) / 2) * degrees;
+  const A2 = 90 - A1;
+  const A3 = acos(-(1 + sqrt(5)) / sqrt(3) / 2) * degrees;
 
-  var dodecahedron = [
-  [[45,A0],[0,A1],[180,A1],[135,A0],[90,A2]],
-  [[45,A0],[A2,0],[-A2,0],[-45,A0],[0,A1]],
-  [[45,A0],[90,A2],[90,-A2],[45,-A0],[A2,0]],
-  [[0,A1],[-45,A0],[-90,A2],[-135,A0],[180,A1]],
-  [[A2,0],[45,-A0],[0,-A1],[-45,-A0],[-A2,0]],
-  [[90,A2],[135,A0],[A3,0],[135,-A0],[90,-A2]],
-  [[45,-A0],[90,-A2],[135,-A0],[180,-A1],[0,-A1]],
-  [[135,A0],[180,A1],[-135,A0],[-A3,0],[A3,0]],
-  [[-45,A0],[-A2,0],[-45,-A0],[-90,-A2],[-90,A2]],
-  [[-45,-A0],[0,-A1],[180,-A1],[-135,-A0],[-90,-A2]],
-  [[135,-A0],[A3,0],[-A3,0],[-135,-A0],[180,-A1]],
-  [[-135,A0],[-90,A2],[-90,-A2],[-135,-A0],[-A3,0]]
+  const dodecahedron = [
+    [[45,A0],[0,A1],[180,A1],[135,A0],[90,A2]],
+    [[45,A0],[A2,0],[-A2,0],[-45,A0],[0,A1]],
+    [[45,A0],[90,A2],[90,-A2],[45,-A0],[A2,0]],
+    [[0,A1],[-45,A0],[-90,A2],[-135,A0],[180,A1]],
+    [[A2,0],[45,-A0],[0,-A1],[-45,-A0],[-A2,0]],
+    [[90,A2],[135,A0],[A3,0],[135,-A0],[90,-A2]],
+    [[45,-A0],[90,-A2],[135,-A0],[180,-A1],[0,-A1]],
+    [[135,A0],[180,A1],[-135,A0],[-A3,0],[A3,0]],
+    [[-45,A0],[-A2,0],[-45,-A0],[-90,-A2],[-90,A2]],
+    [[-45,-A0],[0,-A1],[180,-A1],[-135,-A0],[-90,-A2]],
+    [[135,-A0],[A3,0],[-A3,0],[-135,-A0],[180,-A1]],
+    [[-135,A0],[-90,A2],[-90,-A2],[-135,-A0],[-A3,0]]
   ];
 
 
-  var polygons = {
+  const polygons = {
     type: "FeatureCollection",
-    features: dodecahedron.map(function(face) {
-      face.push(face[0]);
-      return {
-        geometry: {
-          type: "Polygon",
-          coordinates: [ face ]
-        }
-      };
-    })
+    features: dodecahedron.map((face) => ({
+      type: "Feature",
+      geometry: {
+        type: "Polygon",
+        coordinates: [ [...face, face[0]] ]
+      }
+    }))
   };
 
   return voronoi()

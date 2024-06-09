@@ -1,7 +1,7 @@
 import { abs, atan2, cos, exp, halfPi, log, pow, sin, sqrt } from "./math.js";
 
 export function complexAtan(x, y) {
-  var x2 = x * x,
+  const x2 = x * x,
     y_1 = y + 1,
     t = 1 - x2 - y * y;
   return [
@@ -37,8 +37,8 @@ export function complexNorm(a) {
 }
 
 export function complexLogHypot(a, b) {
-  var _a = abs(a),
-    _b = abs(b);
+  const _a = abs(a);
+  const _b = abs(b);
   if (a === 0) return log(_b);
   if (b === 0) return log(_a);
   if (_a < 3000 && _b < 3000) return log(a * a + b * b) * 0.5;
@@ -47,7 +47,7 @@ export function complexLogHypot(a, b) {
 
 // adapted from https://github.com/infusion/Complex.js
 export function complexPow(a, n) {
-  var b = a[1],
+  let b = a[1],
     arg,
     loh;
   a = a[0];

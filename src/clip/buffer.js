@@ -1,11 +1,11 @@
 import noop from "../noop.js";
 
 export default function() {
-  var lines = [],
-      line;
+  let lines = [];
+  let line;
   return {
     point: function(x, y, i, t) {
-      var point = [x, y];
+      const point = [x, y];
       // when called by clipPolygon, store index and t
       if (arguments.length > 2) { point.index = i; point.t = t; }
       line.push(point);
@@ -18,7 +18,7 @@ export default function() {
       if (lines.length > 1) lines.push(lines.pop().concat(lines.shift()));
     },
     result: function() {
-      var result = lines;
+      const result = lines;
       lines = [];
       line = null;
       return result;

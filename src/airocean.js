@@ -17,19 +17,16 @@ import {
 import { range } from "d3-array";
 
 function airoceanRaw(faceProjection) {
-  var theta = atan(0.5) * degrees;
+  const theta = atan(0.5) * degrees;
 
   // construction inspired by
   // https://en.wikipedia.org/wiki/Regular_icosahedron#Spherical_coordinates
-  var vertices = [[0, 90], [0, -90]].concat(
-    range(10).map(function(i) {
-      var phi = (i * 36 + 180) % 360 - 180;
-      return [phi, i & 1 ? theta : -theta];
-    })
+  const vertices = [[0, 90], [0, -90]].concat(
+    range(10).map((i) => [(i * 36 + 180) % 360 - 180, i & 1 ? theta : -theta])
   );
 
   // icosahedron
-  var polyhedron = [
+  const polyhedron = [
     [0, 3, 11],
     [0, 5, 3],
     [0, 7, 5],
@@ -50,22 +47,16 @@ function airoceanRaw(faceProjection) {
     [1, 6, 8],
     [1, 8, 10],
     [1, 10, 2] // South
-  ].map(function(face) {
-    return face.map(function(i) {
-      return vertices[i];
-    });
-  });
+  ].map((face) => face.map((i) => vertices[i]));
 
   // add centroid
-  polyhedron.forEach(function(face) {
-    face.centroid = centroid({ type: "MultiPoint", coordinates: face });
-  });
+  polyhedron.forEach((face) => (face.centroid = centroid({ type: "MultiPoint", coordinates: face })));
 
   // split the relevant faces:
   // * face[15] in the centroid: this will become face[15], face[20] and face[21]
   // * face[14] in the middle of the side: this will become face[14] and face[22]
   (function() {
-    var face, tmp, mid, centroid;
+    let face, tmp, mid, centroid;
 
     // Split face[15] in 3 faces at centroid.
     face = polyhedron[15];
@@ -87,11 +78,11 @@ function airoceanRaw(faceProjection) {
     tmp = face.slice();
 
     // compute planar midpoint
-    var proj = gnomonic()
+    const proj = gnomonic()
       .scale(1)
       .translate([0, 0])
       .rotate([-centroid[0], -centroid[1]]);
-    var a = proj(face[1]),
+    const a = proj(face[1]),
       b = proj(face[2]);
     mid = proj.invert([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]);
     face[1] = mid; // (new) face[14]
@@ -113,20 +104,17 @@ function airoceanRaw(faceProjection) {
     polyhedron.push(face); // face[23]
   })();
 
-  var airocean = function(faceProjection) {
+  const airocean = function(faceProjection) {
     faceProjection =
       faceProjection ||
-      function(face) {
-        // for half-triangles this is definitely not centroid({type: "MultiPoint", coordinates: face});
-        var c = face.centroid;
-        return gnomonic()
+      // for half-triangles this is definitely not centroid({type: "MultiPoint", coordinates: face});
+      ((face) => gnomonic()
           .scale(1)
           .translate([0, 0])
-          .rotate([-c[0], -c[1]]);
-      };
+          .rotate([-face.centroid[0], -face.centroid[1]]));
 
-    var faces = polyhedron.map(function(face, i) {
-      var polygon = face.slice();
+    const faces = polyhedron.map((face, i) => {
+      const polygon = face.slice();
       polygon.push(polygon[0]);
 
       return {
@@ -144,7 +132,7 @@ function airoceanRaw(faceProjection) {
     });
 
     // Connect each face to a parent face.
-    var parents = [
+    const parents = [
       // N
       -1, // 0
       0, // 1
@@ -177,19 +165,19 @@ function airoceanRaw(faceProjection) {
       19 // 23
     ];
 
-    parents.forEach(function(d, i) {
-      var node = faces[d];
+    parents.forEach((d, i) => {
+      const node = faces[d];
       node && (node.children || (node.children = [])).push(faces[i]);
     });
 
     function face(lambda, phi) {
-      for (var i = 0; i < faces.length; i++) {
+      for (let i = 0; i < faces.length; ++i) {
         if (faces[i].contains(lambda, phi)) return faces[i];
       }
     }
 
     // Polyhedral projection
-    var proj = polyhedral(
+    const proj = polyhedral(
       faces[0], // the root face
       face // a function that returns a face given coords
     );
@@ -202,8 +190,8 @@ function airoceanRaw(faceProjection) {
 }
 
 export default function () {
-  var p = airoceanRaw(function(face) {
-    var c = face.centroid;
+  const p = airoceanRaw((face) => {
+    const c = face.centroid;
 
     face.direction =
       Math.abs(c[1] - 52.62) < 1 || Math.abs(c[1] + 10.81) < 1 ? 0 : 60;

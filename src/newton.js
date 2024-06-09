@@ -3,7 +3,7 @@ import {abs, epsilon, epsilon2} from "./math.js";
 // Approximate Newton-Raphson
 // Solve f(x) = y, start from x
 export function solve(f, y, x) {
-  var steps = 100, delta, f0, f1;
+  let steps = 100, delta, f0, f1;
   x = x === undefined ? 0 : +x;
   y = +y;
   do {
@@ -18,17 +18,17 @@ export function solve(f, y, x) {
 // Approximate Newton-Raphson in 2D
 // Solve f(a,b) = [x,y]
 export function solve2d(f, MAX_ITERATIONS = 40, eps = epsilon2) {
-  return function(x, y, a = 0, b = 0) {
-    var err2, da, db;
-    for (var i = 0; i < MAX_ITERATIONS; i++) {
-      var p = f(a, b),
+  return (x, y, a = 0, b = 0) => {
+    let err2, da, db;
+    for (let i = 0; i < MAX_ITERATIONS; ++i) {
+      const p = f(a, b),
         // diffs
         tx = p[0] - x,
         ty = p[1] - y;
       if (abs(tx) < eps && abs(ty) < eps) break; // we're there!
 
       // backtrack if we overshot
-      var h = tx * tx + ty * ty;
+      const h = tx * tx + ty * ty;
       if (h > err2) {
         a -= da /= 2;
         b -= db /= 2;
@@ -37,7 +37,7 @@ export function solve2d(f, MAX_ITERATIONS = 40, eps = epsilon2) {
       err2 = h;
 
       // partial derivatives
-      var ea = (a > 0 ? -1 : 1) * eps,
+      const ea = (a > 0 ? -1 : 1) * eps,
         eb = (b > 0 ? -1 : 1) * eps,
         pa = f(a + ea, b),
         pb = f(a, b + eb),

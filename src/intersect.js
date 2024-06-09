@@ -16,20 +16,20 @@ export function intersect(a, b) {
   if (cartesianEqual(a.to, b.from) || cartesianEqual(a.to, b.to))
     return a.to;
 
-  var lc = (a.l + b.l < pi) ? cos(a.l + b.l) - epsilon : -1;
+  const lc = (a.l + b.l < pi) ? cos(a.l + b.l) - epsilon : -1;
   if (cartesianDot(a.from, b.from) < lc
   || cartesianDot(a.from, b.to) < lc
   || cartesianDot(a.to, b.from) < lc
   || cartesianDot(a.to, b.to) < lc)
     return;
 
-  var axb = cartesianCross(a.normal, b.normal);
+  const axb = cartesianCross(a.normal, b.normal);
   cartesianNormalizeInPlace(axb);
 
-  var a0 = cartesianDot(axb, a.fromNormal),
-      a1 = cartesianDot(axb, a.toNormal),
-      b0 = cartesianDot(axb, b.fromNormal),
-      b1 = cartesianDot(axb, b.toNormal);
+  let a0 = cartesianDot(axb, a.fromNormal);
+  let a1 = cartesianDot(axb, a.toNormal);
+  let b0 = cartesianDot(axb, b.fromNormal);
+  let b1 = cartesianDot(axb, b.toNormal);
 
   // check if the candidate lies on both segments
   // or is almost equal to one of the four points
@@ -70,21 +70,20 @@ export function intersect(a, b) {
 }
 
 export function intersectPointOnLine(p, a) {
-  var a0 = cartesianDot(p, a.fromNormal),
-      a1 = cartesianDot(p, a.toNormal);
+  const a0 = cartesianDot(p, a.fromNormal);
+  const a1 = cartesianDot(p, a.toNormal);
   p = cartesianDot(p, a.normal);
-
   return abs(p) < epsilon2 && (a0 > -epsilon2 && a1 < epsilon2 || a0 < epsilon2 && a1 > -epsilon2);
 }
 
-export var intersectCoincident = {};
+export const intersectCoincident = {};
 
 export default function(a, b) {
-  var ca = a.map(p => cartesian(p.map(d => d * radians))),
-      cb = b.map(p => cartesian(p.map(d => d * radians)));
-  var i = intersect(
+  const ca = a.map(p => cartesian(p.map(d => d * radians)));
+  const cb = b.map(p => cartesian(p.map(d => d * radians)));
+  const i = intersect(
     new intersectSegment(ca[0], ca[1]),
     new intersectSegment(cb[0], cb[1])
   );
-  return !i ? i : spherical(i).map(d => d * degrees);
+  return i ? spherical(i).map((d) => d * degrees) : null;
 }

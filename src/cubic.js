@@ -8,21 +8,18 @@ import voronoi from "./polyhedral/voronoi.js";
 import { default as cube } from "./polyhedral/cube.js";
 
 export default function() {
-  var polygons = {
+  const polygons = {
     type: "FeatureCollection",
-    features: cube.map(function(face) {
-      face = face.slice();
-      face.push(face[0]);
-      return {
-        geometry: {
-          type: "Polygon",
-          coordinates: [face]
-        }
-      };
-    })
+    features: cube.map((face) => ({
+      type: "Feature",
+      geometry: {
+        type: "Polygon",
+        coordinates: [[...face, face[0]]]
+      }
+    }))
   };
 
-  var parents = [-1, 0, 1, 5, 3, 2];
+  const parents = [-1, 0, 1, 5, 3, 2];
 
   return voronoi()
     .polygons(polygons)

@@ -17,67 +17,55 @@ export default function(tree, face) {
     node.edges = faceEdges(node.face);
     // Find shared edge.
     if (parent.face) {
-      var shared = node.shared = sharedEdge(node.face, parent.face),
-          m = matrix(shared.map(parent.project), shared.map(node.project));
+      const shared = node.shared = sharedEdge(node.face, parent.face);
+      const m = matrix(shared.map(parent.project), shared.map(node.project));
       node.transform = parent.transform ? multiply(parent.transform, m) : m;
       // Replace shared edge in parent edges array.
-      var edges = parent.edges;
-      for (var i = 0, n = edges.length; i < n; ++i) {
+      let edges = parent.edges;
+      for (let i = 0, n = edges.length; i < n; ++i) {
         if (pointEqual(shared[0], edges[i][1]) && pointEqual(shared[1], edges[i][0])) edges[i] = node;
         if (pointEqual(shared[0], edges[i][0]) && pointEqual(shared[1], edges[i][1])) edges[i] = node;
       }
       edges = node.edges;
-      for (i = 0, n = edges.length; i < n; ++i) {
+      for (let i = 0, n = edges.length; i < n; ++i) {
         if (pointEqual(shared[0], edges[i][0]) && pointEqual(shared[1], edges[i][1])) edges[i] = parent;
         if (pointEqual(shared[0], edges[i][1]) && pointEqual(shared[1], edges[i][0])) edges[i] = parent;
       }
     } else {
       node.transform = parent.transform;
     }
-    if (node.children) {
-      node.children.forEach(function(child) {
-        recurse(child, node);
-      });
-    }
+    if (node.children) node.children.forEach((child) => recurse(child, node));
     return node;
   }
 
   function forward(lambda, phi) {
-    var node = face(lambda, phi),
-        point = node.project([lambda * degrees, phi * degrees]),
-        t;
-    if (t = node.transform) {
-      return [
-        t[0] * point[0] + t[1] * point[1] + t[2],
-        -(t[3] * point[0] + t[4] * point[1] + t[5])
-      ];
-    }
-    point[1] = -point[1];
-    return point;
+    const node = face(lambda, phi);
+    const point = node.project([lambda * degrees, phi * degrees]);
+    const t  = node.transform;
+    return t
+      ? [t[0] * point[0] + t[1] * point[1] + t[2], -(t[3] * point[0] + t[4] * point[1] + t[5])]
+      : [point[0], -point[1]];
   }
 
   // Naive inverse!  A faster solution would use bounding boxes, or even a
   // polygonal quadtree.
   if (hasInverse(tree)) forward.invert = function(x, y) {
-    var coordinates = faceInvert(tree, [x, -y]);
+    const coordinates = faceInvert(tree, [x, -y]);
     return coordinates && (coordinates[0] *= radians, coordinates[1] *= radians, coordinates);
   };
 
   function faceInvert(node, coordinates) {
-    var invert = node.project.invert,
-        t = node.transform,
-        point = coordinates;
+    const invert = node.project.invert;
+    let point = coordinates;
+    let p;
+    let t = node.transform;
     if (t) {
       t = inverse(t);
-      point = [
-        t[0] * point[0] + t[1] * point[1] + t[2],
-        (t[3] * point[0] + t[4] * point[1] + t[5])
-      ];
+      point = [t[0] * point[0] + t[1] * point[1] + t[2], (t[3] * point[0] + t[4] * point[1] + t[5])];
     }
     if (invert && node === faceDegrees(p = invert(point))) return p;
-    var p,
-        children = node.children;
-    for (var i = 0, n = children && children.length; i < n; ++i) {
+    const children = node.children;
+    for (let i = 0, n = children && children.length; i < n; ++i) {
       if (p = faceInvert(children[i], coordinates)) return p;
     }
   }
@@ -86,10 +74,10 @@ export default function(tree, face) {
     return face(coordinates[0] * radians, coordinates[1] * radians);
   }
 
-  var proj = projection(forward);
+  const proj = projection(forward);
 
   // run around the mesh of faces and stream all vertices to create the clipping polygon
-  var polygon = [];
+  const polygon = [];
   outline({point: function(lambda, phi) { polygon.push([lambda, phi]); }}, tree);
   polygon.push(polygon[0]);
   proj.preclip(clipPolygon({ type: "Polygon", coordinates: [ polygon ] }));
@@ -99,7 +87,7 @@ export default function(tree, face) {
 }
 
 function outline(stream, node, parent) {
-  var point,
+  let point,
       edges = node.edges,
       n = edges.length,
       edge,
@@ -118,7 +106,7 @@ function outline(stream, node, parent) {
     if (edges[j] === parent) break;
   }
   ++j;
-  for (var i = 0; i < n; ++i) {
+  for (let i = 0; i < n; ++i) {
     edge = edges[(i + j) % n];
     if (Array.isArray(edge)) {
       if (!inside) {
@@ -135,10 +123,11 @@ function outline(stream, node, parent) {
 
 // Finds a shared edge given two clockwise polygons.
 function sharedEdge(a, b) {
-  var x, y, n = a.length, found = null;
-  for (var i = 0; i < n; ++i) {
+  const n = a.length;
+  let x, y, found = null;
+  for (let i = 0; i < n; ++i) {
     x = a[i];
-    for (var j = b.length; --j >= 0;) {
+    for (let j = b.length; --j >= 0;) {
       y = b[j];
       if (x[0] === y[0] && x[1] === y[1]) {
         if (found) return [found, x];
@@ -150,9 +139,9 @@ function sharedEdge(a, b) {
 
 // Converts an array of n face vertices to an array of n + 1 edges.
 function faceEdges(face) {
-  var n = face.length,
-      edges = [];
-  for (var a = face[n - 1], i = 0; i < n; ++i) edges.push([a, a = face[i]]);
+  const n = face.length;
+  const edges = [];
+  for (let i = 0, a = face[n - 1]; i < n; ++i) edges.push([a, a = face[i]]);
   return edges;
 }
 
