@@ -10,8 +10,8 @@ import voronoi from "./polyhedral/voronoi.js";
 import { geoCentroid } from "d3-geo";
 
 export default function () {
-  var phi1 = atan(Math.SQRT1_2) * degrees;
-  var vertices = [
+  const phi1 = atan(Math.SQRT1_2) * degrees;
+  const vertices = [
     [0, 90], // 0
     [0, phi1], // 1
     [90, phi1], // 2
@@ -29,7 +29,7 @@ export default function () {
   ];
 
   // rhombic dodecahedron
-  var polyhedron = [
+  const polyhedron = [
     [0, 1, 8, 4],
     [0, 2, 5, 1],
     [0, 3, 6, 2],
@@ -44,31 +44,26 @@ export default function () {
     [5, 10, 13, 9],
     [6, 11, 13, 10],
     [7, 12, 13, 11],
-  ].map(function (face) {
-    return face.map(function (i) {
-      return vertices[i];
-    });
-  });
+  ].map((face) => face.map((i) => vertices[i]));
 
-  var polygons = {
+  const polygons = {
     type: "FeatureCollection",
-    features: polyhedron.map(function (face) {
-      return {
-        properties: {
-          sitecoordinates: geoCentroid({
-            type: "MultiPoint",
-            coordinates: face,
-          }),
-        },
-        geometry: {
-          type: "Polygon",
-          coordinates: [[...face, face[0]]],
-        },
-      };
-    }),
+    features: polyhedron.map((face) => ({
+      type: "Feature",
+      properties: {
+        sitecoordinates: geoCentroid({
+          type: "MultiPoint",
+          coordinates: face,
+        }),
+      },
+      geometry: {
+        type: "Polygon",
+        coordinates: [[...face, face[0]]],
+      },
+    }))
   };
 
-  var parents = [
+  const parents = [
     -1, // 0
     0, // 1
     6, // 2
