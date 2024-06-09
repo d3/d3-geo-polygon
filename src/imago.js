@@ -20,8 +20,8 @@ import {
   sign,
   sin,
   sqrt,
-  tan
-} from "./math";
+  tan,
+} from "./math.js";
 import { geoProjectionMutator as projectionMutator } from "d3-geo";
 import { default as clipPolygon } from "./clip/polygon.js";
 import { solve } from "./newton.js";
@@ -33,7 +33,7 @@ var ASIN_ONE_THD = asin(1 / 3),
     [halfPi, 0, 0, -halfPi, 0, sqrt(3)],
     [-ASIN_ONE_THD, 0, pi, halfPi, 0, -sqrt(3)],
     [-ASIN_ONE_THD, (2 * pi) / 3, pi, (5 * pi) / 6, 3, 0],
-    [-ASIN_ONE_THD, (-2 * pi) / 3, pi, pi / 6, -3, 0]
+    [-ASIN_ONE_THD, (-2 * pi) / 3, pi, pi / 6, -3, 0],
   ],
   TETRAHEDRON_WIDE_VERTEX = {
     sphereSym: 3,
@@ -41,12 +41,12 @@ var ASIN_ONE_THD = asin(1 / 3),
     width: 6,
     height: 2 * sqrt(3),
     centrums,
-    rotateOOB: function(x, y, xCen, yCen) {
+    rotateOOB: function (x, y, xCen, yCen) {
       yCen * 0;
       if (abs(x) > this.width / 2) return [2 * xCen - x, -y];
       else return [-x, this.height * sign(y) - y];
     },
-    inBounds: () => true
+    inBounds: () => true,
   },
   configuration = TETRAHEDRON_WIDE_VERTEX;
 
@@ -60,7 +60,7 @@ export function imagoRaw(k) {
 
   function faceInverse(r, th) {
     const l = solve(
-        l => atan(((l - asin(sin(l) / sqrt(3))) / pi) * sqrt(12)),
+        (l) => atan(((l - asin(sin(l) / sqrt(3))) / pi) * sqrt(12)),
         th,
         th / 2
       ),
@@ -221,7 +221,7 @@ export function imagoBlock() {
     m = projectionMutator(imagoRaw),
     p = m(k);
 
-  p.k = function(_) {
+  p.k = function (_) {
     return arguments.length ? m((k = +_)) : k;
   };
 
@@ -232,14 +232,16 @@ export function imagoBlock() {
       [180 - epsilon, a + epsilon],
       [180 - epsilon, a - epsilon],
       [-180 + epsilon, a - epsilon],
-      [-180 + epsilon, a + epsilon]
+      [-180 + epsilon, a + epsilon],
     ];
 
   return p
-    .preclip(clipPolygon({
-      type: "Polygon",
-      coordinates: [border]
-      }))
+    .preclip(
+      clipPolygon({
+        type: "Polygon",
+        coordinates: [border],
+      })
+    )
     .scale(144.04)
     .rotate([18, -12.5, 3.5])
     .center([0, 35.2644]);
@@ -283,16 +285,16 @@ function imagoWideRaw(k, shift) {
   return forward;
 }
 
-export default function() {
+export default function () {
   var k = 0.59,
     shift = 1.16,
     m = projectionMutator(imagoWideRaw),
     p = m(k, shift);
 
-  p.shift = function(_) {
+  p.shift = function (_) {
     return arguments.length ? clipped(m(k, (shift = +_))) : shift;
   };
-  p.k = function(_) {
+  p.k = function (_) {
     return arguments.length ? clipped(m((k = +_), shift)) : k;
   };
 
@@ -305,21 +307,18 @@ export default function() {
       center = p.center(),
       translate = p.translate(),
       rotate = p.rotate();
-    p.scale(1)
-      .center([0, 90])
-      .rotate([0, 0])
-      .translate([shift, 0]);
+    p.scale(1).center([0, 90]).rotate([0, 0]).translate([shift, 0]);
     for (let i = N - epsilon; i > 0; i--) {
       border.unshift(
         p.invert([
           1.5 * configuration.height - e,
-          ((configuration.width / 2) * i) / N
+          ((configuration.width / 2) * i) / N,
         ])
       );
       border.push(
         p.invert([
           -0.5 * configuration.height + e,
-          ((configuration.width / 2) * i) / N
+          ((configuration.width / 2) * i) / N,
         ])
       );
     }
@@ -333,7 +332,7 @@ export default function() {
       .preclip(
         clipPolygon({
           type: "Polygon",
-          coordinates: [border]
+          coordinates: [border],
         })
       );
   }

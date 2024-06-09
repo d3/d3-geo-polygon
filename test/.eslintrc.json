@@ -7,5 +7,9 @@
   "rules": {
     "no-cond-assign": 0,
     "no-constant-condition": 0
+  },
+  "env": {
+    "mocha": true,
+    "node": true
   }
 }
