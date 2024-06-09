@@ -11,22 +11,19 @@ import voronoi from "./polyhedral/voronoi.js";
 import { geoCentroid, geoInterpolate } from "d3-geo";
 
 export default function () {
-  var theta = atan(0.5) * degrees;
+  const theta = atan(0.5) * degrees;
 
   // construction inspired by
   // https://en.wikipedia.org/wiki/Regular_icosahedron#Spherical_coordinates
-  var vertices = [
-    [0, 90],
-    [0, -90],
-  ].concat(
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (i) {
-      var phi = ((i * 36 + 180) % 360) - 180;
-      return [phi, i & 1 ? theta : -theta];
-    })
+  const vertices = [[0, 90], [0, -90]].concat(
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => [
+      ((i * 36 + 180) % 360) - 180,
+      i & 1 ? theta : -theta
+    ])
   );
 
   // icosahedron
-  var polyhedron = [
+  const polyhedron = [
     [0, 3, 11],
     [0, 5, 3],
     [0, 7, 5],
@@ -47,51 +44,38 @@ export default function () {
     [1, 6, 8],
     [1, 8, 10],
     [1, 10, 2], // South
-  ].map(function (face) {
-    var t = face.map(function (i) {
-      return vertices[i];
-    });
+  ].map((face) => {
+    const t = face.map((i) => vertices[i]);
     // create 3 polygons from these using centroid and midpoints
-    var f1 = [
-      t[0],
-      geoInterpolate(t[0], t[1])(0.5),
-      geoCentroid({ type: "MultiPoint", coordinates: t }),
-      geoInterpolate(t[0], t[2])(0.5),
+    const a0 = geoInterpolate(t[1], t[2])(0.5);
+    const a1 = geoInterpolate(t[0], t[2])(0.5);
+    const a2 = geoInterpolate(t[0], t[1])(0.5);
+    const c = geoCentroid({ type: "MultiPoint", coordinates: t });
+    return [
+      [t[0], a2, c, a1],
+      [t[1], a0, c, a2],
+      [t[2], a1, c, a0]
     ];
-    var f2 = [
-      t[1],
-      geoInterpolate(t[1], t[2])(0.5),
-      geoCentroid({ type: "MultiPoint", coordinates: t }),
-      geoInterpolate(t[1], t[0])(0.5),
-    ];
-    var f3 = [
-      t[2],
-      geoInterpolate(t[2], t[0])(0.5),
-      geoCentroid({ type: "MultiPoint", coordinates: t }),
-      geoInterpolate(t[2], t[1])(0.5),
-    ];
-    return [f1, f2, f3];
   });
 
-  var polygons = {
+  const polygons = {
     type: "FeatureCollection",
-    features: polyhedron.flat().map(function (face) {
-      return {
-        properties: {
-          sitecoordinates: geoCentroid({
-            type: "MultiPoint",
-            coordinates: face,
-          }),
-        },
-        geometry: {
-          type: "Polygon",
-          coordinates: [[...face, face[0]]],
-        },
-      };
-    }),
+    features: polyhedron.flat().map((face) => ({
+      type: "Feature",
+      properties: {
+        sitecoordinates: geoCentroid({
+          type: "MultiPoint",
+          coordinates: face,
+        }),
+      },
+      geometry: {
+        type: "Polygon",
+        coordinates: [[...face, face[0]]],
+      },
+    }))
   };
 
-  var parents = [
+  const parents = [
     -1, // 0
     2, // 1
     0, // 2
