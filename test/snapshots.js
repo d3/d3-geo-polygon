@@ -8,6 +8,8 @@ import {
   geoCahillKeyes,
   geoComplexLog,
   geoCubic,
+  geoDeltoidalHexecontahedral,
+  geoRhombicDodecahedral,
   geoDodecahedral,
   geoIcosahedral,
   geoImago,
@@ -98,6 +100,14 @@ export async function polyhedralCollignon() {
 
 export async function polyhedralWaterman() {
   return renderWorld(geoPolyhedralWaterman().precision(0.1));
+}
+
+export async function deltoidalHexecontahedral() {
+  return renderWorld(geoDeltoidalHexecontahedral().precision(0.1));
+}
+
+export async function rhombicDodecahedral() {
+  return renderWorld(geoRhombicDodecahedral().precision(0.1));
 }
 
 export async function tetrahedralLee() {

@@ -96,7 +96,19 @@ The cubic projection.
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/dodecahedral.png" width="480" height="250">](https://observablehq.com/@fil/dodecahedral-projection)
 
-The dodecahedral projection.
+The pentagonal dodecahedral projection.
+
+<a href="#geoRhombicDodecahedral" name="geoRhombicDodecahedral">#</a> d3.<b>geoRhombicDodecahedral</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/rhombic.js), [Examples](https://observablehq.com/d/881a8431e638b408)
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/rhombicDodecahedral.png" width="480" height="250">](https://observablehq.com/d/881a8431e638b408)
+
+The rhombic dodecahedral projection.
+
+<a href="#geoDeltoidalHexecontahedral" name="geoDeltoidalHexecontahedral">#</a> d3.<b>geoDeltoidalHexecontahedral</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/deltoidal.js), [Examples](https://observablehq.com/d/881a8431e638b408)
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/deltoidalHexecontahedral.png" width="480" height="250">](https://observablehq.com/d/881a8431e638b408)
+
+The deltoidal hexecontahedral projection.
 
 <a href="#geoIcosahedral" name="geoIcosahedral">#</a> d3.<b>geoIcosahedral</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/icosahedral.js), [Examples](https://observablehq.com/@fil/icosahedral-projections)
 
