@@ -1,4 +1,4 @@
-Copyright 2017 Mike Bostock
+Copyright 2017-2024 Mike Bostock
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
 with or without fee is hereby granted, provided that the above copyright notice
@@ -12,8 +12,6 @@ OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
 TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
 
-
-
 Philippe Rivière’s implementation of the Gray-Fuller raw projection (grayfuller.js)
 belongs to the public domain.
 
@@ -26,4 +24,3 @@ belongs to the public domain.
 >
 > To the extent possible under law, Philippe Rivière has waived all copyright
 > and related or neighboring rights to this implementation. (Public Domain.)
-

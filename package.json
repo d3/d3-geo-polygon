@@ -2,6 +2,11 @@
   "name": "d3-geo-polygon",
   "version": "1.12.1",
   "description": "Clipping and geometric operations for spherical polygons.",
+  "homepage": "https://github.com/d3/d3-geo-polygon",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d3/d3-geo-polygon.git"
+  },
   "keywords": [
     "d3",
     "d3-module",
@@ -9,7 +14,6 @@
     "projection",
     "polygon"
   ],
-  "homepage": "https://github.com/d3/d3-geo-polygon",
   "license": "ISC",
   "author": {
     "name": "Mike Bostock",
@@ -25,35 +29,40 @@
       "url": "https://visionscarto.net"
     }
   ],
-  "main": "dist/d3-geo-polygon.js",
-  "unpkg": "dist/d3-geo-polygon.min.js",
-  "jsdelivr": "dist/d3-geo-polygon.min.js",
+  "type": "module",
+  "files": [
+    "dist/**/*.js",
+    "src/**/*.js"
+  ],
   "module": "src/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/d3/d3-geo-polygon.git"
-  },
-  "scripts": {
-    "pretest": "rollup -c",
-    "test": "tape 'test/**/*-test.js' && eslint src",
-    "prepublishOnly": "rm -rf dist && yarn test && mkdir -p test/output && test/compare-images",
-    "postpublish": "git push && git push --tags && zip -j dist/d3-geo-polygon.zip -- LICENSE README.md dist/d3-geo-polygon.js dist/d3-geo-polygon.min.js"
-  },
-  "dependencies": {
-    "d3-array": "1 - 2",
-    "d3-geo": "1.12.0 - 2"
+  "main": "src/index.js",
+  "jsdelivr": "dist/d3-geo-polygon.min.js",
+  "unpkg": "dist/d3-geo-polygon.min.js",
+  "exports": {
+    "umd": "./dist/d3-geo-polygon.min.js",
+    "default": "./src/index.js"
   },
   "sideEffects": false,
+  "dependencies": {
+    "d3-array": "2.5.0 - 3",
+    "d3-geo": "2 - 3"
+  },
   "devDependencies": {
-    "canvas": "1 - 2",
-    "eslint": "5",
-    "rollup": "0.64",
-    "rollup-plugin-terser": "1",
-    "tape": "4",
+    "@rollup/plugin-terser": "0.4",
+    "canvas": "2",
+    "eslint": "8",
+    "mocha": "10",
+    "pixelmatch": "5",
+    "pngjs": "6",
+    "rollup": "3",
     "topojson-client": "3",
     "world-atlas": "1"
   },
+  "scripts": {
+    "test": "mocha 'test/**/*-test.js' && eslint src test",
+    "prepublishOnly": "rm -rf dist && rollup -c"
+  },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=12"
   }
 }

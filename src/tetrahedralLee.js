@@ -2,7 +2,7 @@ import {
   geoProjection as projection,
   geoStereographicRaw,
   geoCentroid,
-  geoContains
+  geoContains,
 } from "d3-geo";
 import polyhedral from "./polyhedral/index.js";
 import { scan } from "d3-array";
@@ -12,9 +12,9 @@ import {
   complexMul,
   complexNorm,
   complexPow,
-  complexSub
-} from "./complex";
-import {solve2d} from "./newton.js";
+  complexSub,
+} from "./complex.js";
+import { solve2d } from "./newton.js";
 
 export function leeRaw(lambda, phi) {
   // return d3.geoGnomonicRaw(...arguments);
@@ -26,7 +26,7 @@ export function leeRaw(lambda, phi) {
 
   // rotate to have s ~= 1
   var sector = scan(
-    [0, 1, 2].map(function(i) {
+    [0, 1, 2].map(function (i) {
       return -complexMul(z, complexPow(w, [i, 0]))[0];
     })
   );
@@ -44,26 +44,13 @@ export function leeRaw(lambda, phi) {
     var w1 = 1.4021821053254548;
 
     var G0 = [
-      1.15470053837925,
-      0.192450089729875,
-      0.0481125224324687,
-      0.010309826235529,
-      3.34114739114366e-4,
-      -1.50351632601465e-3,
-      -1.2304417796231e-3,
-      -6.75190201960282e-4,
-      -2.84084537293856e-4,
-      -8.21205120500051e-5,
-      -1.59257630018706e-6,
-      1.91691805888369e-5,
-      1.73095888028726e-5,
-      1.03865580818367e-5,
-      4.70614523937179e-6,
-      1.4413500104181e-6,
-      1.92757960170179e-8,
-      -3.82869799649063e-7,
-      -3.57526015225576e-7,
-      -2.2175964844211e-7
+      1.15470053837925, 0.192450089729875, 0.0481125224324687,
+      0.010309826235529, 3.34114739114366e-4, -1.50351632601465e-3,
+      -1.2304417796231e-3, -6.75190201960282e-4, -2.84084537293856e-4,
+      -8.21205120500051e-5, -1.59257630018706e-6, 1.91691805888369e-5,
+      1.73095888028726e-5, 1.03865580818367e-5, 4.70614523937179e-6,
+      1.4413500104181e-6, 1.92757960170179e-8, -3.82869799649063e-7,
+      -3.57526015225576e-7, -2.2175964844211e-7,
     ];
 
     var G = [0, 0];
@@ -99,84 +86,84 @@ export function leeRaw(lambda, phi) {
 }
 
 var leeSolver = solve2d(leeRaw);
-leeRaw.invert = function (x,y) {
+leeRaw.invert = function (x, y) {
   if (x > 1.5) return false; // immediately avoid using the wrong face
   var p = leeSolver(x, y, x, y * 0.5),
-      q = leeRaw(p[0], p[1]);
-  q[0] -= x; q[1] -= y;
-  if (q[0]*q[0] + q[1]*q[1] < 1e-8) return p;
+    q = leeRaw(p[0], p[1]);
+  q[0] -= x;
+  q[1] -= y;
+  if (q[0] * q[0] + q[1] * q[1] < 1e-8) return p;
   return [-10, 0]; // far out of the face
-}
+};
 
 var asin1_3 = asin(1 / 3);
 var centers = [
   [0, 90],
   [-180, -asin1_3 * degrees],
   [-60, -asin1_3 * degrees],
-  [60, -asin1_3 * degrees]
+  [60, -asin1_3 * degrees],
 ];
-var tetrahedron = [[1, 2, 3], [0, 2, 1], [0, 3, 2], [0, 1, 3]].map(function(
-  face
-) {
-  return face.map(function(i) {
+var tetrahedron = [
+  [1, 2, 3],
+  [0, 2, 1],
+  [0, 3, 2],
+  [0, 1, 3],
+].map(function (face) {
+  return face.map(function (i) {
     return centers[i];
   });
 });
 
-export default function() {
-  var faceProjection = function(face) {
+export default function () {
+  var faceProjection = function (face) {
     var c = geoCentroid({ type: "MultiPoint", coordinates: face }),
       rotate = [-c[0], -c[1], 30];
     if (abs(c[1]) == 90) {
       rotate = [0, -c[1], -30];
     }
-    return projection(leeRaw)
-      .scale(1)
-      .translate([0, 0])
-      .rotate(rotate);
+    return projection(leeRaw).scale(1).translate([0, 0]).rotate(rotate);
   };
 
-  var faces = tetrahedron.map(function(face) {
+  var faces = tetrahedron.map(function (face) {
     return { face: face, project: faceProjection(face) };
   });
 
-  [-1, 0, 0, 0].forEach(function(d, i) {
+  [-1, 0, 0, 0].forEach(function (d, i) {
     var node = faces[d];
     node && (node.children || (node.children = [])).push(faces[i]);
   });
 
-  var p = polyhedral(
-    faces[0],
-    function(lambda, phi) {
-      lambda *= degrees;
-      phi *= degrees;
-      for (var i = 0; i < faces.length; i++) {
-        if (
-          geoContains(
-            {
-              type: "Polygon",
-              coordinates: [
-                [
-                  tetrahedron[i][0],
-                  tetrahedron[i][1],
-                  tetrahedron[i][2],
-                  tetrahedron[i][0]
-                ]
-              ]
-            },
-            [lambda, phi]
-          )
-        ) {
-          return faces[i];
-        }
+  var p = polyhedral(faces[0], function (lambda, phi) {
+    lambda *= degrees;
+    phi *= degrees;
+    for (var i = 0; i < faces.length; i++) {
+      if (
+        geoContains(
+          {
+            type: "Polygon",
+            coordinates: [
+              [
+                tetrahedron[i][0],
+                tetrahedron[i][1],
+                tetrahedron[i][2],
+                tetrahedron[i][0],
+              ],
+            ],
+          },
+          [lambda, phi]
+        )
+      ) {
+        return faces[i];
       }
     }
-  );
+  });
 
-  return p
-    .rotate([30, 180]) // North Pole aspect, needs clipPolygon
-    // .rotate([-30, 0]) // South Pole aspect
-    .angle(30)
-    .scale(118.662)
-    .translate([480, 195.47]);
+  return (
+    p
+      .rotate([30, 180]) // North Pole aspect, needs clipPolygon
+      // .rotate([-30, 0]) // South Pole aspect
+      .angle(30)
+      .scale(118.662)
+      .translate([480, 195.47])
+  );
 }
