@@ -1,8 +1,6 @@
-import adder from "./adder.js";
+import {Adder} from "d3-array";
 import {cartesian, cartesianCross, cartesianNormalizeInPlace} from "./cartesian.js";
 import {asin, atan2, cos, epsilon, pi, quarterPi, sin, tau} from "./math.js";
-
-var sum = adder();
 
 export default function(polygon, point) {
   var lambda = point[0],
@@ -11,7 +9,7 @@ export default function(polygon, point) {
       angle = 0,
       winding = 0;
 
-  sum.reset();
+  const sum = new Adder();
 
   for (var i = 0, n = polygon.length; i < n; ++i) {
     if (!(m = (ring = polygon[i]).length)) continue;
@@ -64,5 +62,5 @@ export default function(polygon, point) {
   // from the point to the South pole.  If it is zero, then the point is the
   // same side as the South pole.
 
-  return (angle < -epsilon || angle < epsilon && sum < -epsilon) ^ (winding & 1);
+  return (angle < -epsilon || angle < epsilon && +sum < -epsilon) ^ (winding & 1);
 }
