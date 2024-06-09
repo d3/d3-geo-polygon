@@ -7,10 +7,10 @@ import {atan2, cos, sin, sqrt} from "../math.js";
 
 // Transform matrix for [a0, a1] -> [b0, b1].
 export default function(a, b) {
-  var u = subtract(a[1], a[0]),
-      v = subtract(b[1], b[0]),
-      phi = angle(u, v),
-      s = length(u) / length(v);
+  const u = subtract(a[1], a[0]);
+  const v = subtract(b[1], b[0]);
+  const phi = angle(u, v);
+  const s = length(u) / length(v);
 
   return multiply([
     1, 0, a[0][0],
@@ -29,7 +29,7 @@ export default function(a, b) {
 
 // Inverts a transform matrix.
 export function inverse(m) {
-  var k = 1 / (m[0] * m[4] - m[1] * m[3]);
+  const k = 1 / (m[0] * m[4] - m[1] * m[3]);
   return [
     k * m[4], -k * m[1], k * (m[1] * m[5] - m[2] * m[4]),
     -k * m[3], k * m[0], k * (m[2] * m[3] - m[0] * m[5])

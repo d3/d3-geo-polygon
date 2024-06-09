@@ -3,15 +3,15 @@ import {cartesian, cartesianCross, cartesianNormalizeInPlace} from "./cartesian.
 import {asin, atan2, cos, epsilon, pi, quarterPi, sin, tau} from "./math.js";
 
 export default function(polygon, point) {
-  var lambda = point[0],
-      phi = point[1],
-      normal = [sin(lambda), -cos(lambda), 0],
-      angle = 0,
-      winding = 0;
+  const lambda = point[0];
+  const phi = point[1];
+  const normal = [sin(lambda), -cos(lambda), 0];
+  let angle = 0;
+  let winding = 0;
 
   const sum = new Adder();
 
-  for (var i = 0, n = polygon.length; i < n; ++i) {
+  for (let i = 0, n = polygon.length; i < n; ++i) {
     if (!(m = (ring = polygon[i]).length)) continue;
     var ring,
         m,
@@ -21,7 +21,7 @@ export default function(polygon, point) {
         sinPhi0 = sin(phi0),
         cosPhi0 = cos(phi0);
 
-    for (var j = 0; j < m; ++j, lambda0 = lambda1, sinPhi0 = sinPhi1, cosPhi0 = cosPhi1, point0 = point1) {
+    for (let j = 0; j < m; ++j, lambda0 = lambda1, sinPhi0 = sinPhi1, cosPhi0 = cosPhi1, point0 = point1) {
       var point1 = ring[j],
           lambda1 = point1[0],
           phi1 = point1[1] / 2 + quarterPi,
@@ -39,11 +39,11 @@ export default function(polygon, point) {
       // Are the longitudes either side of the point’s meridian (lambda),
       // and are the latitudes smaller than the parallel (phi)?
       if (antimeridian ^ lambda0 >= lambda ^ lambda1 >= lambda) {
-        var arc = cartesianCross(cartesian(point0), cartesian(point1));
+        const arc = cartesianCross(cartesian(point0), cartesian(point1));
         cartesianNormalizeInPlace(arc);
-        var intersection = cartesianCross(normal, arc);
+        const intersection = cartesianCross(normal, arc);
         cartesianNormalizeInPlace(intersection);
-        var phiArc = (antimeridian ^ delta >= 0 ? -1 : 1) * asin(intersection[2]);
+        const phiArc = (antimeridian ^ delta >= 0 ? -1 : 1) * asin(intersection[2]);
         if (phi > phiArc || phi === phiArc && (arc[0] || arc[1])) {
           winding += antimeridian ^ delta >= 0 ? 1 : -1;
         }

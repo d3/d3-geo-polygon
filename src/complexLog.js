@@ -15,14 +15,14 @@ import { complexMul, complexLogHypot } from "./complex.js";
 import { default as clipPolygon } from "./clip/polygon.js";
 
 // Default planar projection and cutoff latitude, see below for an explanation of these settings.
-var DEFAULT_PLANAR_PROJECTION_RAW = azimuthalEqualAreaRaw;
-var DEFAULT_CUTOFF_LATITUDE = -0.05;
+const DEFAULT_PLANAR_PROJECTION_RAW = azimuthalEqualAreaRaw;
+const DEFAULT_CUTOFF_LATITUDE = -0.05;
 
 // Offset used to prevent logarithm of 0.
-var CARTESIAN_OFFSET = 1e-10;
+const CARTESIAN_OFFSET = 1e-10;
 
 // Projection parameters for the default 960x500 projection area.
-var DEFAULT_PROJECTION_PARAMS = {
+const DEFAULT_PROJECTION_PARAMS = {
   angle: 90,
   center: [0, 5.022570623227068],
   scale: 79.92959180396787,
@@ -31,7 +31,7 @@ var DEFAULT_PROJECTION_PARAMS = {
 
 // Vertices of the clipping polygon in spherical coordinates.
 // It contains the whole world except a small strip along longitude 0/180 crossing the south pole.
-var CLIP_POLY_SPHERICAL = [
+const CLIP_POLY_SPHERICAL = [
   [-180, -1e-4],
   [180, -1e-4],
   [1e-4, DEFAULT_CUTOFF_LATITUDE],
@@ -39,18 +39,18 @@ var CLIP_POLY_SPHERICAL = [
 ]
 
 // Clipping polygon precision.
-var N_SIDE = 5;    
-var N_BOTTOM = 50; 
+const N_SIDE = 5;    
+const N_BOTTOM = 50; 
 
 
 export function complexLogRaw(planarProjectionRaw = DEFAULT_PLANAR_PROJECTION_RAW) {
   function forward(lambda, phi) {
     // Project on plane.
     // Interpret projected point on complex plane.
-    var aziComp = planarProjectionRaw(lambda, phi);
+    const azi1 = planarProjectionRaw(lambda, phi);
 
     // Rotate by -90 degrees in complex plane so the following complex log projection will be horizontally centered
-    aziComp = complexMul(aziComp, [cos(-pi / 2), sin(-pi / 2)]);
+    const aziComp = complexMul(azi1, [cos(-pi / 2), sin(-pi / 2)]);
 
     // Small offset to prevent logarithm of 0.
     if (aziComp[0] == 0 && aziComp[1] == 0) {
@@ -59,17 +59,15 @@ export function complexLogRaw(planarProjectionRaw = DEFAULT_PLANAR_PROJECTION_RA
     }
 
     // Apply complex logarithm.
-    var logComp = [complexLogHypot(aziComp[0], aziComp[1]), atan2(aziComp[1], aziComp[0])];
-
-    return logComp;
+    return [complexLogHypot(aziComp[0], aziComp[1]), atan2(aziComp[1], aziComp[0])];
   }
 
   function invert(x, y) {
     // Inverse complex logarithm (complex exponential function).
-    var invLogComp = [exp(x) * cos(y), exp(x) * sin(y)];
+    const inv1 = [exp(x) * cos(y), exp(x) * sin(y)];
 
     // Undo rotation.
-    invLogComp = complexMul(invLogComp, [cos(pi / 2), sin(pi / 2)]);
+    const invLogComp = complexMul(inv1, [cos(pi / 2), sin(pi / 2)]);
 
     // Invert azimuthal equal area.
     return planarProjectionRaw.invert(invLogComp[0], invLogComp[1]);
@@ -81,8 +79,8 @@ export function complexLogRaw(planarProjectionRaw = DEFAULT_PLANAR_PROJECTION_RA
 
 
 export default function(planarProjectionRaw = DEFAULT_PLANAR_PROJECTION_RAW, cutoffLatitude = DEFAULT_CUTOFF_LATITUDE) {
-  var mutator = projectionMutator(complexLogRaw);
-  var projection = mutator(planarProjectionRaw);
+  const mutator = projectionMutator(complexLogRaw);
+  const projection = mutator(planarProjectionRaw);
 
   // Projection used to project onto the complex plane.
   projection.planarProjectionRaw = function(_) {
@@ -96,11 +94,11 @@ export default function(planarProjectionRaw = DEFAULT_PLANAR_PROJECTION_RAW, cut
   }
 
   function clipped(projection) {
-    var angle = projection.angle();
-    var scale = projection.scale();
-    var center = projection.center();
-    var translate = projection.translate();
-    var rotate = projection.rotate();
+    const angle = projection.angle();
+    const scale = projection.scale();
+    const center = projection.center();
+    const translate = projection.translate();
+    const rotate = projection.rotate();
 
     projection
       .angle(DEFAULT_PROJECTION_PARAMS.angle)
@@ -111,12 +109,12 @@ export default function(planarProjectionRaw = DEFAULT_PLANAR_PROJECTION_RAW, cut
       .preclip();
 
     // These are corner vertices of a rectangle in the projected complex log view.
-    var topLeft = projection(CLIP_POLY_SPHERICAL[0]);
-    var topRight = projection(CLIP_POLY_SPHERICAL[1]);
-    var bottomRight = projection([CLIP_POLY_SPHERICAL[2][0], cutoffLatitude]);
-    var bottomLeft = projection([CLIP_POLY_SPHERICAL[3][0], cutoffLatitude]);    
-    var width = abs(topRight[0] - topLeft[0]);
-    var height = abs(bottomRight[1] - topRight[1]);
+    const topLeft = projection(CLIP_POLY_SPHERICAL[0]);
+    const topRight = projection(CLIP_POLY_SPHERICAL[1]);
+    const bottomRight = projection([CLIP_POLY_SPHERICAL[2][0], cutoffLatitude]);
+    const bottomLeft = projection([CLIP_POLY_SPHERICAL[3][0], cutoffLatitude]);    
+    const width = abs(topRight[0] - topLeft[0]);
+    const height = abs(bottomRight[1] - topRight[1]);
     
     // Prevent overlapping polygons that result from paths that go from one side to the other, 
     // so cut along 180°/-180° degree line (left and right in complex log projected view).
@@ -137,7 +135,7 @@ export default function(planarProjectionRaw = DEFAULT_PLANAR_PROJECTION_RAW, cut
     // N_BOTTOM determines how many vertices to insert along the bottom (marked as - above).
     //
     // The resulting polygon vertices are back-projected to spherical coordinates.
-    var polygon = {
+    const polygon = {
         type: "Polygon",
         coordinates: [
             [

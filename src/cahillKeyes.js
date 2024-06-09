@@ -15,13 +15,11 @@ import {solve2d} from "./newton.js";
 export default function(faceProjection) {
   faceProjection =
     faceProjection ||
-    function() {
-      return cahillKeyesProjection().scale(1);
-    };
+    (() => cahillKeyesProjection().scale(1));
 
-  var octahedron = [[0, 90], [-90, 0], [0, 0], [90, 0], [180, 0], [0, -90]];
+  const octa = [[0, 90], [-90, 0], [0, 0], [90, 0], [180, 0], [0, -90]];
 
-  octahedron = [
+  const octahedron = [
     [0, 2, 1],
     [0, 3, 2],
     [5, 1, 2],
@@ -30,22 +28,18 @@ export default function(faceProjection) {
     [0, 4, 3],
     [5, 4, 1],
     [5, 3, 4]
-  ].map(function(face) {
-    return face.map(function(i) {
-      return octahedron[i];
-    });
-  });
+  ].map((face) => face.map((i) => octa[i]));
 
-  var ck = octahedron.map(function(face) {
-    var xyz = face.map(cartesianDegrees),
+  const ck = octahedron.map((face) => {
+    const xyz = face.map(cartesianDegrees),
       n = xyz.length,
-      a = xyz[n - 1],
-      b,
       theta = 17 * radians,
       cosTheta = cos(theta),
       sinTheta = sin(theta),
       hexagon = [];
-    for (var i = 0; i < n; ++i) {
+    let a = xyz[n - 1];
+    let b;
+    for (let i = 0; i < n; ++i) {
       b = xyz[i];
       hexagon.push(
         sphericalDegrees([
@@ -64,15 +58,15 @@ export default function(faceProjection) {
     return hexagon;
   });
 
-  var cornerNormals = [];
+  const cornerNormals = [];
 
-  var parents = [-1, 3, 0, 2, 0, 1, 4, 5];
+  const parents = [-1, 3, 0, 2, 0, 1, 4, 5];
 
-  ck.forEach(function(hexagon, j) {
-    var face = octahedron[j],
+  ck.forEach((hexagon, j) => {
+    const face = octahedron[j],
       n = face.length,
       normals = (cornerNormals[j] = []);
-    for (var i = 0; i < n; ++i) {
+    for (let i = 0; i < n; ++i) {
       ck.push([
         face[i],
         hexagon[(i * 2 + 2) % (2 * n)],
@@ -88,15 +82,10 @@ export default function(faceProjection) {
     }
   });
 
-  var faces = ck.map(function(face) {
-    return {
-      project: faceProjection(face),
-      face: face
-    };
-  });
+  const faces = ck.map((face) => ({project: faceProjection(face), face}));
 
-  parents.forEach(function(d, i) {
-    var parent = faces[d];
+  parents.forEach((d, i) => {
+    const parent = faces[d];
     parent && (parent.children || (parent.children = [])).push(faces[i]);
   });
   return polyhedral(faces[0], face, 0, true)
@@ -105,17 +94,17 @@ export default function(faceProjection) {
     .center([0,-17]);
 
   function face(lambda, phi) {
-    var cosPhi = cos(phi),
-      p = [cosPhi * cos(lambda), cosPhi * sin(lambda), sin(phi)];
+    const cosPhi = cos(phi);
+    const p = [cosPhi * cos(lambda), cosPhi * sin(lambda), sin(phi)];
 
-    var hexagon =
+    const hexagon =
       lambda < -pi / 2
         ? phi < 0 ? 6 : 4
         : lambda < 0
           ? phi < 0 ? 2 : 0
           : lambda < pi / 2 ? (phi < 0 ? 3 : 1) : phi < 0 ? 7 : 5;
 
-    var n = cornerNormals[hexagon];
+    const n = cornerNormals[hexagon];
 
     return faces[
       cartesianDot(n[0], p) < 0
@@ -132,15 +121,15 @@ export default function(faceProjection) {
 // web site http://www.genekeyes.com/CKOG-OOo/7-CKOG-illus-&-coastline.html
 
 export function cahillKeyesRaw(mg) {
-  var CK = {
+  const CK = {
     lengthMG: mg // magic scaling length
   };
 
   preliminaries();
 
   function preliminaries() {
-    var pointN, lengthMB, lengthMN, lengthNG, pointU;
-    var m = 29, // meridian
+    let pointN, lengthMB, lengthMN, lengthNG, pointU;
+    let m = 29, // meridian
       p = 15, // parallel
       p73a,
       lF,
@@ -213,20 +202,17 @@ export function cahillKeyesRaw(mg) {
   // distance between two 2D coordinates
 
   function distance(p1, p2) {
-    var deltaX = p1[0] - p2[0],
-      deltaY = p1[1] - p2[1];
-    return sqrt(deltaX * deltaX + deltaY * deltaY);
+    return Math.hypot(p1[0] - p2[0], p1[1] - p2[1]);
   }
 
   // return 2D point at position length/totallength of the line
   // defined by two 2D points, start and end.
 
   function interpolate(length, totalLength, start, end) {
-    var xy = [
+    return [
       start[0] + (end[0] - start[0]) * length / totalLength,
       start[1] + (end[1] - start[1]) * length / totalLength
     ];
-    return xy;
   }
 
   // return the 2D point intersection between two lines defined
@@ -234,13 +220,10 @@ export function cahillKeyesRaw(mg) {
 
   function lineIntersection(point1, slope1, point2, slope2) {
     // s1/s2 = slope in degrees
-    var m1 = tan(slope1 * radians),
-      m2 = tan(slope2 * radians),
-      p = [0, 0];
-    p[0] =
-      (m1 * point1[0] - m2 * point2[0] - point1[1] + point2[1]) / (m1 - m2);
-    p[1] = m1 * (p[0] - point1[0]) + point1[1];
-    return p;
+    const m1 = tan(slope1 * radians);
+    const m2 = tan(slope2 * radians);
+    const x = (m1 * point1[0] - m2 * point2[0] - point1[1] + point2[1]) / (m1 - m2);
+    return [x, m1 * (x - point1[0]) + point1[1]];
   }
 
   // return the 2D point intercepting a circumference centered
@@ -251,7 +234,7 @@ export function cahillKeyesRaw(mg) {
   // Equations from "Intersection of a Line and a Sphere (or circle)/Line Segment"
   // at http://paulbourke.net/geometry/circlesphere/
   function circleLineIntersection(cc, r, p1, p2) {
-    var x1 = p1[0],
+    let x1 = p1[0],
       y1 = p1[1],
       x2 = p2[0],
       y2 = p2[1],
@@ -290,7 +273,7 @@ export function cahillKeyesRaw(mg) {
   // [original CKOG uses clockwise rotation]
 
   function rotate(xy, angle) {
-    var xynew = [0, 0];
+    const xynew = [0, 0];
 
     if (angle === -60) {
       xynew[0] = xy[0] * CK.cos60 + xy[1] * CK.sin60;
@@ -300,7 +283,7 @@ export function cahillKeyesRaw(mg) {
       xynew[1] = -xy[0] * CK.sin60 - xy[1] * CK.cos60;
     } else {
       // !!!!! This should not happen for this projection!!!!
-      // the general algorith: cos(angle) * xy + sin(angle) * perpendicular(xy)
+      // the general algorithm: cos(angle) * xy + sin(angle) * perpendicular(xy)
       // return cos(angle * radians) * xy + sin(angle * radians) * perpendicular(xy);
       //console.log("rotate: angle " + angle + " different than -60 or -120!");
       // counterclockwise
@@ -317,15 +300,10 @@ export function cahillKeyesRaw(mg) {
   }
 
   function equator(m) {
-    var l = CK.deltaMEq * m,
-      jointE = [0, 0];
-    if (l <= CK.lengthGF) {
-      jointE = [CK.pointG[0], l];
-    } else {
-      l = l - CK.lengthGF;
-      jointE = interpolate(l, CK.lengthAB, CK.pointF, CK.pointE);
-    }
-    return jointE;
+    const l = CK.deltaMEq * m;
+    return (l <= CK.lengthGF)
+      ? [CK.pointG[0], l]
+      : interpolate(l - CK.lengthGF, CK.lengthAB, CK.pointF, CK.pointE);
   }
 
   function jointE(m) {
@@ -340,8 +318,7 @@ export function cahillKeyesRaw(mg) {
     if (m === 0) {
       return [CK.pointA + CK.lengthAB, 0];
     }
-    var xy = lineIntersection(CK.pointA, m, CK.pointM, 2 * m / 3);
-    return xy;
+    return lineIntersection(CK.pointA, m, CK.pointM, 2 * m / 3);
   }
 
   function lengthTorridSegment(m) {
@@ -353,7 +330,7 @@ export function cahillKeyesRaw(mg) {
   }
 
   function parallel73(m) {
-    var p73 = [0, 0],
+    let p73 = [0, 0],
       jF = jointF(m),
       lF = 0,
       xy = [0, 0];
@@ -387,17 +364,15 @@ export function cahillKeyesRaw(mg) {
 
   // special functions to transform lon/lat to x/y
   function ll2mp(lon, lat) {
-    var south = [0, 6, 7, 8, 5],
-      o = truncate((lon + 180) / 90 + 1),
-      p, // parallel
-      m = (lon + 720) % 90 - 45, // meridian
-      s = sign(m);
+    const south = [0, 6, 7, 8, 5];
+    let o = truncate((lon + 180) / 90 + 1);
+    let m = (lon + 720) % 90 - 45; // meridian
 
+    const s = sign(m);
     m = abs(m);
     if (o === 5) o = 1;
     if (lat < 0) o = south[o];
-    p = abs(lat);
-    return [m, p, s, o];
+    return [m, abs(lat), s, o];
   }
 
   function zoneA(m, p) {
@@ -409,7 +384,7 @@ export function cahillKeyesRaw(mg) {
   }
 
   function zoneC(m, p) {
-    var l = 104 * (90 - p);
+    const l = 104 * (90 - p);
     return [
       CK.pointA[0] + l * cos(m * radians),
       CK.pointA[1] + l * sin(m * radians)
@@ -422,7 +397,7 @@ export function cahillKeyesRaw(mg) {
   }
 
   function zoneE(m, p) {
-    var l = 1560 + (75 - p) * 100;
+    const l = 1560 + (75 - p) * 100;
     return [
       CK.pointA[0] + l * cos(m * radians),
       CK.pointA[1] + l * sin(m * radians)
@@ -434,152 +409,103 @@ export function cahillKeyesRaw(mg) {
   }
 
   function zoneG(m, p) {
-    var l = p - 15;
+    const l = p - 15;
     return interpolate(l, 58, CK.pointD, CK.pointT);
   }
 
   function zoneH(m, p) {
-    var p75 = parallel75(45),
+    const p75 = parallel75(45),
       p73a = parallel73(m),
       p73 = p73a.parallel73,
       lF = distance(CK.pointT, CK.pointB),
       lF75 = distance(CK.pointB, p75),
-      l = (75 - p) * (lF75 + lF) / 2,
-      xy = [0, 0];
-    if (l <= lF75) {
-      xy = interpolate(l, lF75, p75, CK.pointB);
-    } else {
-      l = l - lF75;
-      xy = interpolate(l, lF, CK.pointB, p73);
-    }
-    return xy;
+      l = (75 - p) * (lF75 + lF) / 2;
+    return (l <= lF75)
+      ? interpolate(l, lF75, p75, CK.pointB)
+      : interpolate(l - lF75, lF, CK.pointB, p73);
   }
 
   function zoneI(m, p) {
-    var p73a = parallel73(m),
+    const p73a = parallel73(m),
       lT = lengthTorridSegment(m),
       lM = lengthMiddleSegment(m),
-      l = p * (lT + lM + p73a.lengthParallel73) / 73,
-      xy;
-    if (l <= lT) {
-      xy = interpolate(l, lT, jointE(m), jointT(m));
-    } else if (l <= lT + lM) {
-      l = l - lT;
-      xy = interpolate(l, lM, jointT(m), jointF(m));
-    } else {
-      l = l - lT - lM;
-      xy = interpolate(l, p73a.lengthParallel73, jointF(m), p73a.parallel73);
-    }
-    return xy;
+      l = p * (lT + lM + p73a.lengthParallel73) / 73;
+    return (l <= lT)
+      ? interpolate(l, lT, jointE(m), jointT(m))
+      : (l <= lT + lM)
+        ? interpolate(l - lT, lM, jointT(m), jointF(m))
+        : interpolate(l - lT - lM, p73a.lengthParallel73, jointF(m), p73a.parallel73);
   }
 
   function zoneJ(m, p) {
-    var p75 = parallel75(m),
+    const p75 = parallel75(m),
       lF75 = distance(jointF(m), p75),
       p73a = parallel73(m),
       p73 = p73a.parallel73,
       lF = p73a.lengthParallel73,
-      l = (75 - p) * (lF75 - lF) / 2,
-      xy = [0, 0];
+      l = (75 - p) * (lF75 - lF) / 2;
 
-    if (l <= lF75) {
-      xy = interpolate(l, lF75, p75, jointF(m));
-    } else {
-      l = l - lF75;
-      xy = interpolate(l, -lF, jointF(m), p73);
-    }
-    return xy;
+    return (l <= lF75)
+      ? interpolate(l, lF75, p75, jointF(m))
+      : interpolate(l - lF75, -lF, jointF(m), p73);
   }
 
   function zoneK(m, p, l15) {
-    var l = p * l15 / 15,
+    const l = p * l15 / 15,
       lT = lengthTorridSegment(m),
-      lM = lengthMiddleSegment(m),
-      xy = [0, 0];
-    if (l <= lT) {
+      lM = lengthMiddleSegment(m);
+    return (l <= lT) 
       // point is in torrid segment
-      xy = interpolate(l, lT, jointE(m), jointT(m));
-    } else {
+      ? interpolate(l, lT, jointE(m), jointT(m))
       // point is in middle segment
-      l = l - lT;
-      xy = interpolate(l, lM, jointT(m), jointF(m));
-    }
-    return xy;
+      : interpolate(l - lT, lM, jointT(m), jointF(m));
   }
 
   function zoneL(m, p, l15) {
-    var p73a = parallel73(m),
+    const p73a = parallel73(m),
       p73 = p73a.parallel73,
       lT = lengthTorridSegment(m),
       lM = lengthMiddleSegment(m),
-      xy,
       lF = p73a.lengthParallel73,
       l = l15 + (p - 15) * (lT + lM + lF - l15) / 58;
-    if (l <= lT) {
-      //on torrid segment
-      xy = interpolate(l, lT, jointE(m), jointF(m));
-    } else if (l <= lT + lM) {
-      //on middle segment
-      l = l - lT;
-      xy = interpolate(l, lM, jointT(m), jointF(m));
-    } else {
-      //on frigid segment
-      l = l - lT - lM;
-      xy = interpolate(l, lF, jointF(m), p73);
-    }
-    return xy;
+    return (l <= lT)
+      // on torrid segment
+      ? interpolate(l, lT, jointE(m), jointF(m))
+      : (l <= lT + lM)
+        // on middle segment
+        ? interpolate(l - lT, lM, jointT(m), jointF(m))
+        // on frigid segment
+        : interpolate(l - lT - lM, lF, jointF(m), p73);
   }
 
   // convert half-octant meridian,parallel to x,y coordinates.
   // arguments are meridian, parallel
 
   function mp2xy(m, p) {
-    var xy = [0, 0],
-      lT,
-      p15a,
-      p15,
-      flag15,
-      l15;
-
-    if (m === 0) {
-      // zones (a) and (b)
-      if (p >= 75) {
-        xy = zoneA(m, p);
-      } else {
-        xy = zoneB(m, p);
-      }
-    } else if (p >= 75) {
-      xy = zoneC(m, p);
-    } else if (p === 0) {
-      xy = zoneD(m, p);
-    } else if (p >= 73 && m <= 30) {
-      xy = zoneE(m, p);
-    } else if (m === 45) {
-      if (p <= 15) {
-        xy = zoneF(m, p);
-      } else if (p <= 73) {
-        xy = zoneG(m, p);
-      } else {
-        xy = zoneH(m, p);
-      }
-    } else {
-      if (m <= 29) {
-        xy = zoneI(m, p);
-      } else {
+    // zones (a) and (b)
+    if (m === 0) return (p >= 75) ? zoneA(m, p) : zoneB(m, p);
+    else if (p >= 75) return zoneC(m, p);
+    else if (p === 0) return zoneD(m, p);
+    else if (p >= 73 && m <= 30) return zoneE(m, p);
+    else if (m === 45) return (p <= 15) ? zoneF(m, p) : (p <= 73) ? zoneG(m, p) : zoneH(m, p);
+    else {
+      if (m <= 29) return zoneI(m, p);
+      else {
         // supple zones (j), (k) and (l)
-        if (p >= 73) {
-          xy = zoneJ(m, p);
-        } else {
+        if (p >= 73) return zoneJ(m, p);
+        else {
+          const lT = lengthTorridSegment(m);
+          let l15;
+    
           //zones (k) and (l)
-          p15a = circleLineIntersection(
+          let p15a = circleLineIntersection(
             CK.pointC,
             CK.radius,
             jointT(m),
             jointF(m)
           );
-          flag15 = p15a[0];
-          p15 = p15a[1];
-          lT = lengthTorridSegment(m);
+          let flag15 = p15a[0];
+          let p15 = p15a[1];
           if (flag15 === 1) {
             // intersection is in middle segment
             l15 = lT + distance(jointT(m), p15);
@@ -599,22 +525,16 @@ export function cahillKeyesRaw(mg) {
             }
             l15 = lT - distance(jointT(m), p15);
           }
-          if (p <= 15) {
-            xy = zoneK(m, p, l15);
-          } else {
-            //zone (l)
-            xy = zoneL(m, p, l15);
-          }
+          return (p <= 15) ? zoneK(m, p, l15) : zoneL(m, p, l15);
         }
       }
     }
-    return xy;
   }
 
   // from half-octant to megamap (single rotated octant)
 
   function mj2g(xy, octant) {
-    var xynew = [0, 0];
+    let xynew;
 
     if (octant === 0) {
       xynew = rotate(xy, -60);
@@ -642,14 +562,7 @@ export function cahillKeyesRaw(mg) {
     } else if (octant === 8) {
       xynew = rotate([2 * CK.lengthMG - xy[0], xy[1]], -120);
       xynew[0] += CK.lengthMG;
-    } else {
-      // TODO trap this some way.
-      // ERROR!
-      // print "Error converting to M-map coordinates; there is no Octant octant!\n";
-      //console.log("mj2g: something weird happened!");
-      return xynew;
     }
-
     return xynew;
   }
 
@@ -657,17 +570,15 @@ export function cahillKeyesRaw(mg) {
 
   function forward(lambda, phi) {
     // lambda, phi are in radians.
-    var lon = lambda * degrees,
+    const lon = lambda * degrees,
       lat = phi * degrees,
       res = ll2mp(lon, lat),
       m = res[0],  // 0 ≤ m ≤ 45
       p = res[1],  // 0 ≤ p ≤ 90
       s = res[2],  // -1 / 1 = side of m
       o = res[3],  // octant
-      xy = mp2xy(m, p),
-      mm = mj2g([xy[0], s * xy[1]], o);
-
-    return mm;
+      xy = mp2xy(m, p);
+    return mj2g([xy[0], s * xy[1]], o);
   }
 
   forward.invert = solve2d(forward);
@@ -676,7 +587,7 @@ export function cahillKeyesRaw(mg) {
 }
 
 function cahillKeyesProjection() {
-  var mg = 10000,
-    m = projectionMutator(cahillKeyesRaw);
+  const mg = 10000;
+  const m = projectionMutator(cahillKeyesRaw);
   return m(mg);
 }

@@ -8,18 +8,18 @@ export default function(pointVisible, clipLine, interpolate, start, sort) {
   if (typeof sort === "undefined") sort = compareIntersection;
 
   return function(sink) {
-    var line = clipLine(sink),
-        ringBuffer = clipBuffer(),
-        ringSink = clipLine(ringBuffer),
-        polygonStarted = false,
+    const line = clipLine(sink);
+    const ringBuffer = clipBuffer();
+    const ringSink = clipLine(ringBuffer);
+    let polygonStarted = false,
         polygon,
         segments,
         ring;
 
-    var clip = {
-      point: point,
-      lineStart: lineStart,
-      lineEnd: lineEnd,
+    const clip = {
+      point,
+      lineStart,
+      lineEnd,
       polygonStart: function() {
         clip.point = pointRing;
         clip.lineStart = ringStart;
@@ -32,7 +32,7 @@ export default function(pointVisible, clipLine, interpolate, start, sort) {
         clip.lineStart = lineStart;
         clip.lineEnd = lineEnd;
         segments = merge(segments);
-        var startInside = polygonContains(polygon, start);
+        const startInside = polygonContains(polygon, start);
         if (segments.length) {
           if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
           clipRejoin(segments, sort, startInside, interpolate, sink);
@@ -43,9 +43,7 @@ export default function(pointVisible, clipLine, interpolate, start, sort) {
         if (polygonStarted) sink.polygonEnd(), polygonStarted = false;
         segments = polygon = null;
       },
-      sphere: function() {
-        interpolate(null, null, 1, sink);
-      }
+      sphere: () => interpolate(null, null, 1, sink)
     };
 
     function point(lambda, phi) {
@@ -80,11 +78,10 @@ export default function(pointVisible, clipLine, interpolate, start, sort) {
       pointRing(ring[0][0], ring[0][1], true);
       ringSink.lineEnd();
 
-      var clean = ringSink.clean(),
-          ringSegments = ringBuffer.result(),
-          i, n = ringSegments.length, m,
-          segment,
-          point;
+      const clean = ringSink.clean();
+      const ringSegments = ringBuffer.result();
+      const n = ringSegments.length;
+      let m, segment, point;
 
       ring.pop();
       polygon.push(ring);
@@ -98,7 +95,7 @@ export default function(pointVisible, clipLine, interpolate, start, sort) {
         if ((m = segment.length - 1) > 0) {
           if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
           sink.lineStart();
-          for (i = 0; i < m; ++i) sink.point((point = segment[i])[0], point[1]);
+          for (let i = 0; i < m; ++i) sink.point((point = segment[i])[0], point[1]);
           sink.lineEnd();
         }
         return;

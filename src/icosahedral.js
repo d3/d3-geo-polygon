@@ -10,19 +10,16 @@ import voronoi from "./polyhedral/voronoi.js";
 
 
 export default function() {
-  var theta = atan(0.5) * degrees;
+  const theta = atan(0.5) * degrees;
 
   // construction inspired by
   // https://en.wikipedia.org/wiki/Regular_icosahedron#Spherical_coordinates
-  var vertices = [[0, 90], [0, -90]].concat(
-    [0,1,2,3,4,5,6,7,8,9].map(function(i) {
-      var phi = (i * 36 + 180) % 360 - 180;
-      return [phi, i & 1 ? theta : -theta];
-    })
+  const vertices = [[0, 90], [0, -90]].concat(
+    [0,1,2,3,4,5,6,7,8,9].map((i) => [(i * 36 + 180) % 360 - 180, i & 1 ? theta : -theta])
   );
 
   // icosahedron
-  var polyhedron = [
+  const polyhedron = [
     [0, 3, 11],
     [0, 5, 3],
     [0, 7, 5],
@@ -43,26 +40,20 @@ export default function() {
     [1, 6, 8],
     [1, 8, 10],
     [1, 10, 2] // South
-  ].map(function(face) {
-    return face.map(function(i) {
-      return vertices[i];
-    });
-  });
+  ].map((face) => face.map((i) => vertices[i]));
 
-  var polygons = {
+  const polygons = {
     type: "FeatureCollection",
-    features: polyhedron.map(function(face) {
-      face.push(face[0]);
-      return {
-        geometry: {
-          type: "Polygon",
-          coordinates: [ face ]
-        }
-      };
-    })
+    features: polyhedron.map((face) => ({
+      type: "Feature",
+      geometry: {
+        type: "Polygon",
+        coordinates: [[...face, face[0]]]
+      }
+    }))
   };
 
-var parents = [
+const parents = [
       // N
       -1, // 0
       7, // 1
@@ -92,13 +83,12 @@ var parents = [
     ];
 
   return voronoi()
-   .parents(parents)
-   .angle(0)
-   .polygons(polygons)
-   .rotate([108,0])
-   .scale(131.777)
+    .parents(parents)
+    .polygons(polygons)
+    .rotate([108,0])
+    .scale(131.777)
     .center([162, 0]);
-    }
+}
 
 
 /*

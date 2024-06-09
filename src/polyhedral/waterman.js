@@ -3,20 +3,16 @@ import {asin, atan2, cos, degrees, max, min, pi, radians, sin} from "../math.js"
 import polyhedral from "./index.js";
 import octahedron from "./octahedron.js";
 
-export default function(faceProjection) {
-
-  faceProjection = faceProjection || function(face) {
-    var c = face.length === 6 ? centroid({type: "MultiPoint", coordinates: face}) : face[0];
-    return gnomonic().scale(1).translate([0, 0]).rotate([-c[0], -c[1]]);
-  };
-
-  var w5 = octahedron.map(function(face) {
-    var xyz = face.map(cartesian),
-        n = xyz.length,
-        a = xyz[n - 1],
-        b,
-        hexagon = [];
-    for (var i = 0; i < n; ++i) {
+export default function(faceProjection = ((face) => {
+  const c = face.length === 6 ? centroid({type: "MultiPoint", coordinates: face}) : face[0];
+  return gnomonic().scale(1).translate([0, 0]).rotate([-c[0], -c[1]]);
+})) {
+  const w5 = octahedron.map((face) => {
+    const xyz = face.map(cartesian);
+    const n = xyz.length;
+    const hexagon = [];
+    let a = xyz[n - 1], b;
+    for (let i = 0; i < n; ++i) {
       b = xyz[i];
       hexagon.push(spherical([
         a[0] * 0.9486832980505138 + b[0] * 0.31622776601683794,
@@ -32,15 +28,15 @@ export default function(faceProjection) {
     return hexagon;
   });
 
-  var cornerNormals = [];
+  const cornerNormals = [];
 
-  var parents = [-1, 0, 0, 1, 0, 1, 4, 5];
+  const parents = [-1, 0, 0, 1, 0, 1, 4, 5];
 
-  w5.forEach(function(hexagon, j) {
-    var face = octahedron[j],
+  w5.forEach((hexagon, j) => {
+    const face = octahedron[j],
         n = face.length,
         normals = cornerNormals[j] = [];
-    for (var i = 0; i < n; ++i) {
+    for (let i = 0; i < n; ++i) {
       w5.push([
         face[i],
         hexagon[(i * 2 + 2) % (2 * n)],
@@ -54,28 +50,26 @@ export default function(faceProjection) {
     }
   });
 
-  var faces = w5.map(function(face) {
-    return {
-      project: faceProjection(face),
-      face: face
-    };
-  });
+  const faces = w5.map((face) => ({
+    project: faceProjection(face),
+    face
+  }));
 
-  parents.forEach(function(d, i) {
-    var parent = faces[d];
+  parents.forEach((d, i) => {
+    const parent = faces[d];
     parent && (parent.children || (parent.children = [])).push(faces[i]);
   });
 
   function face(lambda, phi) {
-    var cosphi = cos(phi),
-        p = [cosphi * cos(lambda), cosphi * sin(lambda), sin(phi)];
+    const cosphi = cos(phi);
+    const p = [cosphi * cos(lambda), cosphi * sin(lambda), sin(phi)];
 
-    var hexagon = lambda < -pi / 2 ? phi < 0 ? 6 : 4
+    const hexagon = lambda < -pi / 2 ? phi < 0 ? 6 : 4
         : lambda < 0 ? phi < 0 ? 2 : 0
         : lambda < pi / 2 ? phi < 0 ? 3 : 1
         : phi < 0 ? 7 : 5;
 
-    var n = cornerNormals[hexagon];
+    const n = cornerNormals[hexagon];
 
     return faces[dot(n[0], p) < 0 ? 8 + 3 * hexagon
         : dot(n[1], p) < 0 ? 8 + 3 * hexagon + 1
@@ -90,7 +84,8 @@ export default function(faceProjection) {
 }
 
 function dot(a, b) {
-  for (var i = 0, n = a.length, s = 0; i < n; ++i) s += a[i] * b[i];
+  let s = 0;
+  for (let i = 0; i < a.length; ++i) s += a[i] * b[i];
   return s;
 }
 
@@ -112,9 +107,9 @@ function spherical(cartesian) {
 
 // Converts spherical coordinates (degrees) to 3D Cartesian.
 function cartesian(coordinates) {
-  var lambda = coordinates[0] * radians,
-      phi = coordinates[1] * radians,
-      cosphi = cos(phi);
+  const lambda = coordinates[0] * radians;
+  const phi = coordinates[1] * radians;
+  const cosphi = cos(phi);
   return [
     cosphi * cos(lambda),
     cosphi * sin(lambda),

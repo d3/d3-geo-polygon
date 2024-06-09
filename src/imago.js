@@ -15,6 +15,7 @@ import {
   epsilon,
   floor,
   halfPi,
+  hypot,
   pi,
   pow,
   sign,
@@ -26,9 +27,7 @@ import { geoProjectionMutator as projectionMutator } from "d3-geo";
 import { default as clipPolygon } from "./clip/polygon.js";
 import { solve } from "./newton.js";
 
-var hypot = Math.hypot;
-
-var ASIN_ONE_THD = asin(1 / 3),
+const ASIN_ONE_THD = asin(1 / 3),
   centrums = [
     [halfPi, 0, 0, -halfPi, 0, sqrt(3)],
     [-ASIN_ONE_THD, 0, pi, halfPi, 0, -sqrt(3)],
@@ -217,15 +216,15 @@ export function imagoRaw(k) {
 }
 
 export function imagoBlock() {
-  var k = 0.68,
-    m = projectionMutator(imagoRaw),
-    p = m(k);
+  let k = 0.68;
+  const m = projectionMutator(imagoRaw);
+  const p = m(k);
 
   p.k = function (_) {
     return arguments.length ? m((k = +_)) : k;
   };
 
-  var a = -atan(1 / sqrt(2)) * degrees,
+  const a = -atan(1 / sqrt(2)) * degrees,
     border = [
       [-180 + epsilon, a + epsilon],
       [0, 90],
@@ -248,7 +247,7 @@ export function imagoBlock() {
 }
 
 function imagoWideRaw(k, shift) {
-  var imago = imagoRaw(k);
+  const imago = imagoRaw(k);
   const height = configuration.height;
 
   function forward(lon, lat) {
@@ -269,9 +268,7 @@ function imagoWideRaw(k, shift) {
   function invert(x, y) {
     x = (x - shift) / height;
 
-    if (x > 1.5) {
-      x -= 2;
-    }
+    if (x > 1.5) x -= 2;
 
     if (x > 0.5) {
       x = 1 - x;
@@ -286,10 +283,10 @@ function imagoWideRaw(k, shift) {
 }
 
 export default function () {
-  var k = 0.59,
-    shift = 1.16,
-    m = projectionMutator(imagoWideRaw),
-    p = m(k, shift);
+  let k = 0.59;
+  let shift = 1.16;
+  const m = projectionMutator(imagoWideRaw);
+  const p = m(k, shift);
 
   p.shift = function (_) {
     return arguments.length ? clipped(m(k, (shift = +_))) : shift;

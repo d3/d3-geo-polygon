@@ -13,15 +13,15 @@ import { abs, atan2, cos, epsilon, sin, sqrt } from "./math.js";
 import { geoGnomonicRaw as gnomonicRaw } from "d3-geo";
 
 export default function GrayFullerRaw() {
-  var SQRT_3 = sqrt(3);
+  const SQRT_3 = sqrt(3);
 
   // Gray’s constants
-  var Z = sqrt(5 + 2 * sqrt(5)) / sqrt(15),
-    el = sqrt(8) / sqrt(5 + sqrt(5)),
-    dve = sqrt(3 + sqrt(5)) / sqrt(5 + sqrt(5));
+  const Z = sqrt(5 + 2 * sqrt(5)) / sqrt(15);
+  const el = sqrt(8) / sqrt(5 + sqrt(5));
+  const dve = sqrt(3 + sqrt(5)) / sqrt(5 + sqrt(5));
 
-  var grayfuller = function(lambda, phi) {
-    var cosPhi = cos(phi),
+  const grayfuller = function(lambda, phi) {
+    const cosPhi = cos(phi),
       s = Z / (cosPhi * cos(lambda)),
       x = cosPhi * sin(lambda) * s,
       y = sin(phi) * s,
@@ -38,14 +38,14 @@ export default function GrayFullerRaw() {
     // something meaningless (but far away enough)
     if (x * x + y * y > 5) return [0, 3];
 
-    var R = 2.9309936378128416,
-      p = gnomonicRaw.invert(x / R, y / R);
+    const R = 2.9309936378128416;
+    const p = gnomonicRaw.invert(x / R, y / R);
 
-    var j = 0;
+    let j = 0, dx, dy;
     do {
-      var f = grayfuller(p[0], p[1]),
-        dx = x - f[0],
-        dy = y - f[1];
+      const f = grayfuller(p[0], p[1]);
+      dx = x - f[0],
+      dy = y - f[1];
       p[0] += 0.2 * dx;
       p[1] += 0.2 * dy;
     } while (j++ < 30 && abs(dx) + abs(dy) > epsilon);
