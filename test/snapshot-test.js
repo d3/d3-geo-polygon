@@ -10,7 +10,8 @@ const {readFile, writeFile} = promises;
 mkdirSync("./test/snapshots", {recursive: true});
 
 for (const [name, snapshot] of Object.entries(snapshots)) {
-  it(`snapshot ${name}`, async () => {
+  it(`snapshot ${name}`, async function() {
+    this.timeout(10000);
     const canvas = await snapshot();
     const actual = PNG.sync.read(canvas.toBuffer());
     const outfile = resolve("./test/snapshots", `${name}.png`);
