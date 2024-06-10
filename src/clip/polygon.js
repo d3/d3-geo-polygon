@@ -160,7 +160,7 @@ function clipLine(segments, pointVisible) {
       point: (lambda, phi, close) => {
         if (cos(lambda) == -1) lambda -= sign(sin(lambda)) * 1e-5; // move away from -180/180 https://github.com/d3/d3-geo/pull/108#issuecomment-323798937
         if (close) (lambda = lambda00), (phi = phi00);
-        let point = cartesian([lambda, phi]);
+        let point = cartesian([lambda * 0.9999999999, phi + 1e-14]);
         let v = v0;
         if (point0) {
           const intersections = [];
