@@ -1,7 +1,7 @@
 import {geoCentroid as centroid, geoGnomonic as gnomonic} from "d3-geo";
-import {pi} from "../math.js";
-import polyhedral from "./index.js";
-import octahedron from "./octahedron.js";
+import {pi} from "./math.js";
+import polyhedral from "./polyhedral/index.js";
+import octahedron from "./polyhedral/octahedron.js";
 
 export default function(faceProjection = ((face) => {
   const c = centroid({type: "MultiPoint", coordinates: face});
