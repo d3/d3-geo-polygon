@@ -35,10 +35,9 @@ export function cartesianScale(vector, k) {
   return [vector[0] * k, vector[1] * k, vector[2] * k];
 }
 
-// TODO return d
-export function cartesianNormalizeInPlace(d) {
+export function cartesianNormalize(d) {
   const l = hypot(d[0], d[1], d[2]);
-  d[0] /= l, d[1] /= l, d[2] /= l;
+  return [d[0] / l, d[1] / l, d[2] / l];
 }
 
 export function cartesianEqual(a, b) {

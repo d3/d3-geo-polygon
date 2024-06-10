@@ -178,7 +178,7 @@ function clipLine(segments, pointVisible) {
               ) {
                 const t = 1e-4;
                 lambda = ((lambda + 3 * pi + randsign(i, j) * t) % (2 * pi)) - pi;
-                phi = min(pi / 2 - 1e-4, max(1e-4 - pi / 2, phi + randsign(i, j) * t));
+                phi = min(pi / 2 - t, max(t - pi / 2, phi + randsign(i, j) * t));
                 segment = new intersectSegment(point0, (point = cartesian([lambda, phi])));
                 (i = -1), --j;
                 intersections.length = 0;
@@ -188,9 +188,9 @@ function clipLine(segments, pointVisible) {
               intersection.distance = clipPolygonDistance(point0, intersection);
               intersection.index = i;
               intersection.t = clipPolygonDistance(s.from, intersection);
-              (intersection[0] = sph[0]),
-                (intersection[1] = sph[1]),
-                intersection.pop();
+              intersection[0] = sph[0];
+              intersection[1] = sph[1];
+              delete intersection[2];
               intersections.push(intersection);
             }
           }
@@ -237,7 +237,8 @@ function clipLine(segments, pointVisible) {
           v00 = v = pointVisible((lambda00 = lambda), (phi00 = phi));
           if (v) line = [], line.push([lambda, phi]);
         }
-        (point0 = point), (v0 = v);
+        point0 = point;
+        v0 = v;
       },
       // Rejoin first and last segments if there were intersections and the first
       // and last points were visible.

@@ -1,5 +1,5 @@
 import {Adder} from "d3-array";
-import {cartesian, cartesianCross, cartesianNormalizeInPlace} from "./cartesian.js";
+import {cartesian, cartesianCross, cartesianNormalize} from "./cartesian.js";
 import {asin, atan2, cos, epsilon, pi, quarterPi, sin, tau} from "./math.js";
 
 export default function(polygon, point) {
@@ -39,10 +39,8 @@ export default function(polygon, point) {
       // Are the longitudes either side of the point’s meridian (lambda),
       // and are the latitudes smaller than the parallel (phi)?
       if (antimeridian ^ lambda0 >= lambda ^ lambda1 >= lambda) {
-        const arc = cartesianCross(cartesian(point0), cartesian(point1));
-        cartesianNormalizeInPlace(arc);
-        const intersection = cartesianCross(normal, arc);
-        cartesianNormalizeInPlace(intersection);
+        const arc = cartesianNormalize(cartesianCross(cartesian(point0), cartesian(point1)));
+        const intersection = cartesianNormalize(cartesianCross(normal, arc));
         const phiArc = (antimeridian ^ delta >= 0 ? -1 : 1) * asin(intersection[2]);
         if (phi > phiArc || phi === phiArc && (arc[0] || arc[1])) {
           winding += antimeridian ^ delta >= 0 ? 1 : -1;
