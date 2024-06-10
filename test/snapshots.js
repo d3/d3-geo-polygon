@@ -28,9 +28,7 @@ async function renderWorld(projection, { extent, clip = false } = {}) {
     extent === undefined
       ? { type: "Sphere" }
       : graticule.extent(extent).outline();
-  const world = JSON.parse(
-    await readFile("./node_modules/world-atlas/world/50m.json")
-  );
+  const world = JSON.parse(await readFile("./node_modules/world-atlas/world/50m.json"));
   const canvas = new Canvas(width, height);
   const context = canvas.getContext("2d");
   const path = geoPath(projection, context);
@@ -122,4 +120,26 @@ export async function tetrahedralLeeSouth() {
       .precision(0.1)
       .fitSize([960, 500], { type: "Sphere" })
   );
+}
+
+// more tests
+
+// https://github.com/d3/d3-geo-polygon/issues/7
+export async function cubic45() {
+  return renderWorld(
+    geoCubic()
+      .parents([-1, 2, 0, 2, 5, 2])
+      .rotate([0, 0, 45])
+      .fitSize([960, 500], { type: "Sphere" })
+  );
+}
+
+// https://github.com/d3/d3-geo-polygon/issues/30
+export async function airocean702() {
+  return renderWorld(geoAirocean().rotate([-70.2, -47, -121.6]));
+}
+
+// https://github.com/d3/d3-geo-polygon/issues/30
+export async function airocean732() {
+  return renderWorld(geoAirocean().rotate([88, -37.8, -73.2]));
 }
