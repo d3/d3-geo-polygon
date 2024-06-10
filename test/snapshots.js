@@ -8,8 +8,8 @@ import {
   geoCahillKeyes,
   geoComplexLog,
   geoCubic,
-  geoDeltoidalHexecontahedral,
-  geoRhombicDodecahedral,
+  geoDeltoidal,
+  geoRhombic,
   geoDodecahedral,
   geoIcosahedral,
   geoImago,
@@ -100,12 +100,12 @@ export async function polyhedralWaterman() {
   return renderWorld(geoPolyhedralWaterman().precision(0.1));
 }
 
-export async function deltoidalHexecontahedral() {
-  return renderWorld(geoDeltoidalHexecontahedral().precision(0.1));
+export async function deltoidal() {
+  return renderWorld(geoDeltoidal().precision(0.1));
 }
 
-export async function rhombicDodecahedral() {
-  return renderWorld(geoRhombicDodecahedral().precision(0.1));
+export async function rhombic() {
+  return renderWorld(geoRhombic().precision(0.1));
 }
 
 export async function tetrahedralLee() {
@@ -142,4 +142,8 @@ export async function airocean702() {
 // https://github.com/d3/d3-geo-polygon/issues/30
 export async function airocean732() {
   return renderWorld(geoAirocean().rotate([88, -37.8, -73.2]));
+}
+
+export async function rhombic00() {
+  return renderWorld(geoRhombic().rotate([0, 0]).precision(0.1));
 }
