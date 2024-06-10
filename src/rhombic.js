@@ -82,7 +82,6 @@ export default function () {
     .polygons(polygons)
     .parents(parents)
     .angle(20)
-    .rotate([0.001, 0])
     .translate([213, 252])
     .scale(106.48)
 }
