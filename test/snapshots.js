@@ -147,3 +147,20 @@ export async function airocean732() {
 export async function rhombic00() {
   return renderWorld(geoRhombic().rotate([0, 0]).precision(0.1));
 }
+
+// https://github.com/d3/d3-geo-polygon/issues/62
+export async function rhombicHalf1() {
+  return renderWorld(geoRhombic()
+    .parents([-1, 0, 6, 2, 1, 9, 11, 3, 4, 8, 6, 10])
+    .precision(0.1)
+    .fitSize([960, 500], { type: "Sphere" })
+  );
+}
+export async function rhombicHalf2() {
+  return renderWorld(geoRhombic()
+    .parents([4, 0, 6, 2, 1, 9, 11, 3, 4, 8, -1, 10])
+    .angle(-19.5)
+    .precision(0.1)
+    .fitSize([960, 500], { type: "Sphere" })
+  );
+}
