@@ -78,7 +78,7 @@ export default function(
       angle = p.angle();
 
     if (faces.length) {
-      p = polyhedral(faces[0], faceFind);
+      p = polyhedral(faces.find((face, i) => face && !(parents[i] >= 0)), faceFind);
     }
 
     p.parents = function(_) {

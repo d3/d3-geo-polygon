@@ -82,7 +82,11 @@ New projections are introduced:
 
 <a href="#geoPolyhedralVoronoi" name="geoPolyhedralVoronoi">#</a> d3.<b>geoPolyhedralVoronoi</b>([<i>parents</i>], [<i>polygons</i>], [<i>faceProjection</i>], [<i>faceFind</i>]) · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/voronoi.js)
 
-Returns a polyhedral projection based on the *polygons*, arranged in a tree according to the list of *parents*. *polygons* are a GeoJSON FeatureCollection of geoVoronoi cells, which should indicate the corresponding sites (see [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi)). An optional [_faceProjection_](#geoPolyhedral) is passed to d3.geoPolyhedral() -- note that the gnomonic projection on the polygons’ sites is the only faceProjection that works in the general case.
+Returns a polyhedral projection based on the *polygons*, arranged in a tree. 
+
+The tree is specified by passing *parents*, an array of indices indicating the parent of each face. The tree is built from the first face whose parent is -1 (or undefined).
+
+*polygons* are a GeoJSON FeatureCollection of geoVoronoi cells, which should indicate the corresponding sites (see [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi)). An optional [_faceProjection_](#geoPolyhedral) is passed to d3.geoPolyhedral() -- note that the gnomonic projection on the polygons’ sites is the only faceProjection that works in the general case.
 
 The .<b>parents</b>([<i>parents</i>]), .<b>polygons</b>([<i>polygons</i>]), .<b>faceProjection</b>([<i>faceProjection</i>]) set and read the corresponding options. Use <i>.faceFind(voronoi.find)</i> for faster results.
 
