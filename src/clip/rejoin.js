@@ -53,6 +53,7 @@ export default function(segments, compareIntersection, startInside, interpolate,
       points,
       point;
 
+  // eslint-disable-next-line no-constant-condition
   while (1) {
     // Find first unvisited intersection.
     let current = start,

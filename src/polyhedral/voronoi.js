@@ -1,7 +1,7 @@
 import {
   geoCentroid as centroid,
   geoGnomonic as gnomonic,
-  geoDistance as distance
+  geoDistance
 } from "d3-geo";
 import { degrees } from "../math.js";
 import polyhedral from "./index.js";
@@ -55,7 +55,7 @@ export default function(
     let d0 = Infinity;
     let found = -1;
     for (let i = 0; i < faces.length; i++) {
-      const d = distance(faces[i].site, [lambda, phi]);
+      const d = geoDistance(faces[i].site, [lambda, phi]);
       if (d < d0) {
         d0 = d;
         found = i;

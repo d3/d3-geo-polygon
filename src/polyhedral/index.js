@@ -1,7 +1,7 @@
 import {geoBounds as bounds, geoCentroid as centroid, geoInterpolate as interpolate, geoProjection as projection} from "d3-geo";
-import {default as clipPolygon} from "../clip/polygon.js";
+import clipPolygon from "../clip/polygon.js";
 import {abs, degrees, epsilon, radians} from "../math.js";
-import {default as matrix, multiply, inverse} from "./matrix.js";
+import matrix, {multiply, inverse} from "./matrix.js";
 import pointEqual from "../pointEqual.js";
 
 // Creates a polyhedral projection.
@@ -66,7 +66,8 @@ export default function(tree, face) {
     if (invert && node === faceDegrees(p = invert(point))) return p;
     const children = node.children;
     for (let i = 0, n = children && children.length; i < n; ++i) {
-      if (p = faceInvert(children[i], coordinates)) return p;
+      p = faceInvert(children[i], coordinates);
+      if (p) return p;
     }
   }
 

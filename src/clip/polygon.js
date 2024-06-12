@@ -2,9 +2,9 @@ import clip from "./index.js";
 import {atan2, cos, max, min, pi, radians, sign, sin, sqrt} from "../math.js";
 import {cartesian, cartesianCross, cartesianDot, cartesianEqual, spherical} from "../cartesian.js";
 import {intersectCoincident, intersectPointOnLine, intersectSegment, intersect} from "../intersect.js";
-import {default as polygonContains} from "../polygonContains.js";
+import polygonContains from "../polygonContains.js";
 
-const clipNone = function(stream) { return stream; };
+const clipNone = (stream) => stream;
 
 // clipPolygon
 export default function(geometry) {
@@ -32,33 +32,32 @@ export default function(geometry) {
       );
     });
 
-    const clipPolygon = function(stream) {
+    function clipPolygon(stream) {
       const clipstream = clips.map(clip => clip(stream));
       return {
-        point: (lambda, phi) => {
-          clipstream.forEach(clip => clip.point(lambda, phi));
+        point(lambda, phi) {
+          clipstream.forEach((clip) => clip.point(lambda, phi));
         },
-        lineStart: () => {
-          clipstream.forEach(clip => clip.lineStart());
+        lineStart() {
+          clipstream.forEach((clip) => clip.lineStart());
         },
-        lineEnd: () => {
-          clipstream.forEach(clip => clip.lineEnd());
+        lineEnd() {
+          clipstream.forEach((clip) => clip.lineEnd());
         },
-        polygonStart: () => {
-          clipstream.forEach(clip => clip.polygonStart());
+        polygonStart() {
+          clipstream.forEach((clip) => clip.polygonStart());
         },
-        polygonEnd: () => {
-          clipstream.forEach(clip => clip.polygonEnd());
+        polygonEnd() {
+          clipstream.forEach((clip) => clip.polygonEnd());
         },
-        sphere: () => {
-          clipstream.forEach(clip => clip.sphere());
-        }
+        sphere() {
+          clipstream.forEach((clip) => clip.sphere());
+        },
       };
-    };
+    }
 
-    clipPolygon.polygon = function(_) {
-      return _ ? ((geometry = _), clipGeometry(geometry)) : geometry;
-    };
+    clipPolygon.polygon = (_) => _ ? ((geometry = _), clipGeometry(geometry)) : geometry;
+
     return clipPolygon;
   }
 
@@ -117,7 +116,10 @@ function interpolate(segments, polygon) {
       to.index != null
     ) {
       for (let i = 0; i < segments.length; ++i) {
-        const segment = segments[(from.index + i * direction + segments.length)%segments.length];
+        const segment =
+          segments[
+            (from.index + i * direction + segments.length) % segments.length
+          ];
         const point = spherical(direction > 0 ? segment.to : segment.from);
         stream.point(point[0], point[1]);
       }
@@ -140,15 +142,22 @@ function randsign(i, j) {
 }
 
 function clipLine(segments, pointVisible) {
-  return function(stream) {
-    let point0, lambda00, phi00, v00, v0, clean, line, lines = [];
+  return function (stream) {
+    let point0,
+      lambda00,
+      phi00,
+      v00,
+      v0,
+      clean,
+      line,
+      lines = [];
     return {
-      lineStart: function() {
+      lineStart() {
         point0 = null;
         clean = 1;
         line = [];
       },
-      lineEnd: function() {
+      lineEnd() {
         if (v0) lines.push(line);
         lines.forEach((line) => {
           stream.lineStart();
@@ -157,7 +166,7 @@ function clipLine(segments, pointVisible) {
         });
         lines = [];
       },
-      point: (lambda, phi, close) => {
+      point(lambda, phi, close) {
         if (cos(lambda) == -1) lambda -= sign(sin(lambda)) * 1e-5; // move away from -180/180 https://github.com/d3/d3-geo/pull/108#issuecomment-323798937
         if (close) (lambda = lambda00), (phi = phi00);
         let point = cartesian([lambda * 0.9999999999, phi + 1e-14]);
@@ -206,14 +215,14 @@ function clipLine(segments, pointVisible) {
                   intersection[0],
                   intersection[1],
                   intersection.index,
-                  intersection.t
+                  intersection.t,
                 ]);
               } else {
                 line.push([
                   intersection[0],
                   intersection[1],
                   intersection.index,
-                  intersection.t
+                  intersection.t,
                 ]);
                 lines.push(line);
               }
@@ -235,14 +244,16 @@ function clipLine(segments, pointVisible) {
             }
           }
           v00 = v = pointVisible((lambda00 = lambda), (phi00 = phi));
-          if (v) line = [], line.push([lambda, phi]);
+          if (v) (line = []), line.push([lambda, phi]);
         }
         point0 = point;
         v0 = v;
       },
       // Rejoin first and last segments if there were intersections and the first
       // and last points were visible.
-      clean: () => clean | ((v00 && v0) << 1)
+      clean() {
+        return clean | ((v00 && v0) << 1);
+      }
     };
   };
 }

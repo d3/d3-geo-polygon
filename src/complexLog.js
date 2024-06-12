@@ -12,7 +12,7 @@
 import { geoProjectionMutator as projectionMutator, geoAzimuthalEqualAreaRaw as azimuthalEqualAreaRaw } from "d3-geo";
 import { abs, sin, cos, pi, exp, atan2 } from "./math.js";
 import { complexMul, complexLogHypot } from "./complex.js";
-import { default as clipPolygon } from "./clip/polygon.js";
+import clipPolygon from "./clip/polygon.js";
 
 // Default planar projection and cutoff latitude, see below for an explanation of these settings.
 const DEFAULT_PLANAR_PROJECTION_RAW = azimuthalEqualAreaRaw;
