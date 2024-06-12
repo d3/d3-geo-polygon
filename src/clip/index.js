@@ -4,7 +4,7 @@ import {epsilon, halfPi} from "../math.js";
 import polygonContains from "../polygonContains.js";
 import {merge} from "d3-array";
 
-export default function(pointVisible, clipLine, interpolate, start, sort) {
+export default function(pointVisible, clipLine, interpolate, start, sort, {clipPoint = false} = {}) {
   if (typeof sort === "undefined") sort = compareIntersection;
 
   return function(sink) {
@@ -47,7 +47,7 @@ export default function(pointVisible, clipLine, interpolate, start, sort) {
     };
 
     function point(lambda, phi) {
-      if (pointVisible(lambda, phi)) sink.point(lambda, phi);
+      if ((!clipPoint && !ring) || pointVisible(lambda, phi)) sink.point(lambda, phi);
     }
 
     function pointLine(lambda, phi) {

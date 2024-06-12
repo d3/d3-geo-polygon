@@ -1,4 +1,4 @@
-import {geoBounds as bounds, geoCentroid as centroid, geoInterpolate as interpolate, geoProjection as projection} from "d3-geo";
+import {geoArea, geoBounds as bounds, geoCentroid as centroid, geoInterpolate as interpolate, geoProjection as projection} from "d3-geo";
 import clipPolygon from "../clip/polygon.js";
 import {abs, degrees, epsilon, radians} from "../math.js";
 import matrix, {multiply, inverse} from "./matrix.js";
@@ -78,10 +78,11 @@ export default function(tree, face) {
   const proj = projection(forward);
 
   // run around the mesh of faces and stream all vertices to create the clipping polygon
-  const polygon = [];
-  outline({point: function(lambda, phi) { polygon.push([lambda, phi]); }}, tree);
-  polygon.push(polygon[0]);
-  proj.preclip(clipPolygon({ type: "Polygon", coordinates: [ polygon ] }));
+  const p = [];
+  const geometry = {type: "MultiPolygon", coordinates: [[p]]};
+  outline({point: (lambda, phi) => p.push([lambda, phi])}, tree);
+  p.push(p[0]);
+  proj.preclip(clipPolygon(geometry).clipPoint(geoArea(geometry) < 4 * Math.PI - 0.1));
   proj.tree = function() { return tree; };
   
   return proj;
