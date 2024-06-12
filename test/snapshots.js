@@ -6,6 +6,7 @@ import { geoHomolosineRaw } from "d3-geo-projection";
 import {
   geoAirocean,
   geoBerghaus,
+  geoClipPolygon,
   geoCox,
   geoCahillKeyes,
   geoComplexLog,
@@ -33,7 +34,7 @@ import {
 const width = 960;
 const height = 500;
 
-async function renderWorld(projection, { extent, clip = false } = {}) {
+async function renderWorld(projection, { points, extent, clip = false } = {}) {
   const graticule = geoGraticule();
   const outline =
     extent === undefined
@@ -66,6 +67,12 @@ async function renderWorld(projection, { extent, clip = false } = {}) {
   path(outline);
   context.strokeStyle = "#000";
   context.stroke();
+  if (points) {
+    context.beginPath();
+    path({type: "MultiPoint", coordinates: points});
+    context.fillStyle = "steelblue";
+    context.fill();
+  }
   return canvas;
 }
 
@@ -278,4 +285,50 @@ export async function rhombicHalf2() {
       .precision(0.1)
       .fitSize([960, 500], { type: "Sphere" })
   );
+}
+
+// https://github.com/d3/d3-geo-polygon/issues/4
+export async function clipPointWorld() {
+  return renderWorld(geoRhombic(), {points: [
+    [0, 0],
+    [10 - 0.0001, 0],
+    [10 + 0.0001, 0],
+    [10, -10],
+    [10, -20],
+  ]});
+}
+export async function clipPointTrue() {
+  const projection = geoRhombic();
+  const polygon = projection.preclip().polygon();
+  projection.preclip(geoClipPolygon(polygon).clipPoint(true));
+  return renderWorld(projection, {points: [
+    [0, 0],
+    [10 - 0.0001, 0],
+    [10 + 0.0001, 0],
+    [10, -10],
+    [10, -20],
+  ]});
+}
+export async function clipPointSmall() {
+  const projection = geoRhombic().parents([-1, 0, 6, 2, 1, 9, 11, 3, 4, 8, 6, 10]);
+  return renderWorld(projection, {points: [
+    [0, 0],
+    [10 - 0.0001, 0],
+    [10 + 0.0001, 0],
+    [10, -10],
+    [10, -20],
+  ]});
+}
+export async function clipPointFalse() {
+  const projection = geoRhombic();
+  projection.preclip(geoClipPolygon(
+    geoRhombic().parents([-1, 0, 6, 2, 1, 9, 11, 3, 4, 8, 6, 10]).preclip().polygon()).clipPoint(false)
+  );
+  return renderWorld(projection, {points: [
+    [0, 0],
+    [10 - 0.0001, 0],
+    [10 + 0.0001, 0],
+    [10, -10],
+    [10, -20],
+  ]});
 }
