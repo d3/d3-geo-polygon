@@ -84,7 +84,7 @@ New projections are introduced:
 
 Returns a polyhedral projection based on the *polygons*, arranged in a tree. 
 
-The tree is specified by passing *parents*, an array of indices indicating the parent of each face. The tree is built from the first face whose parent is -1 (or undefined).
+The tree is specified by passing *parents*, an array of indices indicating the parent of each face. The root of the tree is the first face without a parent (with the array typically specifying -1).
 
 *polygons* are a GeoJSON FeatureCollection of geoVoronoi cells, which should indicate the corresponding sites (see [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi)). An optional [_faceProjection_](#geoPolyhedral) is passed to d3.geoPolyhedral() -- note that the gnomonic projection on the polygons’ sites is the only faceProjection that works in the general case.
 
