@@ -24,7 +24,7 @@ import {
   tan,
 } from "./math.js";
 import { geoProjectionMutator as projectionMutator } from "d3-geo";
-import { default as clipPolygon } from "./clip/polygon.js";
+import clipPolygon from "./clip/polygon.js";
 import { solve } from "./newton.js";
 
 const ASIN_ONE_THD = asin(1 / 3),
