@@ -1,5 +1,5 @@
 import {merge, range} from "d3-array";
-import {geoInterpolate, geoPath} from "d3-geo";
+import {geoInterpolate} from "d3-geo";
 import {
   geoBerghaus as berghaus,
   geoGingery as gingery,
