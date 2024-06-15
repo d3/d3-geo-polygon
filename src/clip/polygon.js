@@ -208,14 +208,14 @@ function clipLine(segments, pointVisible) {
                   intersection[0],
                   intersection[1],
                   intersection.index,
-                  intersection.t,
+                  intersection.t
                 ]);
               } else {
                 line.push([
                   intersection[0],
                   intersection[1],
                   intersection.index,
-                  intersection.t,
+                  intersection.t
                 ]);
                 lines.push(line);
               }
