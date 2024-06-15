@@ -143,14 +143,7 @@ function randsign(i, j) {
 
 function clipLine(segments, pointVisible) {
   return function (stream) {
-    let point0,
-      lambda00,
-      phi00,
-      v00,
-      v0,
-      clean,
-      line,
-      lines = [];
+    let point0, lambda00, phi00, v00, v0, clean, line, lines = [];
     return {
       lineStart() {
         point0 = null;
