@@ -2,13 +2,24 @@ import { Canvas } from "canvas";
 import { readFile } from "fs/promises";
 import { feature } from "topojson-client";
 import { geoGraticule, geoPath } from "d3-geo";
+import { geoHomolosineRaw } from "d3-geo-projection";
 import {
   geoAirocean,
+  geoBerghaus,
   geoCox,
   geoCahillKeyes,
   geoComplexLog,
   geoCubic,
   geoDeltoidal,
+  geoGingery,
+  geoHealpix,
+  geoInterrupt,
+  geoInterruptedBoggs,
+  geoInterruptedHomolosine,
+  geoInterruptedMollweide,
+  geoInterruptedMollweideHemispheres,
+  geoInterruptedSinuMollweide,
+  geoInterruptedSinusoidal,
   geoRhombic,
   geoDodecahedral,
   geoIcosahedral,
@@ -28,7 +39,9 @@ async function renderWorld(projection, { extent, clip = false } = {}) {
     extent === undefined
       ? { type: "Sphere" }
       : graticule.extent(extent).outline();
-  const world = JSON.parse(await readFile("./node_modules/world-atlas/world/50m.json"));
+  const world = JSON.parse(
+    await readFile("./node_modules/world-atlas/world/50m.json")
+  );
   const canvas = new Canvas(width, height);
   const context = canvas.getContext("2d");
   const path = geoPath(projection, context);
@@ -122,6 +135,106 @@ export async function tetrahedralLeeSouth() {
   );
 }
 
+// reclip
+export async function berghaus() {
+  return renderWorld(geoBerghaus());
+}
+
+export async function gingery() {
+  return renderWorld(geoGingery());
+}
+
+export async function berghaus7() {
+  return renderWorld(geoBerghaus().lobes(7).fitSize([960, 500], { type: "Sphere" }));
+}
+
+export async function berghaus13() {
+  return renderWorld(geoBerghaus().lobes(13).fitSize([960, 500], { type: "Sphere" }));
+}
+
+export async function gingery7() {
+  return renderWorld(geoGingery().lobes(7).fitSize([960, 500], { type: "Sphere" }));
+}
+
+export async function gingery3() {
+  return renderWorld(geoGingery().lobes(3).fitSize([960, 500], { type: "Sphere" }));
+}
+
+export async function goodeOcean() {
+  return renderWorld(
+    geoInterrupt(geoHomolosineRaw, [
+      [
+        [
+          [-180, 0],
+          [-130, 90],
+          [-95, 0],
+        ],
+        [
+          [-95, 0],
+          [-30, 90],
+          [55, 0],
+        ],
+        [
+          [55, 0],
+          [120, 90],
+          [180, 0],
+        ],
+      ],
+      [
+        [
+          [-180, 0],
+          [-120, -90],
+          [-60, 0],
+        ],
+        [
+          [-60, 0],
+          [20, -90],
+          [85, 0],
+        ],
+        [
+          [85, 0],
+          [140, -90],
+          [180, 0],
+        ],
+      ],
+    ])
+      .rotate([-204, 0])
+      .precision(0.1)
+  );
+}
+
+export async function interruptedBoggs() {
+  return renderWorld(geoInterruptedBoggs());
+}
+
+export async function healpix() {
+  return renderWorld(geoHealpix());
+}
+
+export async function healpix5() {
+  return renderWorld(geoHealpix().lobes(5));
+}
+
+export async function interruptedHomolosine() {
+  return renderWorld(geoInterruptedHomolosine());
+}
+
+export async function interruptedMollweide() {
+  return renderWorld(geoInterruptedMollweide());
+}
+
+export async function interruptedMollweideHemispheres() {
+  return renderWorld(geoInterruptedMollweideHemispheres());
+}
+
+export async function interruptedSinuMollweide() {
+  return renderWorld(geoInterruptedSinuMollweide());
+}
+
+export async function interruptedSinusoidal() {
+  return renderWorld(geoInterruptedSinusoidal());
+}
+
 // more tests
 
 // https://github.com/d3/d3-geo-polygon/issues/7
@@ -150,17 +263,19 @@ export async function rhombic00() {
 
 // https://github.com/d3/d3-geo-polygon/issues/62
 export async function rhombicHalf1() {
-  return renderWorld(geoRhombic()
-    .parents([-1, 0, 6, 2, 1, 9, 11, 3, 4, 8, 6, 10])
-    .precision(0.1)
-    .fitSize([960, 500], { type: "Sphere" })
+  return renderWorld(
+    geoRhombic()
+      .parents([-1, 0, 6, 2, 1, 9, 11, 3, 4, 8, 6, 10])
+      .precision(0.1)
+      .fitSize([960, 500], { type: "Sphere" })
   );
 }
 export async function rhombicHalf2() {
-  return renderWorld(geoRhombic()
-    .parents([4, 0, 6, 2, 1, 9, 11, 3, 4, 8, -1, 10])
-    .angle(-19.5)
-    .precision(0.1)
-    .fitSize([960, 500], { type: "Sphere" })
+  return renderWorld(
+    geoRhombic()
+      .parents([4, 0, 6, 2, 1, 9, 11, 3, 4, 8, -1, 10])
+      .angle(-19.5)
+      .precision(0.1)
+      .fitSize([960, 500], { type: "Sphere" })
   );
 }
