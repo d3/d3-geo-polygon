@@ -94,7 +94,7 @@ The Gingery projection.
 
 [<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoHealpix.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
-The HEALpix projection.
+The HEALPix projection.
 
 <a href="#geoInterruptedBoggs" name="geoInterruptedBoggs">#</a> d3.<b>geoInterruptedBoggs</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
