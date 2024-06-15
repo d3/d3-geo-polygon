@@ -53,7 +53,8 @@
   "sideEffects": false,
   "dependencies": {
     "d3-array": "2.5.0 - 3",
-    "d3-geo": "2 - 3"
+    "d3-geo": "2 - 3",
+    "d3-geo-projection": "4"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "0.4",
