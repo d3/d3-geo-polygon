@@ -2,13 +2,24 @@ import { Canvas } from "canvas";
 import { readFile } from "fs/promises";
 import { feature } from "topojson-client";
 import { geoGraticule, geoPath } from "d3-geo";
+import {geoHomolosineRaw} from "d3-geo-projection";
 import {
   geoAirocean,
+  geoBerghaus,
   geoCox,
   geoCahillKeyes,
   geoComplexLog,
   geoCubic,
   geoDeltoidal,
+  geoGingery,
+  geoHealpix,
+  geoInterrupt,
+  geoInterruptedBoggs,
+  geoInterruptedHomolosine,
+  geoInterruptedMollweide,
+  geoInterruptedMollweideHemispheres,
+  geoInterruptedSinuMollweide,
+  geoInterruptedSinusoidal,
   geoRhombic,
   geoDodecahedral,
   geoIcosahedral,
@@ -120,6 +131,61 @@ export async function tetrahedralLeeSouth() {
       .precision(0.1)
       .fitSize([960, 500], { type: "Sphere" })
   );
+}
+
+// reclip
+export async function berghaus() {
+  return renderWorld(geoBerghaus());
+}
+
+export async function gingery() {
+  return renderWorld(geoGingery());
+}
+
+export async function goodeOcean() {
+  return renderWorld(geoInterrupt(geoHomolosineRaw, [
+      [
+        [[-180, 0], [-130, 90], [-95, 0]],
+        [[-95, 0], [-30, 90], [55, 0]],
+        [[55, 0], [120, 90], [180, 0]]
+      ],
+      [
+        [[-180, 0], [-120, -90], [-60, 0]],
+        [[-60, 0], [20, -90], [85, 0]],
+        [[85, 0], [140, -90], [180, 0]]
+      ]
+    ])
+    .rotate([-204, 0])
+    .precision(0.1)
+  )
+}
+
+export async function interruptedBoggs() {
+  return renderWorld(geoInterruptedBoggs());
+}
+
+export async function healpix() {
+  return renderWorld(geoHealpix());
+}
+
+export async function interruptedHomolosine() {
+  return renderWorld(geoInterruptedHomolosine());
+}
+
+export async function interruptedMollweide() {
+  return renderWorld(geoInterruptedMollweide());
+}
+
+export async function interruptedMollweideHemispheres() {
+  return renderWorld(geoInterruptedMollweideHemispheres());
+}
+
+export async function interruptedSinuMollweide() {
+  return renderWorld(geoInterruptedSinuMollweide());
+}
+
+export async function interruptedSinusoidal() {
+  return renderWorld(geoInterruptedSinusoidal());
 }
 
 // more tests

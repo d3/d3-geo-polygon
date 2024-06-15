@@ -17,3 +17,15 @@ export {default as geoRhombic} from "./rhombic.js";
 export {default as geoDeltoidal} from "./deltoidal.js";
 export {default as geoCahillKeyes, cahillKeyesRaw as geoCahillKeyesRaw} from "./cahillKeyes.js";
 export {default as geoComplexLog, complexLogRaw as geoComplexLogRaw} from "./complexLog.js";
+export {
+  geoBerghaus,
+  geoGingery,
+  geoHealpix,
+  geoInterrupt,
+  geoInterruptedBoggs,
+  geoInterruptedHomolosine,
+  geoInterruptedMollweide,
+  geoInterruptedMollweideHemispheres,
+  geoInterruptedSinuMollweide,
+  geoInterruptedSinusoidal
+} from "./reclip.js";
