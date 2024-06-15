@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import terser from "@rollup/plugin-terser";
+import nodeResolve from "@rollup/plugin-node-resolve";
 import meta from "./package.json" assert { type: "json" };
 
 // Extract copyrights from the LICENSE.
@@ -12,7 +13,7 @@ const copyright = readFileSync("./LICENSE", "utf-8")
 const config = {
   input: "src/index.js",
   external: Object.keys(meta.dependencies || {}).filter((key) =>
-    /^d3-/.test(key)
+    /^d3-/.test(key) && key !== "d3-geo-projection"
   ),
   output: {
     file: `dist/${meta.name}.js`,
@@ -24,11 +25,11 @@ const config = {
     globals: Object.assign(
       {},
       ...Object.keys(meta.dependencies || {})
-        .filter((key) => /^d3-/.test(key))
+        .filter((key) => /^d3-/.test(key) && key !== "d3-geo-projection")
         .map((key) => ({ [key]: "d3" }))
     ),
   },
-  plugins: [],
+  plugins: [nodeResolve()],
 };
 
 export default [

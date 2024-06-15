@@ -57,6 +57,7 @@
     "d3-geo-projection": "4"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "0.4",
     "canvas": "2",
     "eslint": "8",
