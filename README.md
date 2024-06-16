@@ -80,55 +80,55 @@ A butterfly projection inspired by Steve Waterman’s design.
 
 <a href="#geoBerghaus" name="geoBerghaus">#</a> d3.<b>geoBerghaus</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoBerghaus.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/berghaus.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
 The Berghaus projection.
 
 <a href="#geoGingery" name="geoGingery">#</a> d3.<b>geoGingery</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoGingery.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/gingery.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
 The Gingery projection.
 
 <a href="#geoHealpix" name="geoHealpix">#</a> d3.<b>geoHealpix</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoHealpix.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/healpix.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
 The HEALPix projection.
 
 <a href="#geoInterruptedBoggs" name="geoInterruptedBoggs">#</a> d3.<b>geoInterruptedBoggs</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoInterruptedBoggs.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedBoggs.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
 Bogg’s interrupted eumorphic projection.
 
 <a href="#geoInterruptedHomolosine" name="geoInterruptedHomolosine">#</a> d3.<b>geoInterruptedHomolosine</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoInterruptedHomolosine.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedHomolosine.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
 Goode’s interrupted homolosine projection.
 
 <a href="#geoInterruptedMollweide" name="geoInterruptedMollweide">#</a> d3.<b>geoInterruptedMollweide</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoInterruptedMollweide.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedMollweide.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
 Goode’s interrupted Mollweide projection.
 
 <a href="#geoInterruptedMollweideHemispheres" name="geoInterruptedMollweideHemispheres">#</a> d3.<b>geoInterruptedMollweideHemispheres</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoInterruptedMollweideHemispheres.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedMollweideHemispheres.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
 The Mollweide projection interrupted into two (equal-area) hemispheres.
 
 <a href="#geoInterruptedSinuMollweide" name="geoInterruptedSinuMollweide">#</a> d3.<b>geoInterruptedSinuMollweide</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoInterruptedSinuMollweide.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedSinuMollweide.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
 Alan K. Philbrick’s interrupted sinu-Mollweide projection.
 
 <a href="#geoInterruptedSinusoidal" name="geoInterruptedSinusoidal">#</a> d3.<b>geoInterruptedSinusoidal</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/geoInterruptedSinusoidal.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedSinusoidal.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
 
 An interrupted sinusoidal projection with asymmetrical lobe boundaries.
 
