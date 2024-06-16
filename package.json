@@ -76,6 +76,6 @@
     "prepublishOnly": "rm -rf dist && rollup -c"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=18"
   }
 }
