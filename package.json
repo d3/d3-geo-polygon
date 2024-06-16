@@ -57,6 +57,7 @@
     "d3-geo-projection": "4"
   },
   "devDependencies": {
+    "@observablehq/framework": "^1.9.0",
     "@rollup/plugin-terser": "0.4",
     "canvas": "2",
     "eslint": "8",
@@ -68,6 +69,9 @@
     "world-atlas": "1"
   },
   "scripts": {
+    "docs:dev": "observable preview",
+    "docs:build": "observable build",
+    "docs:deploy": "observable deploy",
     "test": "mocha 'test/**/*-test.js' && eslint src test",
     "prepublishOnly": "rm -rf dist && rollup -c"
   },
