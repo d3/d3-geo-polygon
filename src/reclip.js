@@ -1,5 +1,5 @@
 import {merge} from "d3-array";
-import {geoInterpolate} from "d3-geo";
+import {geoDistance, geoInterpolate} from "d3-geo";
 import {
   geoBerghaus as berghaus,
   geoGingery as gingery,
@@ -11,6 +11,7 @@ import {
   geoInterruptedMollweideHemispheres as interruptedMollweideHemispheres,
   geoInterruptedSinuMollweide as interruptedSinuMollweide,
   geoInterruptedSinusoidal as interruptedSinusoidal,
+  geoTwoPointEquidistant as twoPointEquidistant
 } from "d3-geo-projection";
 import geoClipPolygon from "./clip/polygon.js";
 
@@ -27,6 +28,8 @@ export function geoInterruptedMollweide() { return clipInterrupted(interruptedMo
 export function geoInterruptedMollweideHemispheres() { return clipInterrupted(interruptedMollweideHemispheres.apply(this, arguments)); }
 export function geoInterruptedSinuMollweide() { return clipInterrupted(interruptedSinuMollweide.apply(this, arguments)); }
 export function geoInterruptedSinusoidal() { return clipInterrupted(interruptedSinusoidal.apply(this, arguments)); }
+export function geoTwoPointEquidistant() { return clipTwoPointEquidistant.apply(this, arguments); }
+export function geoTwoPointEquidistantUsa() { return geoTwoPointEquidistant([-158, 21.5], [-77, 39]); }
 
 function reclip(projection, vertical = false) {
   const {lobes} = projection;
@@ -96,4 +99,21 @@ function clipInterrupted(projection) {
   }
 
   return reset(projection);
+}
+
+function clipTwoPointEquidistant(a, b) {
+  const epsilon = 1e-3;
+  const u = geoDistance(a, b) * 90 / Math.PI + epsilon;
+  const ellipse = {
+    type: "Polygon",
+    coordinates: [[
+        [180 - u, epsilon],
+        [180 - u, -epsilon],
+        [-180 + u, -epsilon],
+        [-180 + u, epsilon],
+        [180 - u, epsilon]
+      ]
+    ]
+  };
+  return twoPointEquidistant(a, b).preclip(geoClipPolygon(ellipse).clipPoint(false));
 }

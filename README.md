@@ -138,6 +138,17 @@ Alan K. Philbrick’s interrupted sinu-Mollweide projection.
 
 An interrupted sinusoidal projection with asymmetrical lobe boundaries.
 
+<a href="#geoTwoPointEquidistant" name="geoTwoPointEquidistant">#</a> d3.<b>geoTwoPointEquidistant</b>(point0, point1) · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
+
+The two-point equidistant projection, displaying 99.9996% of the sphere thanks to polygon clipping.
+
+<a href="#geoTwoPointEquidistantUsa" name="geoTwoPointEquidistantUsa">#</a> d3.<b>geoTwoPointEquidistantUsa</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/twoPointEquidistantUsa.png" width="480" height="250">](https://observablehq.com/@d3/two-point-equidistant)
+
+The two-point equidistant projection with points [-158°, 21.5°] and [-77°, 39°], approximately representing Honolulu, HI and Washington, D.C.
+
+### New projections
 
 New projections are introduced:
 

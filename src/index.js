@@ -27,5 +27,7 @@ export {
   geoInterruptedMollweide,
   geoInterruptedMollweideHemispheres,
   geoInterruptedSinuMollweide,
-  geoInterruptedSinusoidal
+  geoInterruptedSinusoidal,
+  geoTwoPointEquidistant,
+  geoTwoPointEquidistantUsa
 } from "./reclip.js";
