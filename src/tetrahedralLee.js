@@ -1,10 +1,8 @@
 import {
   geoProjection as projection,
   geoStereographicRaw,
-  geoCentroid,
-  geoContains,
+  geoCentroid
 } from "d3-geo";
-import polyhedral from "./polyhedral/index.js";
 import { greatest } from "d3-array";
 import { abs, asin, degrees, sqrt } from "./math.js";
 import {
@@ -15,9 +13,9 @@ import {
   complexSub,
 } from "./complex.js";
 import { solve2d } from "./newton.js";
+import voronoi from "./polyhedral/voronoi.js";
 
 export function leeRaw(lambda, phi) {
-  // return d3.geoGnomonicRaw(...arguments);
   const w = [-1 / 2, sqrt(3) / 2];
   let k = [0, 0],
     h = [0, 0],
@@ -104,40 +102,21 @@ const tetrahedron = [
   [0, 1, 3],
 ].map((face) => face.map((i) => centers[i]));
 
-export default function (faceProjection = (face) => {
-  const c = geoCentroid({ type: "MultiPoint", coordinates: face });
-  const rotate = (abs(c[1]) == 90) ? [0, -c[1], -30] : [-c[0], -c[1], 30];
-  return projection(leeRaw).scale(1).translate([0, 0]).rotate(rotate);
-}) {
-  const faces = tetrahedron.map((face) => ({ face, project: faceProjection(face) }));
-
-  [-1, 0, 0, 0].forEach((d, i) => {
-    const node = faces[d];
-    node && (node.children || (node.children = [])).push(faces[i]);
-  });
-
-  const p = polyhedral(faces[0], (lambda, phi) => {
-    lambda *= degrees;
-    phi *= degrees;
-    for (let i = 0; i < faces.length; ++i) {
-      if (
-        geoContains(
-          {
-            type: "Polygon",
-            coordinates: [ [...tetrahedron[i], tetrahedron[i][0]] ],
-          },
-          [lambda, phi]
-        )
-      ) {
-        return faces[i];
-      }
-    }
-  });
-
-  return p
-      .rotate([30, 180]) // North Pole aspect, needs clipPolygon
-      // .rotate([-30, 0]) // South Pole aspect
-      .angle(30)
-      .scale(118.662)
-      .translate([480, 195.47]);
+export default function (
+  faceProjection = (face) => {
+    const c = geoCentroid({ type: "MultiPoint", coordinates: face });
+    const rotate = abs(c[1]) == 90 ? [0, -c[1], -30] : [-c[0], -c[1], 30];
+    return projection(leeRaw).scale(1).translate([0, 0]).rotate(rotate);
+  }
+) {
+  return voronoi([-1, 0, 0, 0], {
+    features: tetrahedron.map((t) => ({
+      type: "Feature",
+      geometry: {type: "Polygon", coordinates: [[...t, t[0]]]}
+    }))
+  }, faceProjection)
+    .rotate([30, 180]) // North Pole aspect
+    .angle(30)
+    .scale(118.662)
+    .translate([480, 195.47]);
 }
