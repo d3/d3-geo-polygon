@@ -6,6 +6,7 @@ import { geoHomolosineRaw } from "d3-geo-projection";
 import {
   geoAirocean,
   geoBerghaus,
+  geoClipPolygon,
   geoCox,
   geoCahillKeyes,
   geoComplexLog,
@@ -28,12 +29,13 @@ import {
   geoPolyhedralCollignon,
   geoPolyhedralWaterman,
   geoTetrahedralLee,
+  geoTwoPointEquidistantUsa
 } from "../src/index.js";
 
 const width = 960;
 const height = 500;
 
-async function renderWorld(projection, { extent, clip = false } = {}) {
+async function renderWorld(projection, { points, extent, clip = false } = {}) {
   const graticule = geoGraticule();
   const outline =
     extent === undefined
@@ -66,6 +68,12 @@ async function renderWorld(projection, { extent, clip = false } = {}) {
   path(outline);
   context.strokeStyle = "#000";
   context.stroke();
+  if (points) {
+    context.beginPath();
+    path({type: "MultiPoint", coordinates: points});
+    context.fillStyle = "steelblue";
+    context.fill();
+  }
   return canvas;
 }
 
@@ -131,7 +139,7 @@ export async function tetrahedralLeeSouth() {
       .rotate([-30, 0])
       .angle(-30)
       .precision(0.1)
-      .fitSize([960, 500], { type: "Sphere" })
+      .fitSize([width, height], { type: "Sphere" })
   );
 }
 
@@ -145,19 +153,19 @@ export async function gingery() {
 }
 
 export async function berghaus7() {
-  return renderWorld(geoBerghaus().lobes(7).fitSize([960, 500], { type: "Sphere" }));
+  return renderWorld(geoBerghaus().lobes(7).fitSize([width, height], { type: "Sphere" }));
 }
 
 export async function berghaus13() {
-  return renderWorld(geoBerghaus().lobes(13).fitSize([960, 500], { type: "Sphere" }));
+  return renderWorld(geoBerghaus().lobes(13).fitSize([width, height], { type: "Sphere" }));
 }
 
 export async function gingery7() {
-  return renderWorld(geoGingery().lobes(7).fitSize([960, 500], { type: "Sphere" }));
+  return renderWorld(geoGingery().lobes(7).fitSize([width, height], { type: "Sphere" }));
 }
 
 export async function gingery3() {
-  return renderWorld(geoGingery().lobes(3).fitSize([960, 500], { type: "Sphere" }));
+  return renderWorld(geoGingery().lobes(3).fitSize([width, height], { type: "Sphere" }));
 }
 
 export async function goodeOcean() {
@@ -235,6 +243,13 @@ export async function interruptedSinusoidal() {
   return renderWorld(geoInterruptedSinusoidal());
 }
 
+// https://github.com/d3/d3-geo/issues/46
+export async function twoPointEquidistantUsa() {
+  return renderWorld(
+    geoTwoPointEquidistantUsa().fitSize([width, height], { type: "Sphere" })
+  );
+}
+
 // more tests
 
 // https://github.com/d3/d3-geo-polygon/issues/7
@@ -243,7 +258,7 @@ export async function cubic45() {
     geoCubic()
       .parents([-1, 2, 0, 2, 5, 2])
       .rotate([0, 0, 45])
-      .fitSize([960, 500], { type: "Sphere" })
+      .fitSize([width, height], { type: "Sphere" })
   );
 }
 
@@ -267,7 +282,7 @@ export async function rhombicHalf1() {
     geoRhombic()
       .parents([-1, 0, 6, 2, 1, 9, 11, 3, 4, 8, 6, 10])
       .precision(0.1)
-      .fitSize([960, 500], { type: "Sphere" })
+      .fitSize([width, height], { type: "Sphere" })
   );
 }
 export async function rhombicHalf2() {
@@ -276,6 +291,52 @@ export async function rhombicHalf2() {
       .parents([4, 0, 6, 2, 1, 9, 11, 3, 4, 8, -1, 10])
       .angle(-19.5)
       .precision(0.1)
-      .fitSize([960, 500], { type: "Sphere" })
+      .fitSize([width, height], { type: "Sphere" })
   );
+}
+
+// https://github.com/d3/d3-geo-polygon/issues/4
+export async function clipPointWorld() {
+  return renderWorld(geoRhombic(), {points: [
+    [0, 0],
+    [10 - 0.0001, 0],
+    [10 + 0.0001, 0],
+    [10, -10],
+    [10, -20],
+  ]});
+}
+export async function clipPointTrue() {
+  const projection = geoRhombic();
+  const polygon = projection.preclip().polygon();
+  projection.preclip(geoClipPolygon(polygon).clipPoint(true));
+  return renderWorld(projection, {points: [
+    [0, 0],
+    [10 - 0.0001, 0],
+    [10 + 0.0001, 0],
+    [10, -10],
+    [10, -20],
+  ]});
+}
+export async function clipPointSmall() {
+  const projection = geoRhombic().parents([-1, 0, 6, 2, 1, 9, 11, 3, 4, 8, 6, 10]);
+  return renderWorld(projection, {points: [
+    [0, 0],
+    [10 - 0.0001, 0],
+    [10 + 0.0001, 0],
+    [10, -10],
+    [10, -20],
+  ]});
+}
+export async function clipPointFalse() {
+  const projection = geoRhombic();
+  projection.preclip(geoClipPolygon(
+    geoRhombic().parents([-1, 0, 6, 2, 1, 9, 11, 3, 4, 8, 6, 10]).preclip().polygon()).clipPoint(false)
+  );
+  return renderWorld(projection, {points: [
+    [0, 0],
+    [10 - 0.0001, 0],
+    [10 + 0.0001, 0],
+    [10, -10],
+    [10, -20],
+  ]});
 }

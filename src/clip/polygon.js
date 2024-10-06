@@ -7,19 +7,13 @@ import polygonContains from "../polygonContains.js";
 const clipNone = (stream) => stream;
 
 // clipPolygon
-export default function(geometry) {
+export default function (geometry) {
+  let clipPoint = true;
+
   function clipGeometry(geometry) {
-    let polygons;
-
-    if (geometry.type === "MultiPolygon") {
-      polygons = geometry.coordinates;
-    } else if (geometry.type === "Polygon") {
-      polygons = [geometry.coordinates];
-    } else {
-      return clipNone;
-    }
-
-    const clips = polygons.map((polygon) => {
+    if (geometry.type === "Polygon") geometry = {type: "MultiPolygon", coordinates: [geometry.coordinates]};
+    if (geometry.type !== "MultiPolygon") return clipNone;
+    const clips = geometry.coordinates.map((polygon) => {
       polygon = polygon.map(ringRadians);
       const pointVisible = visible(polygon);
       const segments = ringSegments(polygon[0]); // todo holes?
@@ -28,7 +22,8 @@ export default function(geometry) {
         clipLine(segments, pointVisible),
         interpolate(segments, polygon),
         polygon[0][0],
-        clipPolygonSort
+        clipPolygonSort,
+        {clipPoint}
       );
     });
 
@@ -56,7 +51,8 @@ export default function(geometry) {
       };
     }
 
-    clipPolygon.polygon = (_) => _ ? ((geometry = _), clipGeometry(geometry)) : geometry;
+    clipPolygon.polygon = (_) => _ !== undefined ? clipGeometry(geometry = _) : geometry;
+    clipPolygon.clipPoint = (_) => _ !== undefined ? ((clipPoint = !!_), clipGeometry(geometry)) : clipPoint;
 
     return clipPolygon;
   }

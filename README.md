@@ -42,9 +42,13 @@ const projection = d3.geoEquirectangular()
 
 Given a GeoJSON *polygon* or *multipolygon*, returns a clip function suitable for [_projection_.preclip](https://github.com/d3/d3-geo#preclip).
 
-<a name="polygon" href="#polygon">#</a> clip.<b>polygon</b>()
+<a name="polygon" href="#polygon">#</a> clip.<b>polygon</b>([<i>geometry</i>])
 
-Given a clipPolygon function, returns the GeoJSON polygon.
+If <i>geometry</i> is specified, sets the clipping polygon to the geometry and returns a new <i>clip</i> function. Otherwise returns the clipping polygon.
+
+<a name="polygon" href="#clipPoint">#</a> clip.<b>clipPoint</b>([<i>clipPoint</i>])
+
+Whether the projection should clip points. If <i>clipPoint</i> is false, the clip function only clips line and polygon geometries. If <i>clipPoint</i> is true, points outside the clipping polygon are not projected. Typically set to false when the projection covers the whole sphere, to make sure that all points —even those on the edge of the clipping polygon— get projected.
 
 <a name="geoIntersectArc" href="#geoIntersectArc">#</a> d3.<b>geoIntersectArc</b>(<i>arcs</i>) · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/intersect.js), [Examples](https://observablehq.com/@fil/spherical-intersection)
 
@@ -57,6 +61,8 @@ d3-geo-polygon adds polygon clipping to the polyhedral and interrupted projectio
 <a href="#geoPolyhedral" name="geoPolyhedral">#</a> d3.<b>geoPolyhedral</b>(<i>tree</i>, <i>face</i>) · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/index.js), [Examples](https://observablehq.com/@fil/polyhedral-projections-with-d3-geo-polygon)
 
 Defines a new polyhedral projection. The *tree* is a spanning tree of polygon face nodes; each *node* is assigned a *node*.transform matrix. The *face* function returns the appropriate *node* for a given *lambda* and *phi* in radians.
+
+Polyhedral projections’ default **clipPoint** depends on whether the clipping polygon covers the whole sphere. When the polygon’s area is almost complete (larger than 4π minus .1 steradian), clipPoint is set to false, and all point geometries are displayed, even if they (technically) fall outside the clipping polygon. For smaller polygons, clipPoint defaults to true, thus hiding points outside the clipping region.
 
 <a href="#geoPolyhedral_tree" name="geoPolyhedral_tree">#</a> <i>polyhedral</i>.<b>tree</b>() returns the spanning tree of the polyhedron, from which one can infer the faces’ centers, polygons, shared edges etc.
 
@@ -132,6 +138,17 @@ Alan K. Philbrick’s interrupted sinu-Mollweide projection.
 
 An interrupted sinusoidal projection with asymmetrical lobe boundaries.
 
+<a href="#geoTwoPointEquidistant" name="geoTwoPointEquidistant">#</a> d3.<b>geoTwoPointEquidistant</b>(point0, point1) · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
+
+The two-point equidistant projection, displaying 99.9996% of the sphere thanks to polygon clipping.
+
+<a href="#geoTwoPointEquidistantUsa" name="geoTwoPointEquidistantUsa">#</a> d3.<b>geoTwoPointEquidistantUsa</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
+
+[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/twoPointEquidistantUsa.png" width="480" height="250">](https://observablehq.com/@d3/two-point-equidistant)
+
+The two-point equidistant projection with points [-158°, 21.5°] and [-77°, 39°], approximately representing Honolulu, HI and Washington, D.C.
+
+### New projections
 
 New projections are introduced:
 
