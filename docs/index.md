@@ -1,3 +1,7 @@
+---
+theme: alt
+---
+
 # d3-geo-polygon
 
 Clipping and geometric operations for spherical polygons.
@@ -64,7 +68,7 @@ Defines a new polyhedral projection. The *tree* is a spanning tree of polygon fa
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/polyhedralButterfly-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/polyhedralButterfly-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/polyhedralButterfly.png">
 </picture>](https://observablehq.com/@d3/polyhedral-gnomonic)
 
 The gnomonic butterfly projection.
@@ -73,7 +77,7 @@ The gnomonic butterfly projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/polyhedralCollignon-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/polyhedralCollignon-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/polyhedralCollignon.png">
 </picture>](https://www.jasondavies.com/maps/collignon-butterfly/)
 
 The Collignon butterfly projection.
@@ -82,7 +86,7 @@ The Collignon butterfly projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/polyhedralWaterman-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/polyhedralWaterman-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/polyhedralWaterman.png">
 </picture>](https://www.jasondavies.com/maps/waterman-butterfly/)
 
 A butterfly projection inspired by Steve Waterman’s design.
@@ -91,7 +95,7 @@ A butterfly projection inspired by Steve Waterman’s design.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/berghaus-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/berghaus-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/berghaus.png">
 </picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 The Berghaus projection.
@@ -100,7 +104,7 @@ The Berghaus projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/gingery-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/gingery-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/gingery.png">
 </picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 The Gingery projection.
@@ -109,7 +113,7 @@ The Gingery projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/healpix-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/healpix-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/healpix.png">
 </picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 The HEALPix projection.
@@ -118,7 +122,7 @@ The HEALPix projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/interruptedBoggs-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/interruptedBoggs-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/interruptedBoggs.png">
 </picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 Bogg’s interrupted eumorphic projection.
@@ -127,7 +131,7 @@ Bogg’s interrupted eumorphic projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/interruptedHomolosine-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/interruptedHomolosine-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/interruptedHomolosine.png">
 </picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 Goode’s interrupted homolosine projection.
@@ -136,7 +140,7 @@ Goode’s interrupted homolosine projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/interruptedMollweide-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/interruptedMollweide-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/interruptedMollweide.png">
 </picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 Goode’s interrupted Mollweide projection.
@@ -145,7 +149,7 @@ Goode’s interrupted Mollweide projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/interruptedMollweideHemispheres-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/interruptedMollweideHemispheres-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/interruptedMollweideHemispheres.png">
 </picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 The Mollweide projection interrupted into two (equal-area) hemispheres.
@@ -154,7 +158,7 @@ The Mollweide projection interrupted into two (equal-area) hemispheres.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/interruptedSinuMollweide-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/interruptedSinuMollweide-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/interruptedSinuMollweide.png">
 </picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 Alan K. Philbrick’s interrupted sinu-Mollweide projection.
@@ -163,7 +167,7 @@ Alan K. Philbrick’s interrupted sinu-Mollweide projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/interruptedSinusoidal-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/interruptedSinusoidal-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/interruptedSinusoidal.png">
 </picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 An interrupted sinusoidal projection with asymmetrical lobe boundaries.
@@ -185,7 +189,7 @@ The .<b>parents</b>([<i>parents</i>]), .<b>polygons</b>([<i>polygons</i>]), .<b>
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/cubic-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/cubic-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/cubic.png">
 </picture>](https://observablehq.com/@fil/cubic-projections)
 
 The cubic projection.
@@ -194,7 +198,7 @@ The cubic projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/dodecahedral-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/dodecahedral-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/dodecahedral.png">
 </picture>](https://observablehq.com/@fil/dodecahedral-projection)
 
 The pentagonal dodecahedral projection.
@@ -203,7 +207,7 @@ The pentagonal dodecahedral projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/rhombic-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/rhombic-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/rhombic.png">
 </picture>](https://observablehq.com/d/881a8431e638b408)
 
 The rhombic dodecahedral projection.
@@ -212,7 +216,7 @@ The rhombic dodecahedral projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/deltoidal-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/deltoidal-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/deltoidal.png">
 </picture>](https://observablehq.com/d/881a8431e638b408)
 
 The deltoidal hexecontahedral projection.
@@ -221,7 +225,7 @@ The deltoidal hexecontahedral projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/icosahedral-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/icosahedral-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/icosahedral.png">
 </picture>](https://observablehq.com/@fil/icosahedral-projections)
 
 The icosahedral projection.
@@ -230,7 +234,7 @@ The icosahedral projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/airocean-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/airocean-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/airocean.png">
 </picture>](https://observablehq.com/@fil/airocean-projection)
 
 Buckminster Fuller’s Airocean projection (also known as “Dymaxion”), based on a very specific arrangement of the icosahedron which allows continuous continent shapes. Fuller’s triangle transformation, as formulated by Robert W. Gray (and implemented by Philippe Rivière), makes the projection almost equal-area.
@@ -240,7 +244,7 @@ Buckminster Fuller’s Airocean projection (also known as “Dymaxion”), based
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/cahillKeyes-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/cahillKeyes-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/cahillKeyes.png">
 </picture>](https://www.genekeyes.com/)
 
 The Cahill-Keyes projection, designed by Gene Keyes (1975), is built on Bernard J. S. Cahill’s 1909 octant design. Implementation by Mary Jo Graça (2011), ported to D3 by Enrico Spinielli (2013).
@@ -249,7 +253,7 @@ The Cahill-Keyes projection, designed by Gene Keyes (1975), is built on Bernard 
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/imago-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/imago-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/imago.png">
 </picture>](https://kunimune.home.blog/2017/11/23/the-secrets-of-the-authagraph-revealed/)
 
 The Imago projection, engineered by Justin Kunimune (2017), is inspired by Hajime Narukawa’s AuthaGraph design (1999).
@@ -267,7 +271,7 @@ Horizontal shift. Defaults to 1.16.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/tetrahedralLee-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/tetrahedralLee-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/tetrahedralLee.png">
 </picture>](https://observablehq.com/@d3/lees-tetrahedral)
 
 Lee’s tetrahedral conformal projection.
@@ -281,7 +285,7 @@ Default aspect uses _projection_.rotate([30, 180]) and has the North Pole at the
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/cox-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/cox-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/cox.png">
 </picture>](https://visionscarto.net/cox-conformal-projection)
 
 The Cox conformal projection.
@@ -291,7 +295,7 @@ The Cox conformal projection.
 
 [<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./snapshots/complexLog-dark.png">
-  <img width="480" height="250" alt="world map" src="./snapshots/complexLog-light.png">
+  <img width="480" height="250" alt="world map" src="./snapshots/complexLog.png">
 </picture>](https://cgmi.github.io/complex-log-projection/)
 
 Complex logarithmic view. This projection is based on the papers by Joachim Böttger et al.:

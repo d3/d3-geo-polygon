@@ -3,14 +3,16 @@ import {parseArgs} from "node:util";
 import sharp from "sharp";
 
 const {
-  values: {projection, dark}
+  values: {snapshot}
 } = parseArgs({
-  options: {projection: {type: "string"}, dark: {type: "string"}}
+  options: {snapshot: {type: "string"}}
 });
+
+const {projection, dark} = snapshot.match(/^(?<projection>.*?)(-(?<dark>dark))?$/).groups;
 
 snapshots[projection]()
   .then(async(canvas) => {
-    if (dark === "dark") {
+    if (dark) {
       const context = canvas.getContext("2d");
       const im = context.getImageData(0, 0, canvas.width, canvas.height);
       const {data} = im
