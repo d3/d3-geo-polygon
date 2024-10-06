@@ -65,8 +65,8 @@
     "pixelmatch": "5",
     "pngjs": "6",
     "rollup": "3",
-    "topojson-client": "3",
     "sharp": "^0.33.5",
+    "topojson-client": "3",
     "world-atlas": "2"
   },
   "scripts": {
