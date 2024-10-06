@@ -74,6 +74,7 @@
     "docs:build": "observable build",
     "docs:deploy": "observable deploy",
     "build": "yarn docs:build",
+    "deploy": "yarn docs:deploy",
     "test": "mocha 'test/**/*-test.js' && eslint src test",
     "prepublishOnly": "rm -rf dist && rollup -c"
   },
