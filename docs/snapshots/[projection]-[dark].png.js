@@ -1,5 +1,6 @@
 import * as snapshots from "../../test/snapshots.js";
 import {parseArgs} from "node:util";
+import sharp from "sharp";
 
 const {
   values: {projection, dark}
@@ -8,7 +9,7 @@ const {
 });
 
 snapshots[projection]()
-  .then((canvas) => {
+  .then(async(canvas) => {
     if (dark === "dark") {
       const context = canvas.getContext("2d");
       const im = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -18,5 +19,5 @@ snapshots[projection]()
       }
       context.putImageData(im, 0, 0);
     }
-    process.stdout.write(canvas.toBuffer("image/png"))
+    process.stdout.write(await sharp(canvas.toBuffer()).png({quality: 60}).toBuffer())
   });

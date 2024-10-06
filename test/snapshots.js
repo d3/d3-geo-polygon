@@ -42,7 +42,7 @@ async function renderWorld(projection, { points, extent, clip = false } = {}) {
       ? { type: "Sphere" }
       : graticule.extent(extent).outline();
   const world = JSON.parse(
-    await readFile("./node_modules/world-atlas/world/50m.json")
+    await readFile("./node_modules/world-atlas/land-50m.json")
   );
   const canvas = new Canvas(width, height);
   const context = canvas.getContext("2d");
