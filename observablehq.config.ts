@@ -2,7 +2,7 @@ import * as snapshots from "./test/snapshots.js";
 
 export default {
   title: "d3-geo-polygon",
-  src: "docs",
+  root: "docs",
   output: "dist/docs",
   async *dynamicPaths() {
     for (const snapshot of Object.keys(snapshots)) {
