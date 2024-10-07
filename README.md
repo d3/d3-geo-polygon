@@ -46,7 +46,7 @@ Given a GeoJSON *polygon* or *multipolygon*, returns a clip function suitable fo
 
 If <i>geometry</i> is specified, sets the clipping polygon to the geometry and returns a new <i>clip</i> function. Otherwise returns the clipping polygon.
 
-<a name="polygon" href="#clipPoint">#</a> clip.<b>clipPoint</b>([<i>clipPoint</i>])
+<a name="clipPoint" href="#clipPoint">#</a> clip.<b>clipPoint</b>([<i>clipPoint</i>])
 
 Whether the projection should clip points. If <i>clipPoint</i> is false, the clip function only clips line and polygon geometries. If <i>clipPoint</i> is true, points outside the clipping polygon are not projected. Typically set to false when the projection covers the whole sphere, to make sure that all points —even those on the edge of the clipping polygon— get projected.
 
