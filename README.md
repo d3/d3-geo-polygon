@@ -6,7 +6,7 @@ Clipping and geometric operations for spherical polygons.
 
 If you use npm, `npm install d3-geo-polygon`. You can also download the [latest release on GitHub](https://github.com/d3/d3-geo-polygon/releases/latest). For vanilla HTML in modern browsers, import d3-geo-polygon from Skypack:
 
-```html
+```html run=false
 <script type="module">
 import {geoCubic} from "https://cdn.skypack.dev/d3-geo-polygon@2";
 const projection = geoCubic();
@@ -15,7 +15,7 @@ const projection = geoCubic();
 
 For legacy environments, you can load d3-geo-projection’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
 
-```html
+```html run=false
 <script src="https://cdn.jsdelivr.net/npm/d3-array@3"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-geo@3"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-geo-polygon@2"></script>
@@ -28,7 +28,7 @@ const projection = d3.geoCubic();
 
 This module introduces a handful of additional projections. It can also be used to clip a projection with an arbitrary polygon:
 
-```html
+```html run=false
 const projection = d3.geoEquirectangular()
   .preclip(d3.geoClipPolygon({
     type: "Polygon",
@@ -68,73 +68,109 @@ Polyhedral projections’ default **clipPoint** depends on whether the clipping 
 
 <a href="#geoPolyhedralButterfly" name="geoPolyhedralButterfly">#</a> d3.<b>geoPolyhedralButterfly</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/butterfly.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/polyhedralButterfly.png" width="480" height="250">](https://observablehq.com/@d3/polyhedral-gnomonic)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralButterfly-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralButterfly.png">
+</picture>](https://observablehq.com/@d3/polyhedral-gnomonic)
 
 The gnomonic butterfly projection.
 
 <a href="#geoPolyhedralCollignon" name="geoPolyhedralCollignon">#</a> d3.<b>geoPolyhedralCollignon</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/collignon.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/polyhedralCollignon.png" width="480" height="250">](https://www.jasondavies.com/maps/collignon-butterfly/)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralCollignon-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralCollignon.png">
+</picture>](https://www.jasondavies.com/maps/collignon-butterfly/)
 
 The Collignon butterfly projection.
 
 <a href="#geoPolyhedralWaterman" name="geoPolyhedralWaterman">#</a> d3.<b>geoPolyhedralWaterman</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/waterman.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/polyhedralWaterman.png" width="480" height="250">](https://www.jasondavies.com/maps/waterman-butterfly/)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralWaterman-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralWaterman.png">
+</picture>](https://www.jasondavies.com/maps/waterman-butterfly/)
 
 A butterfly projection inspired by Steve Waterman’s design.
 
 <a href="#geoBerghaus" name="geoBerghaus">#</a> d3.<b>geoBerghaus</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/berghaus.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/berghaus-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/berghaus.png">
+</picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 The Berghaus projection.
 
 <a href="#geoGingery" name="geoGingery">#</a> d3.<b>geoGingery</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/gingery.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/gingery-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/gingery.png">
+</picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 The Gingery projection.
 
 <a href="#geoHealpix" name="geoHealpix">#</a> d3.<b>geoHealpix</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/healpix.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/healpix-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/healpix.png">
+</picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 The HEALPix projection.
 
 <a href="#geoInterruptedBoggs" name="geoInterruptedBoggs">#</a> d3.<b>geoInterruptedBoggs</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedBoggs.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedBoggs-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedBoggs.png">
+</picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 Bogg’s interrupted eumorphic projection.
 
 <a href="#geoInterruptedHomolosine" name="geoInterruptedHomolosine">#</a> d3.<b>geoInterruptedHomolosine</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedHomolosine.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedHomolosine-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedHomolosine.png">
+</picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 Goode’s interrupted homolosine projection.
 
 <a href="#geoInterruptedMollweide" name="geoInterruptedMollweide">#</a> d3.<b>geoInterruptedMollweide</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedMollweide.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedMollweide-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedMollweide.png">
+</picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 Goode’s interrupted Mollweide projection.
 
 <a href="#geoInterruptedMollweideHemispheres" name="geoInterruptedMollweideHemispheres">#</a> d3.<b>geoInterruptedMollweideHemispheres</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedMollweideHemispheres.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedMollweideHemispheres-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedMollweideHemispheres.png">
+</picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 The Mollweide projection interrupted into two (equal-area) hemispheres.
 
 <a href="#geoInterruptedSinuMollweide" name="geoInterruptedSinuMollweide">#</a> d3.<b>geoInterruptedSinuMollweide</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedSinuMollweide.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedSinuMollweide-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedSinuMollweide.png">
+</picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 Alan K. Philbrick’s interrupted sinu-Mollweide projection.
 
 <a href="#geoInterruptedSinusoidal" name="geoInterruptedSinusoidal">#</a> d3.<b>geoInterruptedSinusoidal</b> · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/interruptedSinusoidal.png" width="480" height="250">](https://observablehq.com/@d3/interrupted-clipped)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedSinusoidal-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/interruptedSinusoidal.png">
+</picture>](https://observablehq.com/@d3/interrupted-clipped)
 
 An interrupted sinusoidal projection with asymmetrical lobe boundaries.
 
@@ -144,7 +180,10 @@ The two-point equidistant projection, displaying 99.9996% of the sphere thanks t
 
 <a href="#geoTwoPointEquidistantUsa" name="geoTwoPointEquidistantUsa">#</a> d3.<b>geoTwoPointEquidistantUsa</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/reclip.js)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/twoPointEquidistantUsa.png" width="480" height="250">](https://observablehq.com/@d3/two-point-equidistant)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/twoPointEquidistantUsa-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/twoPointEquidistantUsa.png">
+</picture>](https://observablehq.com/@d3/two-point-equidistant)
 
 The two-point equidistant projection with points [-158°, 21.5°] and [-77°, 39°], approximately representing Honolulu, HI and Washington, D.C.
 
@@ -164,50 +203,74 @@ The .<b>parents</b>([<i>parents</i>]), .<b>polygons</b>([<i>polygons</i>]), .<b>
 
 <a href="#geoCubic" name="geoCubic">#</a> d3.<b>geoCubic</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/cubic.js), [Examples](https://observablehq.com/@fil/cubic-projections)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/cubic.png" width="480" height="250">](https://observablehq.com/@fil/cubic-projections)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/cubic-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/cubic.png">
+</picture>](https://observablehq.com/@fil/cubic-projections)
 
 The cubic projection.
 
 <a href="#geoDodecahedral" name="geoDodecahedral">#</a> d3.<b>geoDodecahedral</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/dodecahedral.js), [Examples](https://observablehq.com/@fil/dodecahedral-projection)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/dodecahedral.png" width="480" height="250">](https://observablehq.com/@fil/dodecahedral-projection)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/dodecahedral-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/dodecahedral.png">
+</picture>](https://observablehq.com/@fil/dodecahedral-projection)
 
 The pentagonal dodecahedral projection.
 
 <a href="#geoRhombic" name="geoRhombic">#</a> d3.<b>geoRhombic</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/rhombic.js), [Examples](https://observablehq.com/d/881a8431e638b408)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/rhombic.png" width="480" height="250">](https://observablehq.com/d/881a8431e638b408)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/rhombic-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/rhombic.png">
+</picture>](https://observablehq.com/d/881a8431e638b408)
 
 The rhombic dodecahedral projection.
 
 <a href="#geoDeltoidal" name="geoDeltoidal">#</a> d3.<b>geoDeltoidal</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/deltoidal.js), [Examples](https://observablehq.com/d/881a8431e638b408)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/deltoidal.png" width="480" height="250">](https://observablehq.com/d/881a8431e638b408)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/deltoidal-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/deltoidal.png">
+</picture>](https://observablehq.com/d/881a8431e638b408)
 
 The deltoidal hexecontahedral projection.
 
 <a href="#geoIcosahedral" name="geoIcosahedral">#</a> d3.<b>geoIcosahedral</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/icosahedral.js), [Examples](https://observablehq.com/@fil/icosahedral-projections)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/icosahedral.png" width="480" height="250">](https://observablehq.com/@fil/icosahedral-projections)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/icosahedral-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/icosahedral.png">
+</picture>](https://observablehq.com/@fil/icosahedral-projections)
 
 The icosahedral projection.
 
 <a href="#geoAirocean" name="geoAirocean">#</a> d3.<b>geoAirocean</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/airocean.js), [Examples](https://observablehq.com/@fil/airocean-projection)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/airocean.png" width="480" height="250">](https://observablehq.com/@fil/airocean-projection)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/airocean-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/airocean.png">
+</picture>](https://observablehq.com/@fil/airocean-projection)
 
 Buckminster Fuller’s Airocean projection (also known as “Dymaxion”), based on a very specific arrangement of the icosahedron which allows continuous continent shapes. Fuller’s triangle transformation, as formulated by Robert W. Gray (and implemented by Philippe Rivière), makes the projection almost equal-area.
 
 <a href="#geoCahillKeyes" name="geoCahillKeyes">#</a> d3.<b>geoCahillKeyes</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/cahillKeyes.js), [Examples](https://observablehq.com/@d3/cahill-keyes)
 <br><a href="#geoCahillKeyesRaw" name="geoCahillKeyesRaw">#</a> d3.<b>geoCahillKeyes</b>
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/cahillKeyes.png" width="480" height="250">](http://www.genekeyes.com/)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/cahillKeyes-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/cahillKeyes.png">
+</picture>](https://www.genekeyes.com/)
 
 The Cahill-Keyes projection, designed by Gene Keyes (1975), is built on Bernard J. S. Cahill’s 1909 octant design. Implementation by Mary Jo Graça (2011), ported to D3 by Enrico Spinielli (2013).
 
 <a href="#geoImago" name="geoImago">#</a> d3.<b>geoImago</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/imago.js), [Examples](https://observablehq.com/@fil/the-imago-projection)
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/imago.png" width="480" height="250">](https://kunimune.home.blog/2017/11/23/the-secrets-of-the-authagraph-revealed/)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/imago-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/imago.png">
+</picture>](https://kunimune.home.blog/2017/11/23/the-secrets-of-the-authagraph-revealed/)
 
 The Imago projection, engineered by Justin Kunimune (2017), is inspired by Hajime Narukawa’s AuthaGraph design (1999).
 
@@ -222,7 +285,10 @@ Horizontal shift. Defaults to 1.16.
 <a href="#geoTetrahedralLee" name="geoTetrahedralLee">#</a> d3.<b>geoTetrahedralLee</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/tetrahedralLee.js), [Examples](https://observablehq.com/@fil/lee-projection)
 <br><a href="#geoLeeRaw" name="geoLeeRaw">#</a> d3.<b>geoLeeRaw</b>
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/tetrahedralLee.png" width="480" height="250">](https://observablehq.com/@d3/lees-tetrahedral)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/tetrahedralLee-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/tetrahedralLee.png">
+</picture>](https://observablehq.com/@d3/lees-tetrahedral)
 
 Lee’s tetrahedral conformal projection.
 
@@ -233,14 +299,20 @@ Default aspect uses _projection_.rotate([30, 180]) and has the North Pole at the
 <a href="#geoCox" name="geoCox">#</a> d3.<b>geoCox</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/cox.js), [Examples](https://observablehq.com/@fil/cox-conformal-projection-in-a-triangle)
 <br><a href="#geoCoxRaw" name="geoCoxRaw">#</a> d3.<b>geoCoxRaw</b>
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/cox.png" width="480" height="250">](https://visionscarto.net/cox-conformal-projection)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/cox-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/cox.png">
+</picture>](https://visionscarto.net/cox-conformal-projection)
 
 The Cox conformal projection.
 
 <a href="#geoComplexLog" name="geoComplexLog">#</a> d3.<b>geoComplexLog</b>([<i>planarProjectionRaw</i>[<i>, cutoffLatitude</i>]]) · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/complexLog.js), [Example](https://cgmi.github.io/complex-log-projection/)
 <br><a href="#geoComplexLogRaw" name="geoComplexLogRaw">#</a> d3.<b>geoComplexLogRaw</b>([<i>planarProjectionRaw</i>])
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo-polygon/main/test/snapshots/complexLog.png" width="480" height="250">](https://cgmi.github.io/complex-log-projection/)
+[<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/complexLog-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/complexLog.png">
+</picture>](https://cgmi.github.io/complex-log-projection/)
 
 Complex logarithmic view. This projection is based on the papers by Joachim Böttger et al.:
 
