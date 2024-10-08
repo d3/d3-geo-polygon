@@ -2,6 +2,25 @@
 
 Clipping and geometric operations for spherical polygons.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/dodecahedral-dark.png">
+  <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/dodecahedral.png">
+</picture>
+
+```html run=false
+const projection = geoDodecahedral();
+```
+
+This module introduces a dozen projections that need polygon clipping. It can also be used to clip a projection with an arbitrary polygon:
+
+```html run=false
+const projection = geoEquirectangular()
+    .preclip(geoClipPolygon({
+      type: "Polygon",
+      coordinates: [[[-10, -10], [-10, 10], [10, 10], [10, -10], [-10, -10]]]
+    }));
+```
+
 ## Installing
 
 If you use npm, `npm install d3-geo-polygon`. You can also download the [latest release on GitHub](https://github.com/d3/d3-geo-polygon/releases/latest). For vanilla HTML in modern browsers, import d3-geo-polygon from Skypack:
@@ -26,15 +45,12 @@ const projection = d3.geoCubic();
 </script>
 ```
 
-This module introduces a handful of additional projections. It can also be used to clip a projection with an arbitrary polygon:
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://observablehq.observablehq.cloud/oss-analytics/d3-geo-polygon/downloads-dark.svg">
+  <img alt="Daily downloads of d3-geo-polygon" src="https://observablehq.observablehq.cloud/oss-analytics/d3-geo-polygon/downloads.svg">
+</picture>
 
-```html run=false
-const projection = d3.geoEquirectangular()
-  .preclip(d3.geoClipPolygon({
-    type: "Polygon",
-    coordinates: [[[-10, -10], [-10, 10], [10, 10], [10, -10], [-10, -10]]]
-  }));
-```
+<sub>Daily downloads of d3-geo-polygon · [oss-analytics](https://observablehq.observablehq.cloud/oss-analytics/)</sub>
 
 ## API Reference
 
