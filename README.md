@@ -50,7 +50,7 @@ const projection = d3.geoCubic();
   <img alt="Daily downloads of d3-geo-polygon" src="https://observablehq.observablehq.cloud/oss-analytics/d3-geo-polygon/downloads.svg">
 </picture>
 
-<sub>Daily downloads of d3-geo-polygon · [oss-analytics](https://observablehq.observablehq.cloud/oss-analytics/)</sub>
+<sub>Daily downloads of d3-geo-polygon · [oss-analytics](https://observablehq.observablehq.cloud/oss-analytics/@d3/d3-geo-polygon)</sub>
 
 ## API Reference
 
