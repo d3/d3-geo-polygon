@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
     steps:
       - uses: step-security/wait-for-secrets@v1
         id: wait-for-secrets
