@@ -12,6 +12,13 @@ jobs:
       contents: read
       packages: write
     steps:
+      - uses: step-security/wait-for-secrets@v1
+        id: wait-for-secrets
+        with:
+          secrets: |
+            OTP: 
+              name: 'OTP to publish package'
+              description: 'OTP from authenticator app'
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -20,6 +27,4 @@ jobs:
           cache: 'yarn'
       - run: yarn --frozen-lockfile
       - run: yarn test
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish --otp ${{ steps.wait-for-secrets.outputs.OTP }}
