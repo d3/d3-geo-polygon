@@ -54,9 +54,9 @@ const projection = d3.geoCubic();
 
 ## API Reference
 
-<a name="geoClipPolygon" href="#geoClipPolygon">#</a> d3.<b>geoClipPolygon</b>(<i>polygon</i>) · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/clip/polygon.js), [Examples](https://observablehq.com/@mbostock/spherical-clipping)
+<a name="geoClipPolygon" href="#geoClipPolygon">#</a> d3.<b>geoClipPolygon</b>(<i>polygon</i>) · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/clip/polygon.js), [Examples](https://observablehq.com/@d3/spherical-clipping)
 
-Given a GeoJSON *polygon* or *multipolygon*, returns a clip function suitable for [_projection_.preclip](https://github.com/d3/d3-geo#preclip).
+Given a GeoJSON *polygon* or *multipolygon*, returns a clip function suitable for [_projection_.preclip](https://d3js.org/d3-geo/projection#projection_preclip).
 
 <a name="polygon" href="#polygon">#</a> clip.<b>polygon</b>([<i>geometry</i>])
 
