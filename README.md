@@ -7,13 +7,13 @@ Clipping and geometric operations for spherical polygons.
   <img width="480" height="250" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/dodecahedral.png">
 </picture>
 
-```html run=false
+```js run=false
 const projection = geoDodecahedral();
 ```
 
 This module introduces a dozen projections that need polygon clipping. It can also be used to clip a projection with an arbitrary polygon:
 
-```html run=false
+```js run=false
 const projection = geoEquirectangular()
     .preclip(geoClipPolygon({
       type: "Polygon",
