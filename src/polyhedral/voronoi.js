@@ -12,7 +12,10 @@ import polyhedral from "./index.js";
 const faceProjection0 = (face) => gnomonic()
   .scale(1)
   .translate([0, 0])
-  .rotate([-face.site[0], -face.site[1]]);
+  .rotate([
+    Math.abs(face.site[1]) > 89.99999999 ? 0 : -face.site[0],
+    -face.site[1]
+  ]);
 
 export default function(
   parents = [],
