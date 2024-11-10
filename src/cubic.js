@@ -1,7 +1,7 @@
 /*
  * Cubic map
  *
- * Implemented for D3.js by Enrico Spinielli (2017) and Philippe Rivière (2017, 2018)
+ * Implemented for D3.js by Enrico Spinielli (2017) and Philippe Rivière (2017—2024)
  *
  */
 import voronoi from "./polyhedral/voronoi.js";
@@ -38,7 +38,6 @@ export default function() {
   return voronoi()
     .polygons(polygons)
     .parents(parents)
-    .angle(0)
     .scale(96.8737)
     .center([135, -45])
     .rotate([120,0]);
