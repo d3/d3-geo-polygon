@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload the output directory
-          path: './dist'
+          path: './dist/docs'
 
   # Deployment job
   deploy:
