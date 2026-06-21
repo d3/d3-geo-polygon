@@ -63,6 +63,7 @@
     "@types/node": "^26.0.0",
     "canvas": "3",
     "eslint": "10",
+    "eslint-formatter-compact": "^9.0.1",
     "mocha": "11",
     "pixelmatch": "7",
     "pngjs": "7",
