@@ -46,11 +46,9 @@ async function renderWorld(projection, { points, extent, clip = false } = {}) {
   );
   const canvas = new Canvas(width, height);
   const context = canvas.getContext("2d");
-  const path = geoPath(projection, context);
   context.fillStyle = "#fff";
-  context.beginPath();
-  path(outline);
-  context.fill();
+  context.fillRect(0, 0, width, height);
+  const path = geoPath(projection, context);
   context.save();
   if (clip) {
     context.beginPath();
