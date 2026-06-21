@@ -10,7 +10,7 @@ const {
 
 const {projection, dark} = snapshot.match(/^(?<projection>.*?)(-(?<dark>dark))?$/).groups;
 
-snapshots[projection]()
+snapshots[projection]?.()
   .then(async(canvas) => {
     if (dark) {
       const context = canvas.getContext("2d");

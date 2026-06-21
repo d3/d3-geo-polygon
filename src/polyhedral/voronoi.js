@@ -1,9 +1,5 @@
-import {
-  geoCentroid as centroid,
-  geoGnomonic as gnomonic,
-  geoDistance
-} from "d3-geo";
-import { degrees } from "../math.js";
+import {geoCentroid as centroid, geoGnomonic as gnomonic, geoDistance} from "d3-geo";
+import {degrees} from "../math.js";
 import polyhedral from "./index.js";
 
 // it is possible to pass a specific projection on each face

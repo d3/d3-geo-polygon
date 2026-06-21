@@ -179,7 +179,6 @@ export function cahillKeyesRaw(mg) {
     lT = lengthTorridSegment(m);
     lM = lengthMiddleSegment(m);
     l = p * (lT + lM + lF) / 73;
-    pointV = [0, 0];
     CK.pointC = [0, 0];
     CK.radius = 0;
 
@@ -245,10 +244,10 @@ export function cahillKeyesRaw(mg) {
       c =
         xc * xc + yc * yc + x1 * x1 + y1 * y1 - 2 * (xc * x1 + yc * y1) - r * r,
       d = b * b - 4 * a * c,
-      u1 = 0,
-      u2 = 0,
-      x = 0,
-      y = 0;
+      u1,
+      u2,
+      x,
+      y;
     if (a === 0) {
       return [0, [0, 0]];
     } else if (d < 0) {
@@ -332,8 +331,8 @@ export function cahillKeyesRaw(mg) {
   function parallel73(m) {
     let p73 = [0, 0],
       jF = jointF(m),
-      lF = 0,
-      xy = [0, 0];
+      lF,
+      xy;
     if (m <= 30) {
       p73[0] = CK.pointA[0] + CK.lengthAP73 * cos(m * radians);
       p73[1] = CK.pointA[1] + CK.lengthAP73 * sin(m * radians);
