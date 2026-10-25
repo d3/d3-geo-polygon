@@ -7,12 +7,13 @@ import {
   geoIcosahedral,
   geoImago,
   geoImagoBlock,
+  geoPolyhedralCollignon,
   geoTetrahedralLee,
 } from "../src/index.js";
 import { assertProjectionEqual } from "./asserts.js";
 
 it("inverse polyhedrals", function () {
-  [geoAirocean(), geoCubic(), geoIcosahedral(), geoDodecahedral()].forEach(
+  [geoAirocean(), geoCubic(), geoIcosahedral(), geoDodecahedral(), geoPolyhedralCollignon()].forEach(
     function (projection) {
       [
         [-23, 12],

@@ -10,7 +10,7 @@ export function collignonRaw(lambda, phi) {
 }
 
 collignonRaw.invert = function(x, y) {
-  const lambda = (y / sqrtPi - 1);
+  const lambda = (1 - y / sqrtPi);
   return [lambda ? x * sqrt(pi) / lambda / 2 : 0, asin(1 - lambda ** 2)];
 };
 
