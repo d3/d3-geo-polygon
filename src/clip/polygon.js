@@ -14,17 +14,22 @@ export default function (geometry) {
     if (geometry.type === "Polygon") geometry = {type: "MultiPolygon", coordinates: [geometry.coordinates]};
     if (geometry.type !== "MultiPolygon") return clipNone;
     const clips = geometry.coordinates.map((polygon) => {
-      polygon = polygon.map(ringRadians);
-      const pointVisible = visible(polygon);
-      const segments = ringSegments(polygon[0]); // todo holes?
-      return clip(
-        pointVisible,
-        clipLine(segments, pointVisible),
-        interpolate(segments, polygon),
-        polygon[0][0],
-        clipPolygonSort,
-        {clipPoint}
-      );
+      const rings = polygon.map((ring) => {
+        ring = ringRadians(ring);
+        const pointVisible = visible([ring]);
+        const segments = ringSegments(ring);
+        return clip(
+          pointVisible,
+          clipLine(segments, pointVisible),
+          interpolate(segments, [ring]),
+          ring[0],
+          clipPolygonSort,
+          {clipPoint}
+        );
+      });
+      // Hole rings have the opposite winding, so intersecting their visible
+      // regions with the exterior removes the holes.
+      return (stream) => rings.reduceRight((sink, ring) => ring(sink), stream);
     });
 
     function clipPolygon(stream) {
@@ -84,13 +89,11 @@ function clipPolygonSort(a, b) {
 function interpolate(segments, polygon) {
   return (from, to, direction, stream) => {
     if (from == null) {
-      stream.polygonStart();
       polygon.forEach((ring) => {
         stream.lineStart();
-        ring.forEach((point) => stream.point(point[0], point[1]));
+        ring.slice(0, -1).forEach((point) => stream.point(point[0], point[1]));
         stream.lineEnd();
       });
-      stream.polygonEnd();
     } else if (
       from.index !== to.index &&
       from.index != null &&
