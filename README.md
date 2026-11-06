@@ -99,19 +99,19 @@ The .<b>parents</b>([<i>parents</i>]), .<b>polygons</b>([<i>polygons</i>]), .<b>
 
 The cubic projection.
 
-<a href="#geoDodecahedral" name="geoDodecahedral">#</a> d3.<b>geoDodecahedral</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/dodecahedral.js), [Examples](https://observablehq.com/@fil/dodecahedral-projection)
+<a href="#geoDodecahedral" name="geoDodecahedral">#</a> d3.<b>geoDodecahedral</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/dodecahedral.js), [Examples](https://observablehq.com/@fil/dodecahedral-projection)
 
 [<picture><source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/dodecahedral-dark.png"><img width="480" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/dodecahedral.png"></picture>](https://observablehq.com/@fil/dodecahedral-projection)
 
 The pentagonal dodecahedral projection.
 
-<a href="#geoRhombic" name="geoRhombic">#</a> d3.<b>geoRhombic</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/rhombic.js), [Examples](https://observablehq.com/d/881a8431e638b408)
+<a href="#geoRhombic" name="geoRhombic">#</a> d3.<b>geoRhombic</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/rhombic.js), [Examples](https://observablehq.com/d/881a8431e638b408)
 
 [<picture><source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/rhombic-dark.png"><img width="480" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/rhombic.png"></picture>](https://observablehq.com/d/881a8431e638b408)
 
 The rhombic dodecahedral projection.
 
-<a href="#geoDeltoidal" name="geoDeltoidal">#</a> d3.<b>geoDeltoidal</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/deltoidal.js), [Examples](https://observablehq.com/d/881a8431e638b408)
+<a href="#geoDeltoidal" name="geoDeltoidal">#</a> d3.<b>geoDeltoidal</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/deltoidal.js), [Examples](https://observablehq.com/d/881a8431e638b408)
 
 [<picture><source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/deltoidal-dark.png"><img width="480" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/deltoidal.png"></picture>](https://observablehq.com/d/881a8431e638b408)
 
@@ -203,19 +203,19 @@ Polyhedral projections’ default **clipPoint** depends on whether the clipping 
 
 <a href="#geoPolyhedral_tree" name="geoPolyhedral_tree">#</a> <i>polyhedral</i>.<b>tree</b>() returns the spanning tree of the polyhedron, from which one can infer the faces’ centers, polygons, shared edges etc.
 
-<a href="#geoPolyhedralButterfly" name="geoPolyhedralButterfly">#</a> d3.<b>geoPolyhedralButterfly</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/butterfly.js)
+<a href="#geoPolyhedralButterfly" name="geoPolyhedralButterfly">#</a> d3.<b>geoPolyhedralButterfly</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/butterfly.js)
 
 [<picture><source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralButterfly-dark.png"><img width="480" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralButterfly.png"></picture>](https://observablehq.com/@d3/polyhedral-gnomonic)
 
 The gnomonic butterfly projection.
 
-<a href="#geoPolyhedralCollignon" name="geoPolyhedralCollignon">#</a> d3.<b>geoPolyhedralCollignon</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/collignon.js)
+<a href="#geoPolyhedralCollignon" name="geoPolyhedralCollignon">#</a> d3.<b>geoPolyhedralCollignon</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/collignon.js)
 
 [<picture><source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralCollignon-dark.png"><img width="480" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralCollignon.png"></picture>](https://www.jasondavies.com/maps/collignon-butterfly/)
 
 The Collignon butterfly projection.
 
-<a href="#geoPolyhedralWaterman" name="geoPolyhedralWaterman">#</a> d3.<b>geoPolyhedralWaterman</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/polyhedral/waterman.js)
+<a href="#geoPolyhedralWaterman" name="geoPolyhedralWaterman">#</a> d3.<b>geoPolyhedralWaterman</b>() · [Source](https://github.com/d3/d3-geo-polygon/blob/main/src/waterman.js)
 
 [<picture><source media="(prefers-color-scheme: dark)" srcset="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralWaterman-dark.png"><img width="480" alt="world map" src="https://d3.observablehq.cloud/d3-geo-polygon/snapshots/polyhedralWaterman.png"></picture>](https://www.jasondavies.com/maps/waterman-butterfly/)
 
