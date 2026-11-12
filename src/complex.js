@@ -59,7 +59,7 @@ export function complexPow(a, n) {
     if (b === 0 && a >= 0) {
       return [pow(a, n[0]), 0];
     } else if (a === 0) {
-      switch ((n[1] % 4 + 4) % 4) {
+      switch ((n[0] % 4 + 4) % 4) {
         case 0:
           return [pow(b, n[0]), 0];
         case 1:
