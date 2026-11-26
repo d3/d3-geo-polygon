@@ -27,9 +27,9 @@ export function solve2d(f, MAX_ITERATIONS = 40, eps = epsilon2) {
         ty = p[1] - y;
       if (abs(tx) < eps && abs(ty) < eps) break; // we're there!
 
-      // backtrack if we overshot
+      // backtrack if we overshot, or stepped out of the domain of f
       const h = tx * tx + ty * ty;
-      if (h > err2) {
+      if (err2 !== undefined && !(h <= err2)) {
         a -= da /= 2;
         b -= db /= 2;
         continue;
@@ -51,9 +51,11 @@ export function solve2d(f, MAX_ITERATIONS = 40, eps = epsilon2) {
         l = (abs(D) < 0.5 ? 0.5 : 1) / D;
       da = (ty * dxb - tx * dyb) * l;
       db = (tx * dya - ty * dxa) * l;
+      // we're crawling; stop at the last evaluated point, in case f is
+      // discontinuous and the step crosses the discontinuity
+      if (abs(da) < eps && abs(db) < eps) break;
       a += da;
       b += db;
-      if (abs(da) < eps && abs(db) < eps) break; // we're crawling
     }
     return [a, b];
   };
