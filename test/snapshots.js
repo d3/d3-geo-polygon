@@ -30,7 +30,7 @@ import {
   geoPolyhedralWaterman,
   geoTetrahedralLee,
   geoTwoPointEquidistantUsa
-} from "d3-geo-polygon";
+} from "../src/index.js";
 
 const width = 960;
 const height = 500;
