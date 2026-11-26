@@ -79,6 +79,19 @@ it("inverse Imago, tetrahedralLee", function () {
   });
 });
 
+it("inverse tetrahedralLee, near the vertices", function () {
+  const projection = geoTetrahedralLee();
+  const phi = Math.asin(1 / 3) * 180 / Math.PI;
+  for (const d of [1e-4, 1e-2, 0.5]) {
+    for (let x = 0; x < 360; x += 45) assertInverse(projection, [x, d - 90]);
+    for (const [x, y] of [[-30, phi], [-150, phi], [90, phi]]) {
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]) {
+        assertInverse(projection, [x + dx * d, y + dy * d]);
+      }
+    }
+  }
+});
+
 it("inverse Cahill-Keyes", function () {
   [geoCahillKeyes()].forEach(function (projection) {
     [
