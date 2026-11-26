@@ -166,7 +166,7 @@ export function cahillKeyesRaw(mg) {
     CK.lengthBDE = CK.lengthBD + CK.lengthAB; // lengthAB = lengthDE 
     CK.lengthGFE = CK.lengthGF + CK.lengthAB; // lengthAB = lengthFE 
     CK.deltaMEq = CK.lengthGFE / 45;
-    CK.lengthAP75 = (90 - 75) * CK.lengthParallel73to90At0;
+    CK.lengthAP75 = (90 - 75) * 104; // as in zones A and C
     CK.lengthAP73 = CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 73;
     pointU = [
       CK.pointA[0] + CK.lengthAP73 * cos(30 * radians),
