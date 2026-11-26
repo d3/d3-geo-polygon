@@ -1,3 +1,4 @@
+import {it} from "vitest";
 import { assertInDelta } from "./asserts.js";
 import { complexPow } from "../src/complex.js";
 

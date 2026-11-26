@@ -1,6 +1,7 @@
-import assert from "assert";
+import assert from "node:assert";
+import {it} from "vitest";
 import { assertInDelta } from "./asserts.js";
-import { geoIntersectArc } from "../src/index.js";
+import { geoIntersectArc } from "d3-geo-polygon";
 
 it("spherical intersections", function () {
   let e = geoIntersectArc(

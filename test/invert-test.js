@@ -1,4 +1,5 @@
-import assert from "assert";
+import assert from "node:assert";
+import {it} from "vitest";
 import { geoDistance } from "d3-geo";
 import {
   geoAirocean,
@@ -14,7 +15,7 @@ import {
   geoPolyhedralWaterman,
   geoRhombic,
   geoTetrahedralLee,
-} from "../src/index.js";
+} from "d3-geo-polygon";
 import { assertProjectionEqual } from "./asserts.js";
 
 function assertInverse(projection, location, delta = 1e-6) {

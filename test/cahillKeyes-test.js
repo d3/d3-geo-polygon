@@ -1,4 +1,5 @@
-import assert from "assert";
+import assert from "node:assert";
+import {it} from "vitest";
 import { geoCahillKeyesRaw } from "../src/index.js";
 
 it("Cahill-Keyes is continuous at the 75th parallel", function () {

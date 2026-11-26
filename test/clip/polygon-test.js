@@ -1,5 +1,6 @@
-import assert from "assert";
-import { geoClipPolygon } from "../../src/index.js";
+import assert from "node:assert";
+import {it} from "vitest";
+import { geoClipPolygon } from "d3-geo-polygon";
 import { geoEquirectangular, geoPath } from "d3-geo";
 
 it("clipPolygon clips line", () => {

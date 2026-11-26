@@ -1,3 +1,4 @@
+import {it} from "vitest";
 import { assertInDelta } from "./asserts.js";
 import { solve2d } from "../src/newton.js";
 

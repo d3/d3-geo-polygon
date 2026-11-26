@@ -1,5 +1,5 @@
 import { Canvas } from "canvas";
-import { readFile } from "fs/promises";
+import { readFile } from "node:fs/promises";
 import { feature } from "topojson-client";
 import { geoGraticule, geoPath } from "d3-geo";
 import { geoHomolosineRaw } from "d3-geo-projection";
@@ -30,7 +30,7 @@ import {
   geoPolyhedralWaterman,
   geoTetrahedralLee,
   geoTwoPointEquidistantUsa
-} from "../src/index.js";
+} from "d3-geo-polygon";
 
 const width = 960;
 const height = 500;
