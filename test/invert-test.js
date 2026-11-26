@@ -110,6 +110,10 @@ it("inverse Cahill-Keyes, on a grid and on the cuts", function () {
   assertInverseGrid(projection, 10, 5);
   assertInverse(projection, [-110, -35]);
   assertInverse(projection, [160, 10]);
+  for (let x = -180; x < 180; x += 5) {
+    assertInverse(projection, [x, 74.95]);
+    assertInverse(projection, [x, -74.95]);
+  }
 });
 
 it("inverse complex log", function () {
