@@ -6,16 +6,16 @@
  * Ported to D3.js by Enrico Spinielli (2013)
  *
  */
-import { abs, cos, degrees, pi, radians, sin, sign, sqrt, tan } from "./math.js";
+import { abs, cos, degrees, epsilon, hypot, pi, radians, sin, sign, sqrt, tan } from "./math.js";
 import { cartesianCross, cartesianDegrees, cartesianDot, sphericalDegrees } from "./cartesian.js";
 import polyhedral from "./polyhedral/index.js";
-import { geoProjectionMutator as projectionMutator } from "d3-geo";
+import { geoCentroid as centroid, geoProjection as projection } from "d3-geo";
 import {solve2d} from "./newton.js";
 
 export default function(faceProjection) {
   faceProjection =
     faceProjection ||
-    (() => cahillKeyesProjection().scale(1));
+    ((face) => cahillKeyesProjection(face).scale(1));
 
   const octa = [[0, 90], [-90, 0], [0, 0], [90, 0], [180, 0], [0, -90]];
 
@@ -569,6 +569,7 @@ export function cahillKeyesRaw(mg) {
 
   function forward(lambda, phi) {
     // lambda, phi are in radians.
+    if (!(abs(lambda) <= pi && abs(phi) <= pi / 2)) return [NaN, NaN];
     const lon = lambda * degrees,
       lat = phi * degrees,
       res = ll2mp(lon, lat),
@@ -580,13 +581,22 @@ export function cahillKeyesRaw(mg) {
     return mj2g([xy[0], s * xy[1]], o);
   }
 
-  forward.invert = solve2d(forward);
+  const solver = solve2d(forward);
+  forward.invert = function(x, y, lambda = 0, phi = 0) {
+    const p = solver(x, y, lambda, phi);
+    const q = forward(p[0], p[1]);
+    // reject a solution that did not converge
+    return hypot(q[0] - x, q[1] - y) < epsilon * mg ? p : [NaN, NaN];
+  };
 
   return forward;
 }
 
-function cahillKeyesProjection() {
-  const mg = 10000;
-  const m = projectionMutator(cahillKeyesRaw);
-  return m(mg);
+// Newton’s method starts from the face’s centroid
+function cahillKeyesProjection(face) {
+  const raw = cahillKeyesRaw(10000);
+  const [lambda0, phi0] = centroid({type: "MultiPoint", coordinates: face});
+  const forward = (lambda, phi) => raw(lambda, phi);
+  forward.invert = (x, y) => raw.invert(x, y, lambda0 * radians, phi0 * radians);
+  return projection(forward);
 }
