@@ -17,11 +17,11 @@ import {
 } from "../src/index.js";
 import { assertProjectionEqual } from "./asserts.js";
 
-function assertInverseGrid(projection, step, offset = 0) {
+function assertInverseGrid(projection, step, offset = 0, delta = 1e-6) {
   for (let y = -90 + offset; y <= 90; y += step) {
     for (let x = -180 + offset; x <= 180; x += step) {
       const p = projection.invert(projection([x, y]));
-      assert(p && geoDistance(p, [x, y]) < 1e-6, `[${x}, ${y}] inverts to ${p}`);
+      assert(p && geoDistance(p, [x, y]) < delta, `[${x}, ${y}] inverts to ${p}`);
     }
   }
 }
@@ -43,6 +43,10 @@ it("inverse polyhedrals", function () {
 
 it("inverse Collignon, inside the faces", function () {
   assertInverseGrid(geoPolyhedralCollignon(), 2.5, 1.25);
+});
+
+it("inverse airocean, precision", function () {
+  assertInverseGrid(geoAirocean(), 5, 2.5, 1e-10);
 });
 
 it("inverse polyhedrals, on the edges of the faces", function () {

@@ -9,8 +9,9 @@
  * To the extent possible under law, Philippe Rivière has waived all copyright
  * and related or neighboring rights to this implementation. (Public Domain.)
  */
-import { abs, atan2, cos, epsilon, sin, sqrt } from "./math.js";
+import { atan2, cos, sin, sqrt } from "./math.js";
 import { geoGnomonicRaw as gnomonicRaw } from "d3-geo";
+import { solve2d } from "./newton.js";
 
 export default function GrayFullerRaw() {
   const SQRT_3 = sqrt(3);
@@ -33,6 +34,7 @@ export default function GrayFullerRaw() {
   };
 
   // Inverse approximation
+  const solver = solve2d(grayfuller);
   grayfuller.invert = function(x, y) {
     // if the point is out of the triangle, return
     // something meaningless (but far away enough)
@@ -40,17 +42,7 @@ export default function GrayFullerRaw() {
 
     const R = 2.9309936378128416;
     const p = gnomonicRaw.invert(x / R, y / R);
-
-    let j = 0, dx, dy;
-    do {
-      const f = grayfuller(p[0], p[1]);
-      dx = x - f[0],
-      dy = y - f[1];
-      p[0] += 0.2 * dx;
-      p[1] += 0.2 * dy;
-    } while (j++ < 30 && abs(dx) + abs(dy) > epsilon);
-
-    return p;
+    return solver(x, y, p[0], p[1]);
   };
 
   return grayfuller;
