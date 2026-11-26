@@ -141,8 +141,8 @@ export function cahillKeyesRaw(mg) {
 
     CK.lengthMA = 940 / 10000 * CK.lengthMG;
     CK.lengthParallel0to73At0 = CK.lengthMG / 100;
-    CK.lengthParallel73to90At0 =
-      (CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 73) / (90 - 73);
+    CK.lengthParallel75to90At0 =
+      (CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 75) / (90 - 75);
     CK.sin60 = k / 2; // √3/2 
     CK.cos60 = 0.5;
     CK.pointM = [0, 0];
@@ -166,7 +166,7 @@ export function cahillKeyesRaw(mg) {
     CK.lengthBDE = CK.lengthBD + CK.lengthAB; // lengthAB = lengthDE 
     CK.lengthGFE = CK.lengthGF + CK.lengthAB; // lengthAB = lengthFE 
     CK.deltaMEq = CK.lengthGFE / 45;
-    CK.lengthAP75 = (90 - 75) * 104; // as in zones A and C
+    CK.lengthAP75 = (90 - 75) * CK.lengthParallel75to90At0;
     CK.lengthAP73 = CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 73;
     pointU = [
       CK.pointA[0] + CK.lengthAP73 * cos(30 * radians),
@@ -375,15 +375,15 @@ export function cahillKeyesRaw(mg) {
   }
 
   function zoneA(m, p) {
-    return [CK.pointA[0] + (90 - p) * 104, 0];
+    return [CK.pointA[0] + (90 - p) * CK.lengthParallel75to90At0, 0];
   }
 
   function zoneB(m, p) {
-    return [CK.pointG[0] - p * 100, 0];
+    return [CK.pointG[0] - p * CK.lengthParallel0to73At0, 0];
   }
 
   function zoneC(m, p) {
-    const l = 104 * (90 - p);
+    const l = CK.lengthParallel75to90At0 * (90 - p);
     return [
       CK.pointA[0] + l * cos(m * radians),
       CK.pointA[1] + l * sin(m * radians)
@@ -396,7 +396,7 @@ export function cahillKeyesRaw(mg) {
   }
 
   function zoneE(m, p) {
-    const l = 1560 + (75 - p) * 100;
+    const l = CK.lengthAP75 + (75 - p) * CK.lengthParallel0to73At0;
     return [
       CK.pointA[0] + l * cos(m * radians),
       CK.pointA[1] + l * sin(m * radians)
