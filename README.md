@@ -23,13 +23,12 @@ const projection = geoEquirectangular()
 
 ## Installing
 
-In Observable Framework, [import](https://observablehq.com/framework/imports) with the `npm:` protocol:
+In [Observable Notebooks 2.0](https://observablehq.com/notebook-kit/) and Notebook Kit, import d3-geo-polygon with the `npm:` protocol:
 
-```html run=false
-<script type="module">
+```js run=false
 import {geoCubic} from "npm:d3-geo-polygon@2";
+
 const projection = geoCubic();
-</script>
 ```
 
 If you use npm, `npm install d3-geo-polygon`. You can also download the [latest release on GitHub](https://github.com/d3/d3-geo-polygon/releases/latest). For vanilla HTML in modern browsers, import d3-geo-polygon from esm.sh:
