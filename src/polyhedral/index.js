@@ -63,7 +63,7 @@ export default function(tree, face) {
       t = inverse(t);
       point = [t[0] * point[0] + t[1] * point[1] + t[2], (t[3] * point[0] + t[4] * point[1] + t[5])];
     }
-    if (invert && node === faceDegrees(p = invert(point))) return p;
+    if (invert && !isNaN((p = invert(point))[0]) && node === faceDegrees(p)) return p;
     const children = node.children;
     for (let i = 0, n = children && children.length; i < n; ++i) {
       p = faceInvert(children[i], coordinates);
