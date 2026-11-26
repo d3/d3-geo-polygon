@@ -50,11 +50,12 @@ export default function(tree, face) {
   // Naive inverse!  A faster solution would use bounding boxes, or even a
   // polygonal quadtree.
   if (hasInverse(tree)) forward.invert = function(x, y) {
-    const coordinates = faceInvert(tree, [x, -y]);
+    const candidates = [];
+    const coordinates = faceInvert(tree, [x, -y], candidates) || faceInvertNear(candidates);
     return coordinates && (coordinates[0] *= radians, coordinates[1] *= radians, coordinates);
   };
 
-  function faceInvert(node, coordinates) {
+  function faceInvert(node, coordinates, candidates) {
     const invert = node.project.invert;
     let point = coordinates;
     let p;
@@ -63,11 +64,23 @@ export default function(tree, face) {
       t = inverse(t);
       point = [t[0] * point[0] + t[1] * point[1] + t[2], (t[3] * point[0] + t[4] * point[1] + t[5])];
     }
-    if (invert && !isNaN((p = invert(point))[0]) && node === faceDegrees(p)) return p;
+    if (invert && (p = invert(point)) && !isNaN(p[0])) {
+      if (node === faceDegrees(p)) return p;
+      candidates.push([node, p]);
+    }
     const children = node.children;
     for (let i = 0, n = children && children.length; i < n; ++i) {
-      p = faceInvert(children[i], coordinates);
+      p = faceInvert(children[i], coordinates, candidates);
       if (p) return p;
+    }
+  }
+
+  // A point on the edge of a face can be assigned to a neighboring face by
+  // rounding; accept it if it is in the face once moved slightly towards the
+  // face’s centroid.
+  function faceInvertNear(candidates) {
+    for (const [node, p] of candidates) {
+      if (node === faceDegrees(interpolate(p, node.centroid)(epsilon))) return p;
     }
   }
 

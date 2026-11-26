@@ -9,7 +9,10 @@ import {
   geoIcosahedral,
   geoImago,
   geoImagoBlock,
+  geoPolyhedralButterfly,
   geoPolyhedralCollignon,
+  geoPolyhedralWaterman,
+  geoRhombic,
   geoTetrahedralLee,
 } from "../src/index.js";
 import { assertProjectionEqual } from "./asserts.js";
@@ -40,6 +43,17 @@ it("inverse polyhedrals", function () {
 
 it("inverse Collignon, inside the faces", function () {
   assertInverseGrid(geoPolyhedralCollignon(), 2.5, 1.25);
+});
+
+it("inverse polyhedrals, on the edges of the faces", function () {
+  [
+    geoCubic(),
+    geoIcosahedral(),
+    geoPolyhedralButterfly(),
+    geoPolyhedralCollignon(),
+    geoPolyhedralWaterman(),
+    geoRhombic(),
+  ].forEach((projection) => assertInverseGrid(projection, 5));
 });
 
 it("inverse Imago, tetrahedralLee", function () {
