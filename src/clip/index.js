@@ -45,7 +45,11 @@ export default function(pointVisible, clipLine, interpolate, start, sort, {clipP
         if (polygonStarted) sink.polygonEnd(), polygonStarted = false;
         segments = polygon = null;
       },
-      sphere: () => interpolate(null, null, 1, sink)
+      sphere: () => {
+        sink.polygonStart();
+        interpolate(null, null, 1, sink);
+        sink.polygonEnd();
+      }
     };
 
     function point(lambda, phi) {
