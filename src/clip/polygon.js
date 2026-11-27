@@ -1,9 +1,8 @@
 import clip from "./index.js";
-import {abs, atan2, cos, epsilon, pi, radians, sign, sin, sqrt} from "../math.js";
+import {abs, atan2, cos, radians, sign, sin, sqrt} from "../math.js";
 import {cartesian, cartesianCross, cartesianDot, cartesianNormalize, spherical} from "../cartesian.js";
-import {intersectSegment} from "../intersect.js";
+import {intersectNear, intersectSegment} from "../intersect.js";
 import {edgeOrVertexCrossing, equal, loopContains} from "../predicates.js";
-import polygonContains from "../polygonContains.js";
 
 const clipNone = (stream) => stream;
 
@@ -16,13 +15,13 @@ export default function (geometry) {
     if (geometry.type !== "MultiPolygon") return clipNone;
     const clips = geometry.coordinates.map((polygon) => {
       polygon = polygon.map(ringRadians);
-      const pointVisible = visible(polygon);
       const segments = ringSegments(polygon[0]); // todo holes?
       // consistent with the crossings; the ring is clockwise
       const contains = loopContains(segments.map((s) => s.from).reverse());
+      const pointVisible = (lambda, phi) => contains(cartesian([lambda, phi]));
       return clip(
         pointVisible,
-        clipLine(segments, (lambda, phi) => contains(cartesian([lambda, phi]))),
+        clipLine(segments, pointVisible),
         interpolate(segments, polygon),
         polygon[0][0],
         clipPolygonSort,
@@ -132,16 +131,6 @@ function clipPolygonDistance(a, b) {
   return atan2(sqrt(cartesianDot(axb, axb)), cartesianDot(a, b));
 }
 
-function visible(polygon) {
-  return (lambda, phi) => polygonContains(polygon, [lambda, phi]);
-}
-
-// Can segments a and b touch?
-function near(a, b) {
-  const lc = a.l + b.l < pi ? cos(a.l + b.l) - epsilon : -1;
-  return !(cartesianDot(a.from, b.from) < lc || cartesianDot(a.from, b.to) < lc || cartesianDot(a.to, b.from) < lc || cartesianDot(a.to, b.to) < lc);
-}
-
 // Where segments a and b cross: a shared vertex, else the intersection of their
 // great circles, else (if collinear) a point of their overlap.
 function crossingPoint(a, b) {
@@ -185,7 +174,7 @@ function clipLine(segments, pointVisible) {
           const segment = new intersectSegment(point0, point);
           for (let i = 0; i < segments.length; ++i) {
             const s = segments[i];
-            if (near(segment, s) && edgeOrVertexCrossing(point0, point, s.from, s.to)) {
+            if (intersectNear(segment, s) && edgeOrVertexCrossing(point0, point, s.from, s.to)) {
               const intersection = crossingPoint(segment, s);
               const sph = spherical(intersection);
               intersection.distance = clipPolygonDistance(point0, intersection);

@@ -11,18 +11,22 @@ export class intersectSegment {
   }
 }
 
+// Can segments a and b touch?
+export function intersectNear(a, b) {
+  const lc = (a.l + b.l < pi) ? cos(a.l + b.l) - epsilon : -1;
+  return !(cartesianDot(a.from, b.from) < lc
+    || cartesianDot(a.from, b.to) < lc
+    || cartesianDot(a.to, b.from) < lc
+    || cartesianDot(a.to, b.to) < lc);
+}
+
 // >> here a and b are segments processed by intersectSegment
 export function intersect(a, b) {
   if (cartesianEqual(a.from, b.from) || cartesianEqual(a.from, b.to)) return a.from;
   if (cartesianEqual(a.to, b.from) || cartesianEqual(a.to, b.to)) return a.to;
 
   // Slightly faster lookup when there is no intersection
-  const lc = (a.l + b.l < pi) ? cos(a.l + b.l) - epsilon : -1;
-  if (cartesianDot(a.from, b.from) < lc
-  || cartesianDot(a.from, b.to) < lc
-  || cartesianDot(a.to, b.from) < lc
-  || cartesianDot(a.to, b.to) < lc)
-     return;
+  if (!intersectNear(a, b)) return;
 
   const axb = cartesianNormalize(cartesianCross(a.normal, b.normal));
   
