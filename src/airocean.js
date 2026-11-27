@@ -171,9 +171,7 @@ function airoceanRaw(faceProjection) {
     });
 
     function face(lambda, phi) {
-      for (let i = 0; i < faces.length; ++i) {
-        if (faces[i].contains(lambda, phi)) return faces[i];
-      }
+      return faces.find((face) => face.contains(lambda, phi));
     }
 
     // Polyhedral projection

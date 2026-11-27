@@ -1,5 +1,6 @@
 import {geoCentroid as centroid, geoGnomonic as gnomonic} from "d3-geo";
-import {asin, atan2, cos, degrees, max, min, pi, radians, sin} from "./math.js";
+import {pi} from "./math.js";
+import {cartesian, cartesianCross, cartesianDegrees, cartesianDot, sphericalDegrees} from "./cartesian.js";
 import polyhedral from "./polyhedral/index.js";
 import octahedron from "./polyhedral/octahedron.js";
 
@@ -8,17 +9,17 @@ export default function(faceProjection = ((face) => {
   return gnomonic().scale(1).translate([0, 0]).rotate([-c[0], -c[1]]);
 })) {
   const w5 = octahedron.map((face) => {
-    const xyz = face.map(cartesian);
+    const xyz = face.map(cartesianDegrees);
     const n = xyz.length;
     const hexagon = [];
     let a = xyz[n - 1], b;
     for (let i = 0; i < n; ++i) {
       b = xyz[i];
-      hexagon.push(spherical([
+      hexagon.push(sphericalDegrees([
         a[0] * 0.9486832980505138 + b[0] * 0.31622776601683794,
         a[1] * 0.9486832980505138 + b[1] * 0.31622776601683794,
         a[2] * 0.9486832980505138 + b[2] * 0.31622776601683794
-      ]), spherical([
+      ]), sphericalDegrees([
         b[0] * 0.9486832980505138 + a[0] * 0.31622776601683794,
         b[1] * 0.9486832980505138 + a[1] * 0.31622776601683794,
         b[2] * 0.9486832980505138 + a[2] * 0.31622776601683794
@@ -43,9 +44,9 @@ export default function(faceProjection = ((face) => {
         hexagon[(i * 2 + 1) % (2 * n)]
       ]);
       parents.push(j);
-      normals.push(cross(
-        cartesian(hexagon[(i * 2 + 2) % (2 * n)]),
-        cartesian(hexagon[(i * 2 + 1) % (2 * n)])
+      normals.push(cartesianCross(
+        cartesianDegrees(hexagon[(i * 2 + 2) % (2 * n)]),
+        cartesianDegrees(hexagon[(i * 2 + 1) % (2 * n)])
       ));
     }
   });
@@ -61,8 +62,7 @@ export default function(faceProjection = ((face) => {
   });
 
   function face(lambda, phi) {
-    const cosphi = cos(phi);
-    const p = [cosphi * cos(lambda), cosphi * sin(lambda), sin(phi)];
+    const p = cartesian([lambda, phi]);
 
     const hexagon = lambda < -pi / 2 ? phi < 0 ? 6 : 4
         : lambda < 0 ? phi < 0 ? 2 : 0
@@ -71,9 +71,9 @@ export default function(faceProjection = ((face) => {
 
     const n = cornerNormals[hexagon];
 
-    return faces[dot(n[0], p) < 0 ? 8 + 3 * hexagon
-        : dot(n[1], p) < 0 ? 8 + 3 * hexagon + 1
-        : dot(n[2], p) < 0 ? 8 + 3 * hexagon + 2
+    return faces[cartesianDot(n[0], p) < 0 ? 8 + 3 * hexagon
+        : cartesianDot(n[1], p) < 0 ? 8 + 3 * hexagon + 1
+        : cartesianDot(n[2], p) < 0 ? 8 + 3 * hexagon + 2
         : hexagon];
   }
 
@@ -81,38 +81,4 @@ export default function(faceProjection = ((face) => {
     .angle(-30)
     .scale(110.625)
     .center([0, 45]);
-}
-
-function dot(a, b) {
-  let s = 0;
-  for (let i = 0; i < a.length; ++i) s += a[i] * b[i];
-  return s;
-}
-
-function cross(a, b) {
-  return [
-    a[1] * b[2] - a[2] * b[1],
-    a[2] * b[0] - a[0] * b[2],
-    a[0] * b[1] - a[1] * b[0]
-  ];
-}
-
-// Converts 3D Cartesian to spherical coordinates (degrees).
-function spherical(cartesian) {
-  return [
-    atan2(cartesian[1], cartesian[0]) * degrees,
-    asin(max(-1, min(1, cartesian[2]))) * degrees
-  ];
-}
-
-// Converts spherical coordinates (degrees) to 3D Cartesian.
-function cartesian(coordinates) {
-  const lambda = coordinates[0] * radians;
-  const phi = coordinates[1] * radians;
-  const cosphi = cos(phi);
-  return [
-    cosphi * cos(lambda),
-    cosphi * sin(lambda),
-    sin(phi)
-  ];
 }
