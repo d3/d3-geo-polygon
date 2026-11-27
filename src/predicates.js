@@ -1,15 +1,16 @@
 // Exact predicates on the sphere, after S2 (https://github.com/google/s2geometry).
 // Ties are broken by symbolic perturbation, so the tests never contradict each other.
 
+import {fsum} from "d3-array";
 import {cartesianCross, cartesianNormalize} from "./cartesian.js";
 
-// Exact arithmetic after Shewchuk (1997): an expansion is an array of numbers
-// whose sum is exact, with its sign that of the last component.
+// Exact arithmetic: products are split into exact pairs (Dekker), and fsum is
+// exact up to its final rounding, so the sign of its result is exact.
 const eps = 2 ** -53;
 const splitter = 2 ** 27 + 1;
 const errbound3 = (7 + 56 * eps) * eps;
 
-// a * b = x + y exactly (Dekker); returns [y, x]
+// a * b = x + y exactly; returns [y, x]
 function twoProduct(a, b) {
   const x = a * b;
   let c = splitter * a;
@@ -19,29 +20,9 @@ function twoProduct(a, b) {
   return [alo * blo - (x - ahi * bhi - alo * bhi - ahi * blo), x];
 }
 
-// e + b
-function grow(e, b) {
-  const h = [];
-  let q = b;
-  for (const ei of e) {
-    const x = q + ei, bv = x - q, av = x - bv, y = q - av + (ei - bv);
-    if (y) h.push(y);
-    q = x;
-  }
-  if (q) h.push(q);
-  return h;
-}
-
-function expansionSign(e) {
-  return e.length ? Math.sign(e[e.length - 1]) : 0;
-}
-
 // sign(p0 * q1 - p1 * q0)
 function det2(p0, p1, q0, q1) {
-  let e = [];
-  for (const v of twoProduct(p0, q1)) e = grow(e, v);
-  for (const v of twoProduct(p1, q0)) e = grow(e, -v);
-  return expansionSign(e);
+  return Math.sign(fsum([...twoProduct(p0, q1), ...twoProduct(-p1, q0)]));
 }
 
 // sign(a · (b × c))
@@ -56,12 +37,12 @@ function det3(a, b, c) {
     Math.abs(a[2]) * (Math.abs(b0c1) + Math.abs(b1c0));
   if (Math.abs(d) > errbound3 * permanent) return Math.sign(d);
   // six products, each exactly the sum of four numbers
-  let e = [];
+  const terms = [];
   for (const [s, i, j, k] of [[1, 0, 1, 2], [-1, 0, 2, 1], [1, 1, 2, 0], [-1, 1, 0, 2], [1, 2, 0, 1], [-1, 2, 1, 0]]) {
-    const [y, x] = twoProduct(a[i], b[j]);
-    for (const v of [...twoProduct(y, c[k]), ...twoProduct(x, c[k])]) e = grow(e, s * v);
+    const [y, x] = twoProduct(s * a[i], b[j]);
+    terms.push(...twoProduct(y, c[k]), ...twoProduct(x, c[k]));
   }
-  return expansionSign(e);
+  return Math.sign(fsum(terms));
 }
 
 export function equal(a, b) {
