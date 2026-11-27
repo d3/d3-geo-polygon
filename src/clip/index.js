@@ -1,7 +1,7 @@
 import clipBuffer from "./buffer.js";
 import clipRejoin from "./rejoin.js";
 import {geoContains} from "d3-geo";
-import {degrees, epsilon, halfPi} from "../math.js";
+import {abs, degrees, epsilon, halfPi, pi} from "../math.js";
 import {merge} from "d3-array";
 
 export default function(pointVisible, clipLine, interpolate, start, sort, {clipPoint = false} = {}) {
@@ -33,8 +33,8 @@ export default function(pointVisible, clipLine, interpolate, start, sort, {clipP
         clip.lineEnd = lineEnd;
         segments = merge(segments);
         // the rings are in radians, and not closed
-        const rings = polygon.map((ring) => [...ring, ring[0]].map(pointDegrees));
-        const startInside = geoContains({type: "Polygon", coordinates: rings}, pointDegrees(start));
+        const startInside = maybeInside(polygon, start)
+          && geoContains({type: "Polygon", coordinates: polygon.map(ringDegrees)}, pointDegrees(start));
         if (segments.length) {
           if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
           clipRejoin(segments, sort, startInside, interpolate, sink);
@@ -125,6 +125,25 @@ function compareIntersection(a, b) {
        - ((b = b.x)[0] < 0 ? b[1] - halfPi - epsilon : halfPi - b[1]);
 }
 
+// A clockwise (small) polygon whose edges cross neither the point’s longitude
+// nor the antimeridian, nor touch a pole, cannot contain the point.
+function maybeInside(polygon, [x]) {
+  let area = 0;
+  for (const ring of polygon) {
+    let a = ring[ring.length - 1];
+    for (const b of ring) {
+      if ((a[0] - x) * (b[0] - x) <= 0 || abs(b[0] - a[0]) >= pi || abs(b[1]) === halfPi) return true;
+      area += a[0] * b[1] - b[0] * a[1];
+      a = b;
+    }
+  }
+  return area >= 0;
+}
+
 function pointDegrees([x, y]) {
   return [x * degrees, y * degrees];
+}
+
+function ringDegrees(ring) {
+  return [...ring, ring[0]].map(pointDegrees);
 }
