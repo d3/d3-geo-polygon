@@ -26,15 +26,6 @@ export function cartesianCross(a, b) {
   return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 }
 
-// TODO return a
-export function cartesianAddInPlace(a, b) {
-  a[0] += b[0], a[1] += b[1], a[2] += b[2];
-}
-
-export function cartesianScale(vector, k) {
-  return [vector[0] * k, vector[1] * k, vector[2] * k];
-}
-
 export function cartesianNormalize(d) {
   const l = hypot(d[0], d[1], d[2]);
   return [d[0] / l, d[1] / l, d[2] / l];

@@ -1,7 +1,7 @@
+import {pairs} from "d3-array";
 import clip from "./index.js";
 import {abs, atan2, cos, radians, sign, sin, sqrt} from "../math.js";
 import {cartesian, cartesianCross, cartesianDot, cartesianNormalize, spherical} from "../cartesian.js";
-import {intersectSegment} from "../intersect.js";
 import {edgeOrVertexCrossing, equal, loopContains} from "../predicates.js";
 
 const clipNone = (stream) => stream;
@@ -15,7 +15,7 @@ export default function (geometry) {
     if (geometry.type !== "MultiPolygon") return clipNone;
     const clips = geometry.coordinates.map((polygon) => {
       polygon = polygon.map(ringRadians);
-      const segments = ringSegments(polygon[0]); // todo holes?
+      const segments = pairs(polygon[0].map(cartesian), (from, to) => ({from, to, bound: bound(from, to)})); // todo holes?
       // consistent with the crossings; the ring is clockwise
       const contains = loopContains(segments.map((s) => s.from).reverse());
       const pointVisible = (lambda, phi) => contains(cartesian([lambda, phi]));
@@ -66,18 +66,6 @@ function ringRadians(ring) {
   return ring.map((point) => [point[0] * radians, point[1] * radians]);
 }
 
-function ringSegments(ring) {
-  const segments = [];
-  let c0;
-  ring.forEach((point, i) => {
-    const c = cartesian(point);
-    if (i) segments.push(Object.assign(new intersectSegment(c0, c), {bound: bound(c0, c)}));
-    c0 = c;
-    return point;
-  });
-  return segments;
-}
-
 // The bounding sphere of the arc from a to b (unit vectors); its diameter is the chord [a, b].
 function bound(a, b) {
   const u = b[0] - a[0], v = b[1] - a[1], w = b[2] - a[2];
@@ -106,34 +94,14 @@ function interpolate(segments, polygon) {
         stream.lineEnd();
       });
       stream.polygonEnd();
-    } else if (
-      from.index !== to.index &&
-      from.index != null &&
-      to.index != null
-    ) {
-      for (
-        let i = from.index;
-        i !== to.index;
-        i = (i + direction + segments.length) % segments.length
-      ) {
-        const segment = segments[i];
-        const point = spherical(direction > 0 ? segment.to : segment.from);
+    } else if (from.index != null && to.index != null && (from.index !== to.index || from.t > to.t)) {
+      // the vertices from segment from.index to segment to.index (a full turn if equal)
+      const n = segments.length;
+      let i = from.index;
+      do {
+        const point = spherical(direction > 0 ? segments[i].to : segments[i].from);
         stream.point(point[0], point[1]);
-      }
-    } else if (
-      from.index === to.index &&
-      from.t > to.t &&
-      from.index != null &&
-      to.index != null
-    ) {
-      for (let i = 0; i < segments.length; ++i) {
-        const segment =
-          segments[
-            (from.index + i * direction + segments.length) % segments.length
-          ];
-        const point = spherical(direction > 0 ? segment.to : segment.from);
-        stream.point(point[0], point[1]);
-      }
+      } while ((i = (i + direction + n) % n) !== to.index);
     }
   };
 }
@@ -144,19 +112,18 @@ function clipPolygonDistance(a, b) {
   return atan2(sqrt(cartesianDot(axb, axb)), cartesianDot(a, b));
 }
 
-// Where segments a and b cross: a shared vertex, else the intersection of their
+// Where arcs ab and cd cross: a shared vertex, else the intersection of their
 // great circles, else (if collinear) a point of their overlap.
-function crossingPoint(a, b) {
-  for (const p of [a.from, a.to]) if (equal(p, b.from) || equal(p, b.to)) return p.slice();
-  const n = cartesianCross(a.normal, b.normal);
-  if (cartesianDot(n, n) > 1e-24 * cartesianDot(a.normal, a.normal) * cartesianDot(b.normal, b.normal)) {
-    const x = cartesianNormalize(n);
-    return cartesianDot(x, a.from) + cartesianDot(x, a.to) < 0 ? x.map((d) => -d) : x;
+function crossingPoint(a, b, c, d) {
+  for (const p of [a, b]) if (equal(p, c) || equal(p, d)) return p;
+  const m = cartesianCross(a, b), n = cartesianCross(c, d), x = cartesianCross(m, n);
+  if (cartesianDot(x, x) > 1e-24 * cartesianDot(m, m) * cartesianDot(n, n)) {
+    const y = cartesianNormalize(x);
+    return cartesianDot(y, a) + cartesianDot(y, b) < 0 ? y.map((v) => -v) : y;
   }
-  // not s.l, which is inaccurate for short segments
-  const on = (p, s) => clipPolygonDistance(s.from, p) + clipPolygonDistance(p, s.to) <= clipPolygonDistance(s.from, s.to) + 1e-12;
-  for (const p of [b.from, b.to, a.from, a.to]) if (on(p, a) && on(p, b)) return p.slice();
-  return a.to.slice();
+  const on = (p, from, to) => clipPolygonDistance(from, p) + clipPolygonDistance(p, to) <= clipPolygonDistance(from, to) + 1e-12;
+  for (const p of [c, d, a, b]) if (on(p, a, b) && on(p, c, d)) return p;
+  return b;
 }
 
 function clipLine(segments, pointVisible) {
@@ -185,39 +152,21 @@ function clipLine(segments, pointVisible) {
         if (point0) {
           const intersections = [];
           const c = bound(point0, point);
-          let segment;
           for (let i = 0; i < segments.length; ++i) {
             const s = segments[i];
             if (overlap(c, s.bound) && edgeOrVertexCrossing(point0, point, s.from, s.to)) {
-              const intersection = crossingPoint(segment || (segment = new intersectSegment(point0, point)), s);
-              const sph = spherical(intersection);
-              intersection.distance = clipPolygonDistance(point0, intersection);
-              intersection.index = i;
-              intersection.t = clipPolygonDistance(s.from, intersection);
-              intersection[0] = sph[0];
-              intersection[1] = sph[1];
-              delete intersection[2];
-              intersections.push(intersection);
+              const x = crossingPoint(point0, point, s.from, s.to), p = spherical(x);
+              intersections.push({distance: clipPolygonDistance(point0, x), point: [p[0], p[1], i, clipPolygonDistance(s.from, x)]});
             }
           }
           if (intersections.length) {
             clean = 0;
             intersections.sort((a, b) => a.distance - b.distance);
-            for (let i = 0; i < intersections.length; ++i) {
-              const intersection = intersections[i];
+            for (const {point: p} of intersections) {
               v = !v;
-              if (v) {
-                line = [];
-                line.push([
-                  intersection[0],
-                  intersection[1],
-                  intersection.index,
-                  intersection.t
-                ]);
-              } else {
-                const p = [intersection[0], intersection[1], intersection.index, intersection.t];
-                // drop zero-length pieces (the line only touches the polygon)
-                if (line.every((q) => abs(q[0] - p[0]) < 1e-12 && abs(q[1] - p[1]) < 1e-12)) continue;
+              if (v) line = [p];
+              // drop zero-length pieces (the line only touches the polygon)
+              else if (!line.every((q) => abs(q[0] - p[0]) < 1e-12 && abs(q[1] - p[1]) < 1e-12)) {
                 line.push(p);
                 lines.push(line);
               }
@@ -226,7 +175,7 @@ function clipLine(segments, pointVisible) {
           if (v) line.push([lambda, phi]);
         } else {
           v00 = v = pointVisible((lambda00 = lambda), (phi00 = phi));
-          if (v) (line = []), line.push([lambda, phi]);
+          if (v) line = [[lambda, phi]];
         }
         point0 = point;
         v0 = v;
