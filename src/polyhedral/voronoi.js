@@ -1,4 +1,6 @@
-import {geoCentroid as centroid, geoGnomonic as gnomonic, geoDistance} from "d3-geo";
+import {maxIndex} from "d3-array";
+import {geoCentroid as centroid, geoGnomonic as gnomonic} from "d3-geo";
+import {cartesianDegrees, cartesianDot} from "../cartesian.js";
 import {degrees} from "../math.js";
 import polyhedral from "./index.js";
 
@@ -21,6 +23,7 @@ export default function(
 ) {
   if (find === undefined) find = find0;
   let faces = [];
+  let sites = []; // the faces’ sites, as vectors
   function build_tree() {
     // the faces from the polyhedron each yield
     // - face: its vertices
@@ -41,6 +44,8 @@ export default function(
       };
     });
 
+    sites = faces.map((face) => cartesianDegrees(face.site));
+
     // Build a tree of the faces, starting with face 0 (North Pole)
     // which has no parent (-1)
     parents.forEach((d, i) => {
@@ -49,18 +54,10 @@ export default function(
     });
   }
 
-  // a basic function to find the polygon that contains the point
+  // the face with the nearest site
   function find0(lambda, phi) {
-    let d0 = Infinity;
-    let found = -1;
-    for (let i = 0; i < faces.length; i++) {
-      const d = geoDistance(faces[i].site, [lambda, phi]);
-      if (d < d0) {
-        d0 = d;
-        found = i;
-      }
-    }
-    return found;
+    const p = cartesianDegrees([lambda, phi]);
+    return maxIndex(sites, (site) => cartesianDot(site, p));
   }
   
   function faceFind(lambda, phi) {
