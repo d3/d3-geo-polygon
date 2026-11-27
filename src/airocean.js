@@ -10,11 +10,11 @@ import polyhedral from "./polyhedral/index.js";
 import { default as grayFullerRaw } from "./grayfuller.js";
 import {
   geoCentroid as centroid,
-  geoContains as contains,
   geoGnomonic as gnomonic,
   geoProjection as projection
 } from "d3-geo";
-import { range } from "d3-array";
+import { maxIndex, min, range } from "d3-array";
+import { cartesian, cartesianCross, cartesianDegrees, cartesianDot, cartesianNormalize } from "./cartesian.js";
 
 function airoceanRaw(faceProjection) {
   const theta = atan(0.5) * degrees;
@@ -114,19 +114,20 @@ function airoceanRaw(faceProjection) {
           .rotate([-face.centroid[0], -face.centroid[1]]));
 
     const faces = polyhedron.map((face, i) => {
-      const polygon = face.slice();
-      polygon.push(polygon[0]);
-
+      // the edges’ normals, pointing towards the triangle’s opposite vertex
+      const v = face.map(cartesianDegrees);
+      const normals = v.map((a, j) => {
+        const n = cartesianNormalize(cartesianCross(a, v[(j + 1) % 3]));
+        return cartesianDot(n, v[(j + 2) % 3]) < 0 ? n.map((x) => -x) : n;
+      });
+      // the distance (sine) to the face’s nearest edge; negative outside
+      const inside = (p) => min(normals, (n) => cartesianDot(n, p));
       return {
         face: face,
         site: face.centroid,
         id: i,
-        contains: function(lambda, phi) {
-          return contains({ type: "Polygon", coordinates: [polygon] }, [
-            lambda * degrees,
-            phi * degrees
-          ]);
-        },
+        inside,
+        contains: (lambda, phi) => inside(cartesian([lambda, phi])) >= 0,
         project: faceProjection(face)
       };
     });
@@ -170,8 +171,10 @@ function airoceanRaw(faceProjection) {
       node && (node.children || (node.children = [])).push(faces[i]);
     });
 
+    // the face that contains the point, or is the nearest
     function face(lambda, phi) {
-      return faces.find((face) => face.contains(lambda, phi));
+      const p = cartesian([lambda, phi]);
+      return faces[maxIndex(faces, (face) => face.inside(p))];
     }
 
     // Polyhedral projection
