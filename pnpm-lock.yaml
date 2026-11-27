@@ -57,6 +57,9 @@ importers:
       topojson-client:
         specifier: ^3.1.0
         version: 3.1.0
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       vitest:
         specifier: ^5.1.0
         version: 5.1.2(@types/node@26.6.11)(jsdom@23.2.0(canvas@3.2.3))(vite@8.4.0(@types/node@26.6.11)(esbuild@0.27.7)(terser@5.51.4)(tsx@4.23.15))
