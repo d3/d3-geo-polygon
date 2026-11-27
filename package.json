@@ -1,6 +1,6 @@
 {
   "name": "d3-geo-polygon",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Clipping and geometric operations for spherical polygons.",
   "homepage": "https://github.com/d3/d3-geo-polygon",
   "repository": {
@@ -39,16 +39,16 @@
   ],
   "type": "module",
   "files": [
-    "dist/**/*.js",
-    "src/**/*.js"
+    "dist/*.js",
+    "dist/*.mjs"
   ],
-  "module": "src/index.js",
-  "main": "src/index.js",
+  "module": "dist/d3-geo-polygon.mjs",
+  "main": "dist/d3-geo-polygon.mjs",
   "jsdelivr": "dist/d3-geo-polygon.min.js",
   "unpkg": "dist/d3-geo-polygon.min.js",
   "exports": {
     "umd": "./dist/d3-geo-polygon.min.js",
-    "default": "./src/index.js"
+    "default": "./dist/d3-geo-polygon.mjs"
   },
   "sideEffects": false,
   "dependencies": {
@@ -59,29 +59,34 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@observablehq/framework": "^1.13.4",
-    "@rollup/plugin-terser": "1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.2",
     "@types/node": "^26.0.0",
-    "canvas": "3",
-    "eslint": "10",
-    "eslint-formatter-compact": "^9.0.1",
-    "mocha": "11",
-    "pixelmatch": "7",
-    "pngjs": "7",
-    "rollup": "4",
+    "canvas": "^3.2.3",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "pixelmatch": "^8.0.0",
+    "pngjs": "^7.0.0",
+    "rollup": "^4.67.4",
     "sharp": "^0.35.2",
-    "topojson-client": "3",
-    "world-atlas": "2"
+    "topojson-client": "^3.1.0",
+    "tsx": "^4.23.15",
+    "vitest": "^5.1.0",
+    "world-atlas": "^2.0.2"
   },
   "scripts": {
     "docs:dev": "observable preview",
     "docs:build": "observable build",
-    "docs:deploy": "observable deploy",
-    "build": "yarn docs:build",
-    "deploy": "yarn docs:deploy",
-    "test": "mocha 'test/**/*-test.js' && eslint src test",
+    "test": "vitest",
+    "lint": "eslint",
     "prepublishOnly": "rm -rf dist && rollup -c"
   },
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "canvas"
+    ]
   }
 }

@@ -7,6 +7,7 @@ import { greatest } from "d3-array";
 import { abs, asin, degrees, sqrt } from "./math.js";
 import {
   complexAdd,
+  complexDivide,
   complexMul,
   complexNorm,
   complexPow,
@@ -15,8 +16,24 @@ import {
 import { solve2d } from "./newton.js";
 import voronoi from "./polyhedral/voronoi.js";
 
+const w = [-1 / 2, sqrt(3) / 2];
+
+// w1 = gamma(1/3) * gamma(1/2) / 3 / gamma(5/6);
+// https://bl.ocks.org/Fil/1aeff1cfda7188e9fbf037d8e466c95c
+const w1 = 1.4021821053254548;
+
+// McIlroy table for G page 16
+const G0 = [
+  1.15470053837925, 0.192450089729875, 0.0481125224324687,
+  0.010309826235529, 3.34114739114366e-4, -1.50351632601465e-3,
+  -1.2304417796231e-3, -6.75190201960282e-4, -2.84084537293856e-4,
+  -8.21205120500051e-5, -1.59257630018706e-6, 1.91691805888369e-5,
+  1.73095888028726e-5, 1.03865580818367e-5, 4.70614523937179e-6,
+  1.4413500104181e-6, 1.92757960170179e-8, -3.82869799649063e-7,
+  -3.57526015225576e-7, -2.2175964844211e-7,
+];
+
 export function leeRaw(lambda, phi) {
-  const w = [-1 / 2, sqrt(3) / 2];
   let k = [0, 0],
     h = [0, 0],
     z = complexMul(geoStereographicRaw(lambda, phi), [sqrt(2), 0]);
@@ -31,20 +48,6 @@ export function leeRaw(lambda, phi) {
     // if |z| > 0.5, use the approx based on y = (1-z)
     // McIlroy formula 6 p6 and table for G page 16
     const y = complexSub([1, 0], complexMul(rot, z));
-
-    // w1 = gamma(1/3) * gamma(1/2) / 3 / gamma(5/6);
-    // https://bl.ocks.org/Fil/1aeff1cfda7188e9fbf037d8e466c95c
-    const w1 = 1.4021821053254548;
-
-    const G0 = [
-      1.15470053837925, 0.192450089729875, 0.0481125224324687,
-      0.010309826235529, 3.34114739114366e-4, -1.50351632601465e-3,
-      -1.2304417796231e-3, -6.75190201960282e-4, -2.84084537293856e-4,
-      -8.21205120500051e-5, -1.59257630018706e-6, 1.91691805888369e-5,
-      1.73095888028726e-5, 1.03865580818367e-5, 4.70614523937179e-6,
-      1.4413500104181e-6, 1.92757960170179e-8, -3.82869799649063e-7,
-      -3.57526015225576e-7, -2.2175964844211e-7,
-    ];
 
     let G = [0, 0];
     for (let i = G0.length; i--; ) {
@@ -79,7 +82,8 @@ export function leeRaw(lambda, phi) {
 const leeSolver = solve2d(leeRaw);
 leeRaw.invert = function (x, y) {
   if (x > 1.5) return false; // immediately avoid using the wrong face
-  const p = leeSolver(x, y, x, y * 0.5);
+  const p0 = leeStart(x, y);
+  const p = leeSolver(x, y, p0[0], p0[1]);
   const q = leeRaw(p[0], p[1]);
   q[0] -= x;
   q[1] -= y;
@@ -87,6 +91,22 @@ leeRaw.invert = function (x, y) {
     ? p
     : [-10, 0]; // far out of the face
 };
+
+// Starting point for Newton’s method, from the leading term of the expansion
+// near the closest corner: k ≈ (w1 - G0[0] √y) rot², with y = 1 - rot z.
+// Newton’s method alone fails near the corners, where the projection has a
+// square-root singularity.
+function leeStart(x, y) {
+  let rot, u;
+  for (let i = 0; i < 3; ++i) {
+    const r = complexPow(w, [i, 0]);
+    const v = complexSub([w1, 0], complexDivide([x, y], complexMul(r, r)));
+    if (!u || complexNorm(v) < complexNorm(u)) (rot = r), (u = v);
+  }
+  const s = complexDivide(u, [G0[0], 0]); // √y
+  const z = complexDivide(complexSub([1, 0], complexMul(s, s)), rot);
+  return geoStereographicRaw.invert(z[0] / sqrt(2), z[1] / sqrt(2));
+}
 
 const asin1_3 = asin(1 / 3);
 const centers = [

@@ -6,16 +6,16 @@
  * Ported to D3.js by Enrico Spinielli (2013)
  *
  */
-import { abs, cos, degrees, pi, radians, sin, sign, sqrt, tan } from "./math.js";
+import { abs, cos, degrees, epsilon, hypot, pi, radians, sin, sign, sqrt, tan } from "./math.js";
 import { cartesianCross, cartesianDegrees, cartesianDot, sphericalDegrees } from "./cartesian.js";
 import polyhedral from "./polyhedral/index.js";
-import { geoProjectionMutator as projectionMutator } from "d3-geo";
+import { geoCentroid as centroid, geoProjection as projection } from "d3-geo";
 import {solve2d} from "./newton.js";
 
 export default function(faceProjection) {
   faceProjection =
     faceProjection ||
-    (() => cahillKeyesProjection().scale(1));
+    ((face) => cahillKeyesProjection(face).scale(1));
 
   const octa = [[0, 90], [-90, 0], [0, 0], [90, 0], [180, 0], [0, -90]];
 
@@ -30,29 +30,30 @@ export default function(faceProjection) {
     [5, 3, 4]
   ].map((face) => face.map((i) => octa[i]));
 
+  // The corners of the octants are cut where their edges bend in the
+  // projection (points T, D and F of cahillKeyesRaw): 17° from the poles; from
+  // the other vertices, 15° along the meridians, and 45° × AB / (GF + AB) along
+  // the equator.
+  const t = tan(30 * radians), x = 0.094 / (1 - t), ab = sqrt(2) * t * x, gf = t - x / cos(30 * radians);
+  const equator = 45 * ab / (gf + ab);
+
+  // The point on the edge from vertex a to vertex b (orthogonal unit vectors)
+  // where the corner at a is cut.
+  function cut(a, b) {
+    const theta = (abs(a[2]) > 0.5 ? 17 : abs(b[2]) > 0.5 ? 15 : equator) * radians;
+    const c = cos(theta), s = sin(theta);
+    return sphericalDegrees([a[0] * c + b[0] * s, a[1] * c + b[1] * s, a[2] * c + b[2] * s]);
+  }
+
   const ck = octahedron.map((face) => {
     const xyz = face.map(cartesianDegrees),
       n = xyz.length,
-      theta = 17 * radians,
-      cosTheta = cos(theta),
-      sinTheta = sin(theta),
       hexagon = [];
     let a = xyz[n - 1];
     let b;
     for (let i = 0; i < n; ++i) {
       b = xyz[i];
-      hexagon.push(
-        sphericalDegrees([
-          a[0] * cosTheta + b[0] * sinTheta,
-          a[1] * cosTheta + b[1] * sinTheta,
-          a[2] * cosTheta + b[2] * sinTheta
-        ]),
-        sphericalDegrees([
-          b[0] * cosTheta + a[0] * sinTheta,
-          b[1] * cosTheta + a[1] * sinTheta,
-          b[2] * cosTheta + a[2] * sinTheta
-        ])
-      );
+      hexagon.push(cut(a, b), cut(b, a));
       a = b;
     }
     return hexagon;
@@ -141,8 +142,8 @@ export function cahillKeyesRaw(mg) {
 
     CK.lengthMA = 940 / 10000 * CK.lengthMG;
     CK.lengthParallel0to73At0 = CK.lengthMG / 100;
-    CK.lengthParallel73to90At0 =
-      (CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 73) / (90 - 73);
+    CK.lengthParallel75to90At0 =
+      (CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 75) / (90 - 75);
     CK.sin60 = k / 2; // √3/2 
     CK.cos60 = 0.5;
     CK.pointM = [0, 0];
@@ -166,7 +167,7 @@ export function cahillKeyesRaw(mg) {
     CK.lengthBDE = CK.lengthBD + CK.lengthAB; // lengthAB = lengthDE 
     CK.lengthGFE = CK.lengthGF + CK.lengthAB; // lengthAB = lengthFE 
     CK.deltaMEq = CK.lengthGFE / 45;
-    CK.lengthAP75 = (90 - 75) * CK.lengthParallel73to90At0;
+    CK.lengthAP75 = (90 - 75) * CK.lengthParallel75to90At0;
     CK.lengthAP73 = CK.lengthMG - CK.lengthMA - CK.lengthParallel0to73At0 * 73;
     pointU = [
       CK.pointA[0] + CK.lengthAP73 * cos(30 * radians),
@@ -230,7 +231,8 @@ export function cahillKeyesRaw(mg) {
   // First element of the returned array is a flag to state whether there is
   // an intersection, a value of zero (0) means NO INTERSECTION.
   // The following array is the 2D point of the intersection.
-  // Equations from "Intersection of a Line and a Sphere (or circle)/Line Segment"
+  // Equations from Paul Bourke’s “Intersection of a Line and a Sphere (or
+  // circle)/Line Segment”
   // at http://paulbourke.net/geometry/circlesphere/
   function circleLineIntersection(cc, r, p1, p2) {
     let x1 = p1[0],
@@ -375,15 +377,15 @@ export function cahillKeyesRaw(mg) {
   }
 
   function zoneA(m, p) {
-    return [CK.pointA[0] + (90 - p) * 104, 0];
+    return [CK.pointA[0] + (90 - p) * CK.lengthParallel75to90At0, 0];
   }
 
   function zoneB(m, p) {
-    return [CK.pointG[0] - p * 100, 0];
+    return [CK.pointG[0] - p * CK.lengthParallel0to73At0, 0];
   }
 
   function zoneC(m, p) {
-    const l = 104 * (90 - p);
+    const l = CK.lengthParallel75to90At0 * (90 - p);
     return [
       CK.pointA[0] + l * cos(m * radians),
       CK.pointA[1] + l * sin(m * radians)
@@ -396,7 +398,7 @@ export function cahillKeyesRaw(mg) {
   }
 
   function zoneE(m, p) {
-    const l = 1560 + (75 - p) * 100;
+    const l = CK.lengthAP75 + (75 - p) * CK.lengthParallel0to73At0;
     return [
       CK.pointA[0] + l * cos(m * radians),
       CK.pointA[1] + l * sin(m * radians)
@@ -569,6 +571,7 @@ export function cahillKeyesRaw(mg) {
 
   function forward(lambda, phi) {
     // lambda, phi are in radians.
+    if (!(abs(lambda) <= pi && abs(phi) <= pi / 2)) return [NaN, NaN];
     const lon = lambda * degrees,
       lat = phi * degrees,
       res = ll2mp(lon, lat),
@@ -580,13 +583,22 @@ export function cahillKeyesRaw(mg) {
     return mj2g([xy[0], s * xy[1]], o);
   }
 
-  forward.invert = solve2d(forward);
+  const solver = solve2d(forward);
+  forward.invert = function(x, y, lambda = 0, phi = 0) {
+    const p = solver(x, y, lambda, phi);
+    const q = forward(p[0], p[1]);
+    // reject a solution that did not converge
+    return hypot(q[0] - x, q[1] - y) < epsilon * mg ? p : [NaN, NaN];
+  };
 
   return forward;
 }
 
-function cahillKeyesProjection() {
-  const mg = 10000;
-  const m = projectionMutator(cahillKeyesRaw);
-  return m(mg);
+// Newton’s method starts from the face’s centroid
+function cahillKeyesProjection(face) {
+  const raw = cahillKeyesRaw(10000);
+  const [lambda0, phi0] = centroid({type: "MultiPoint", coordinates: face});
+  const forward = (lambda, phi) => raw(lambda, phi);
+  forward.invert = (x, y) => raw.invert(x, y, lambda0 * radians, phi0 * radians);
+  return projection(forward);
 }

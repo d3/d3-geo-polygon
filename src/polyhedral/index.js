@@ -1,3 +1,4 @@
+import {least} from "d3-array";
 import {geoArea, geoBounds as bounds, geoCentroid as centroid, geoInterpolate as interpolate, geoProjection as projection} from "d3-geo";
 import clipPolygon from "../clip/polygon.js";
 import {abs, degrees, epsilon, radians} from "../math.js";
@@ -10,10 +11,12 @@ import pointEqual from "../pointEqual.js";
 //  * face: a function that returns the appropriate node for a given {lambda, phi}
 //    point (radians).
 export default function(tree, face) {
+  const nodes = [];
 
   recurse(tree, {transform: null});
 
   function recurse(node, parent) {
+    nodes.push(node);
     node.edges = faceEdges(node.face);
     // Find shared edge.
     if (parent.face) {
@@ -47,27 +50,37 @@ export default function(tree, face) {
       : [point[0], -point[1]];
   }
 
-  // Naive inverse!  A faster solution would use bounding boxes, or even a
-  // polygonal quadtree.
   if (hasInverse(tree)) forward.invert = function(x, y) {
-    const coordinates = faceInvert(tree, [x, -y]);
+    const candidates = [];
+    const coordinates = faceInvert(x, -y, candidates) || faceInvertNear(candidates);
     return coordinates && (coordinates[0] *= radians, coordinates[1] *= radians, coordinates);
   };
 
-  function faceInvert(node, coordinates) {
-    const invert = node.project.invert;
-    let point = coordinates;
-    let p;
-    let t = node.transform;
-    if (t) {
-      t = inverse(t);
-      point = [t[0] * point[0] + t[1] * point[1] + t[2], (t[3] * point[0] + t[4] * point[1] + t[5])];
+  // Tries first the face whose projected centroid is nearest, then the face
+  // that contains the inverted point, and so on; then all the other faces.
+  function faceInvert(x, y, candidates) {
+    const tried = new Set();
+    let next = least(nodes, ({center: [u, v]}) => (x - u) ** 2 + (y - v) ** 2);
+    for (let i = 0; next || i < nodes.length;) {
+      const node = next || nodes[i++];
+      next = null;
+      if (tried.has(node)) continue;
+      tried.add(node);
+      const invert = node.project.invert, t = node.inverse;
+      const p = invert && invert(t ? [t[0] * x + t[1] * y + t[2], t[3] * x + t[4] * y + t[5]] : [x, y]);
+      if (p && !isNaN(p[0])) {
+        if (node === (next = faceDegrees(p))) return p;
+        candidates.push([node, p]);
+      }
     }
-    if (invert && node === faceDegrees(p = invert(point))) return p;
-    const children = node.children;
-    for (let i = 0, n = children && children.length; i < n; ++i) {
-      p = faceInvert(children[i], coordinates);
-      if (p) return p;
+  }
+
+  // A point on the edge of a face can be assigned to a neighboring face by
+  // rounding; accept it if it is in the face once moved slightly towards the
+  // face’s centroid.
+  function faceInvertNear(candidates) {
+    for (const [node, p] of candidates) {
+      if (node === faceDegrees(interpolate(p, node.centroid)(epsilon))) return p;
     }
   }
 
@@ -82,6 +95,12 @@ export default function(tree, face) {
   const geometry = {type: "MultiPolygon", coordinates: [[p]]};
   outline({point: (lambda, phi) => p.push([lambda, phi])}, tree);
   p.push(p[0]);
+  // the faces’ inverse transforms and projected centroids, for the inverse
+  for (const node of nodes) {
+    const t = node.transform, c = node.project(node.centroid);
+    node.inverse = t && inverse(t);
+    node.center = t ? [t[0] * c[0] + t[1] * c[1] + t[2], t[3] * c[0] + t[4] * c[1] + t[5]] : c;
+  }
   proj.preclip(clipPolygon(geometry).clipPoint(geoArea(geometry) < 4 * Math.PI - 0.1));
   proj.tree = function() { return tree; };
   

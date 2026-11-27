@@ -1,7 +1,7 @@
 import clipBuffer from "./buffer.js";
 import clipRejoin from "./rejoin.js";
-import {epsilon, halfPi} from "../math.js";
-import polygonContains from "../polygonContains.js";
+import {geoContains} from "d3-geo";
+import {degrees, epsilon, halfPi} from "../math.js";
 import {merge} from "d3-array";
 
 export default function(pointVisible, clipLine, interpolate, start, sort, {clipPoint = false} = {}) {
@@ -32,7 +32,9 @@ export default function(pointVisible, clipLine, interpolate, start, sort, {clipP
         clip.lineStart = lineStart;
         clip.lineEnd = lineEnd;
         segments = merge(segments);
-        const startInside = polygonContains(polygon, start);
+        // the rings are in radians, and not closed
+        const rings = polygon.map((ring) => [...ring, ring[0]].map(pointDegrees));
+        const startInside = geoContains({type: "Polygon", coordinates: rings}, pointDegrees(start));
         if (segments.length) {
           if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
           clipRejoin(segments, sort, startInside, interpolate, sink);
@@ -43,7 +45,7 @@ export default function(pointVisible, clipLine, interpolate, start, sort, {clipP
         if (polygonStarted) sink.polygonEnd(), polygonStarted = false;
         segments = polygon = null;
       },
-      sphere: function() {
+      sphere: () => {
         sink.polygonStart();
         interpolate(null, null, 1, sink);
         sink.polygonEnd();
@@ -125,4 +127,8 @@ function validSegment(segment) {
 function compareIntersection(a, b) {
   return ((a = a.x)[0] < 0 ? a[1] - halfPi - epsilon : halfPi - a[1])
        - ((b = b.x)[0] < 0 ? b[1] - halfPi - epsilon : halfPi - b[1]);
+}
+
+function pointDegrees([x, y]) {
+  return [x * degrees, y * degrees];
 }

@@ -1,14 +1,4 @@
-import { abs, atan2, cos, exp, halfPi, log, pow, sin, sqrt } from "./math.js";
-
-export function complexAtan(x, y) {
-  const x2 = x * x,
-    y_1 = y + 1,
-    t = 1 - x2 - y * y;
-  return [
-    0.5 * ((x >= 0 ? halfPi : -halfPi) - atan2(t, 2 * x)),
-    -0.25 * log(t * t + 4 * x2) + 0.5 * log(y_1 * y_1 + x2)
-  ];
-}
+import { abs, atan2, cos, exp, log, pow, sin, sqrt } from "./math.js";
 
 export function complexDivide(a, b) {
   if (b[1]) (a = complexMul(a, [b[0], -b[1]])), (b = complexNorm2(b));
@@ -59,7 +49,7 @@ export function complexPow(a, n) {
     if (b === 0 && a >= 0) {
       return [pow(a, n[0]), 0];
     } else if (a === 0) {
-      switch ((n[1] % 4 + 4) % 4) {
+      switch ((n[0] % 4 + 4) % 4) {
         case 0:
           return [pow(b, n[0]), 0];
         case 1:

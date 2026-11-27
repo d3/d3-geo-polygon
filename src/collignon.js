@@ -1,5 +1,5 @@
 import {geoCentroid as centroid, geoProjection as projection} from "d3-geo";
-import {asin, pi, sin, sqrt, sqrtPi} from "./math.js";
+import {abs, asin, epsilon, pi, sin, sqrt, sqrtPi} from "./math.js";
 import polyhedral from "./polyhedral/index.js";
 import octahedron from "./polyhedral/octahedron.js";
 
@@ -10,8 +10,10 @@ export function collignonRaw(lambda, phi) {
 }
 
 collignonRaw.invert = function(x, y) {
-  const lambda = (y / sqrtPi - 1);
-  return [lambda ? x * sqrt(pi) / lambda / 2 : 0, asin(1 - lambda ** 2)];
+  const alpha = 1 - y / sqrtPi;
+  // outside of the projection’s domain (|lambda| > pi)
+  if (abs(x) > 2 * sqrtPi * alpha + epsilon) return [NaN, NaN];
+  return [alpha > 0 ? x * sqrtPi / alpha / 2 : 0, asin(1 - alpha ** 2)];
 };
 
 
