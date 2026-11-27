@@ -3,6 +3,7 @@ import clip from "./index.js";
 import {abs, atan2, cos, radians, sign, sin, sqrt} from "../math.js";
 import {cartesian, cartesianCross, cartesianDot, cartesianNormalize, spherical} from "../cartesian.js";
 import {edgeOrVertexCrossing, equal, loopContains} from "../predicates.js";
+import pointEqual from "../pointEqual.js";
 
 const clipNone = (stream) => stream;
 
@@ -15,18 +16,25 @@ export default function (geometry) {
     if (geometry.type !== "MultiPolygon") return clipNone;
     const clips = geometry.coordinates.map((polygon) => {
       polygon = polygon.map(ringRadians);
-      const segments = pairs(polygon[0].map(cartesian), (from, to) => ({from, to, bound: bound(from, to)})); // todo holes?
-      // consistent with the crossings; the ring is clockwise
-      const contains = loopContains(segments.map((s) => s.from).reverse());
-      const pointVisible = (lambda, phi) => contains(cartesian([lambda, phi]));
-      return clip(
-        pointVisible,
-        clipLine(segments, pointVisible),
-        interpolate(segments, polygon),
-        polygon[0][0],
-        clipPolygonSort,
-        {clipPoint}
-      );
+      // Clip against each ring in turn: the exterior ring first, then the holes.
+      // A hole ring is wound the other way, so its visible region is the
+      // exterior—chaining the rings therefore cuts the holes out. Each stage
+      // keeps a single closed boundary, which is what clipRejoin() requires.
+      const rings = polygon.map((ring) => {
+        const segments = pairs(ring.map(cartesian), (from, to) => ({from, to, bound: bound(from, to)}));
+        // consistent with the crossings; the ring is clockwise
+        const contains = loopContains(segments.map((s) => s.from).reverse());
+        const pointVisible = (lambda, phi) => contains(cartesian([lambda, phi]));
+        return clip(
+          pointVisible,
+          clipLine(segments, pointVisible),
+          interpolate(segments, [ring]),
+          ring[0],
+          clipPolygonSort,
+          {clipPoint}
+        );
+      });
+      return (stream) => rings.reduceRight((sink, ring) => ring(sink), stream);
     });
 
     function clipPolygon(stream) {
@@ -87,13 +95,15 @@ function clipPolygonSort(a, b) {
 function interpolate(segments, polygon) {
   return (from, to, direction, stream) => {
     if (from == null) {
-      stream.polygonStart();
       polygon.forEach((ring) => {
         stream.lineStart();
-        ring.forEach((point) => stream.point(point[0], point[1]));
+        // Skip a trailing point that duplicates the first: the clipping polygon’s
+        // rings are explicitly closed, the rings buffered by clip/index.js are not,
+        // and a ring is closed implicitly by its last segment.
+        const n = ring.length, closed = n > 1 && pointEqual(ring[0], ring[n - 1]);
+        for (let i = 0, m = closed ? n - 1 : n; i < m; ++i) stream.point(ring[i][0], ring[i][1]);
         stream.lineEnd();
       });
-      stream.polygonEnd();
     } else if (from.index != null && to.index != null && (from.index !== to.index || from.t > to.t)) {
       // the vertices from segment from.index to segment to.index (a full turn if equal)
       const n = segments.length;
