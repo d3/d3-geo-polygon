@@ -12,7 +12,7 @@ export class intersectSegment {
 }
 
 // Can segments a and b touch?
-export function intersectNear(a, b) {
+function intersectNear(a, b) {
   const lc = (a.l + b.l < pi) ? cos(a.l + b.l) - epsilon : -1;
   return !(cartesianDot(a.from, b.from) < lc
     || cartesianDot(a.from, b.to) < lc

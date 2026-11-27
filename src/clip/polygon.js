@@ -1,7 +1,7 @@
 import clip from "./index.js";
 import {abs, atan2, cos, radians, sign, sin, sqrt} from "../math.js";
 import {cartesian, cartesianCross, cartesianDot, cartesianNormalize, spherical} from "../cartesian.js";
-import {intersectNear, intersectSegment} from "../intersect.js";
+import {intersectSegment} from "../intersect.js";
 import {edgeOrVertexCrossing, equal, loopContains} from "../predicates.js";
 
 const clipNone = (stream) => stream;
@@ -71,11 +71,24 @@ function ringSegments(ring) {
   let c0;
   ring.forEach((point, i) => {
     const c = cartesian(point);
-    if (i) segments.push(new intersectSegment(c0, c));
+    if (i) segments.push(Object.assign(new intersectSegment(c0, c), {bound: bound(c0, c)}));
     c0 = c;
     return point;
   });
   return segments;
+}
+
+// The bounding sphere of the arc from a to b (unit vectors); its diameter is the chord [a, b].
+function bound(a, b) {
+  const u = b[0] - a[0], v = b[1] - a[1], w = b[2] - a[2];
+  return {center: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2], radius: sqrt(u * u + v * v + w * w) / 2};
+}
+
+// Can arcs with bounding spheres a and b touch?
+function overlap(a, b) {
+  const x = a.center[0] - b.center[0], y = a.center[1] - b.center[1], z = a.center[2] - b.center[2];
+  const r = a.radius + b.radius + 1e-9;
+  return x * x + y * y + z * z <= r * r;
 }
 
 function clipPolygonSort(a, b) {
@@ -171,11 +184,12 @@ function clipLine(segments, pointVisible) {
         let v = v0;
         if (point0) {
           const intersections = [];
-          const segment = new intersectSegment(point0, point);
+          const c = bound(point0, point);
+          let segment;
           for (let i = 0; i < segments.length; ++i) {
             const s = segments[i];
-            if (intersectNear(segment, s) && edgeOrVertexCrossing(point0, point, s.from, s.to)) {
-              const intersection = crossingPoint(segment, s);
+            if (overlap(c, s.bound) && edgeOrVertexCrossing(point0, point, s.from, s.to)) {
+              const intersection = crossingPoint(segment || (segment = new intersectSegment(point0, point)), s);
               const sph = spherical(intersection);
               intersection.distance = clipPolygonDistance(point0, intersection);
               intersection.index = i;
