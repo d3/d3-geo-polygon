@@ -30,29 +30,30 @@ export default function(faceProjection) {
     [5, 3, 4]
   ].map((face) => face.map((i) => octa[i]));
 
+  // The corners of the octants are cut where their edges bend in the
+  // projection (points T, D and F of cahillKeyesRaw): 17° from the poles; from
+  // the other vertices, 15° along the meridians, and 45° × AB / (GF + AB) along
+  // the equator.
+  const t = tan(30 * radians), x = 0.094 / (1 - t), ab = sqrt(2) * t * x, gf = t - x / cos(30 * radians);
+  const equator = 45 * ab / (gf + ab);
+
+  // The point on the edge from vertex a to vertex b (orthogonal unit vectors)
+  // where the corner at a is cut.
+  function cut(a, b) {
+    const theta = (abs(a[2]) > 0.5 ? 17 : abs(b[2]) > 0.5 ? 15 : equator) * radians;
+    const c = cos(theta), s = sin(theta);
+    return sphericalDegrees([a[0] * c + b[0] * s, a[1] * c + b[1] * s, a[2] * c + b[2] * s]);
+  }
+
   const ck = octahedron.map((face) => {
     const xyz = face.map(cartesianDegrees),
       n = xyz.length,
-      theta = 17 * radians,
-      cosTheta = cos(theta),
-      sinTheta = sin(theta),
       hexagon = [];
     let a = xyz[n - 1];
     let b;
     for (let i = 0; i < n; ++i) {
       b = xyz[i];
-      hexagon.push(
-        sphericalDegrees([
-          a[0] * cosTheta + b[0] * sinTheta,
-          a[1] * cosTheta + b[1] * sinTheta,
-          a[2] * cosTheta + b[2] * sinTheta
-        ]),
-        sphericalDegrees([
-          b[0] * cosTheta + a[0] * sinTheta,
-          b[1] * cosTheta + a[1] * sinTheta,
-          b[2] * cosTheta + a[2] * sinTheta
-        ])
-      );
+      hexagon.push(cut(a, b), cut(b, a));
       a = b;
     }
     return hexagon;
