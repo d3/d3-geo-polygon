@@ -230,7 +230,8 @@ export function cahillKeyesRaw(mg) {
   // First element of the returned array is a flag to state whether there is
   // an intersection, a value of zero (0) means NO INTERSECTION.
   // The following array is the 2D point of the intersection.
-  // Equations from "Intersection of a Line and a Sphere (or circle)/Line Segment"
+  // Equations from Paul Bourke’s “Intersection of a Line and a Sphere (or
+  // circle)/Line Segment”
   // at http://paulbourke.net/geometry/circlesphere/
   function circleLineIntersection(cc, r, p1, p2) {
     let x1 = p1[0],
