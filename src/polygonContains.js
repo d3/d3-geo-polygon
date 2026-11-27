@@ -1,29 +1,37 @@
 import {Adder} from "d3-array";
 import {cartesian, cartesianCross, cartesianNormalize} from "./cartesian.js";
-import {asin, atan2, cos, epsilon, pi, quarterPi, sin, tau} from "./math.js";
+import {abs, asin, atan2, cos, epsilon, epsilon2, halfPi, pi, quarterPi, sign, sin, tau} from "./math.js";
+
+// Longitude in [-π, π], as in d3-geo.
+function longitude(point) {
+  return abs(point[0]) <= pi ? point[0] : sign(point[0]) * ((abs(point[0]) + pi) % tau - pi);
+}
 
 export default function(polygon, point) {
-  const lambda = point[0];
-  const phi = point[1];
+  const lambda = longitude(point);
+  let phi = point[1];
   const normal = [sin(lambda), -cos(lambda), 0];
   let angle = 0;
   let winding = 0;
 
   const sum = new Adder();
 
+  if (sin(phi) === 1) phi = halfPi + epsilon;
+  else if (sin(phi) === -1) phi = -halfPi - epsilon;
+
   for (let i = 0, n = polygon.length; i < n; ++i) {
     if (!(m = (ring = polygon[i]).length)) continue;
     var ring,
         m,
         point0 = ring[m - 1],
-        lambda0 = point0[0],
+        lambda0 = longitude(point0),
         phi0 = point0[1] / 2 + quarterPi,
         sinPhi0 = sin(phi0),
         cosPhi0 = cos(phi0);
 
     for (let j = 0; j < m; ++j, lambda0 = lambda1, sinPhi0 = sinPhi1, cosPhi0 = cosPhi1, point0 = point1) {
       var point1 = ring[j],
-          lambda1 = point1[0],
+          lambda1 = longitude(point1),
           phi1 = point1[1] / 2 + quarterPi,
           sinPhi1 = sin(phi1),
           cosPhi1 = cos(phi1),
@@ -60,5 +68,5 @@ export default function(polygon, point) {
   // from the point to the South pole.  If it is zero, then the point is the
   // same side as the South pole.
 
-  return (angle < -epsilon || angle < epsilon && +sum < -epsilon) ^ (winding & 1);
+  return (angle < -epsilon || angle < epsilon && +sum < -epsilon2) ^ (winding & 1);
 }
